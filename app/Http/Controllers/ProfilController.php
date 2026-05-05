@@ -8,13 +8,15 @@ class ProfilController extends Controller
 {
     public function index()
     {
-        $allAnggota = Anggota::all();
+        $kabid = Anggota::where('bidang', 'TIK')->get();
+        
+        $kasubbid = Anggota::where(function($q) {
+            $q->where('jabatan', 'like', 'Kasubbid%');
+        })->get();
 
-        $kabid = $allAnggota->filter(fn($a) => $a->sub_bidang === 'pimpinan');
-        $kasubbid = $allAnggota->filter(fn($a) => $a->sub_bidang === 'kasubbid');
-        $renmin = $allAnggota->filter(fn($a) => $a->sub_bidang === 'renmin');
-        $tekkom = $allAnggota->filter(fn($a) => $a->sub_bidang === 'tekkom');
-        $tekinfo = $allAnggota->filter(fn($a) => $a->sub_bidang === 'tekinfo');
+        $renmin = Anggota::where('bidang', 'RENMIN')->where('jabatan', 'not like', 'Kasubbid%')->get();
+        $tekkom = Anggota::where('bidang', 'TEKKOM')->where('jabatan', 'not like', 'Kasubbid%')->get();
+        $tekinfo = Anggota::where('bidang', 'TEKINFO')->where('jabatan', 'not like', 'Kasubbid%')->get();
 
         return view('profil', compact('kabid', 'kasubbid', 'renmin', 'tekkom', 'tekinfo'));
     }

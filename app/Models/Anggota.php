@@ -10,6 +10,7 @@ class Anggota extends Model
         'nama_lengkap',
         'nrp',
         'pangkat',
+        'bidang',
         'jabatan',
         'foto',
     ];

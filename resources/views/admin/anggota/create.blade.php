@@ -23,41 +23,33 @@
                     <input type="text" name="pangkat" class="form-control" value="{{ old('pangkat') }}" required>
                 </div>
             </div>
+
+            <div class="form-group">
+                <label>Bidang *</label>
+                <select name="bidang" id="selectBidang" class="form-control" required onchange="updateJabatan()">
+                    <option value="">-- Pilih Bidang --</option>
+                    <option value="TIK" {{ old('bidang')=='TIK'?'selected':'' }}>TIK</option>
+                    <option value="RENMIN" {{ old('bidang')=='RENMIN'?'selected':'' }}>RENMIN</option>
+                    <option value="TEKKOM" {{ old('bidang')=='TEKKOM'?'selected':'' }}>TEKKOM</option>
+                    <option value="TEKINFO" {{ old('bidang')=='TEKINFO'?'selected':'' }}>TEKINFO</option>
+                </select>
+                @error('bidang')<div class="form-error">{{ $message }}</div>@enderror
+            </div>
+
             <div class="form-group">
                 <label>Jabatan *</label>
-                <select name="jabatan" class="form-control" required>
+                <select name="jabatan" id="selectJabatan" class="form-control" required>
                     <option value="">-- Pilih Jabatan --</option>
-                    <optgroup label="Pimpinan">
-                        <option {{ old('jabatan')=='Kabid TIK'?'selected':'' }}>Kabid TIK</option>
-                    </optgroup>
-                    <optgroup label="Kasubbid">
-                        <option {{ old('jabatan')=='Kasubbid Renmin'?'selected':'' }}>Kasubbid Renmin</option>
-                        <option {{ old('jabatan')=='Kasubbid Tekkom'?'selected':'' }}>Kasubbid Tekkom</option>
-                        <option {{ old('jabatan')=='Kasubbid Tekinfo'?'selected':'' }}>Kasubbid Tekinfo</option>
-                    </optgroup>
-                    <optgroup label="Subbid Renmin">
-                        @foreach(['Kaurren','Kaurmintu','PS. Kaur Keu','Ps. Pamin 2','Ba. Urkeu','BA. Renmin','Ba. Urmin'] as $j)
-                        <option {{ old('jabatan')==$j?'selected':'' }}>{{ $j }}</option>
-                        @endforeach
-                    </optgroup>
-                    <optgroup label="Subbid Tekkom">
-                        @foreach(['Kaur Jarkom','PS. Paur Urjarkom','PS. Kaurharkan','PS. Kauryankom','PS. Pauryankom','PS. Paur 3 Harkan','Pamin 1','PS. Pamin 3','Ba. Yankom','Ps. Pmain 4','Ba. Tekkom'] as $j)
-                        <option {{ old('jabatan')==$j?'selected':'' }}>{{ $j }}</option>
-                        @endforeach
-                    </optgroup>
-                    <optgroup label="Subbid Tekinfo">
-                        @foreach(['Ps. Kaur Yanduknis','Kaurtini','PS. Kaurpulahta','Ps. Paur Yanduknis','Paur 2 Subidtekinfo','PS. Paur Subidtekinfo','Ba. Tekinfo','PNS Tekinfo'] as $j)
-                        <option {{ old('jabatan')==$j?'selected':'' }}>{{ $j }}</option>
-                        @endforeach
-                    </optgroup>
                 </select>
                 @error('jabatan')<div class="form-error">{{ $message }}</div>@enderror
             </div>
+
             <div class="form-group">
                 <label>Foto</label>
                 <input type="file" name="foto" class="form-control" accept="image/*">
                 @error('foto')<div class="form-error">{{ $message }}</div>@enderror
             </div>
+
             <div style="display:flex;gap:10px;margin-top:25px;">
                 <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Simpan</button>
                 <a href="{{ route('admin.anggota.index') }}" class="btn btn-outline">Batal</a>
@@ -65,4 +57,35 @@
         </form>
     </div>
 </div>
+
+<script>
+const jabatanOptions = {
+    'TIK': ['Kabid TIK'],
+    'RENMIN': ['Kasubbid Renmin', 'Kaurren', 'Kaurmintu', 'PS. Kaur Keu', 'Ps. Pamin 2', 'Ba. Urkeu', 'BA. Renmin', 'Ba. Urmin'],
+    'TEKKOM': ['Kasubbid Tekkom', 'Kaur Jarkom', 'PS. Paur Urjarkom', 'PS. Kaurharkan', 'PS. Kauryankom', 'PS. Pauryankom', 'PS. Paur 3 Harkan', 'Pamin 1', 'PS. Pamin 3', 'Ba. Yankom', 'Ps. Pmain 4', 'Ba. Tekkom'],
+    'TEKINFO': ['Kasubbid Tekinfo', 'Ps. Kaur Yanduknis', 'Kaurtini', 'PS. Kaurpulahta', 'Ps. Paur Yanduknis', 'Paur 2 Subidtekinfo', 'PS. Paur Subidtekinfo', 'Ba. Tekinfo', 'PNS Tekinfo']
+};
+
+function updateJabatan() {
+    const bidang = document.getElementById('selectBidang').value;
+    const selectJabatan = document.getElementById('selectJabatan');
+    const oldJabatan = "{{ old('jabatan') }}";
+    
+    // Clear existing options
+    selectJabatan.innerHTML = '<option value="">-- Pilih Jabatan --</option>';
+    
+    if (bidang && jabatanOptions[bidang]) {
+        jabatanOptions[bidang].forEach(j => {
+            const option = document.createElement('option');
+            option.value = j;
+            option.text = j;
+            if (j === oldJabatan) option.selected = true;
+            selectJabatan.appendChild(option);
+        });
+    }
+}
+
+// Trigger on load for validation errors
+document.addEventListener('DOMContentLoaded', updateJabatan);
+</script>
 @endsection

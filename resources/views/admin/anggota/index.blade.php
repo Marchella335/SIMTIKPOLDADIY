@@ -11,15 +11,15 @@
     <div class="card-body">
         <div class="table-container">
             <table>
-                <thead><tr><th>No</th><th>Foto</th><th>Nama Lengkap</th><th>NRP</th><th>Pangkat</th><th>Jabatan</th><th>Aksi</th></tr></thead>
+                <thead><tr><th>No</th><th>Foto</th><th>Nama Lengkap</th><th>Pangkat</th><th>Bidang</th><th>Jabatan</th><th>Aksi</th></tr></thead>
                 <tbody>
                     @forelse($anggotas as $i => $a)
                     <tr>
                         <td>{{ $i + 1 }}</td>
                         <td>@if($a->foto)<img src="{{ asset($a->foto) }}" style="width:40px;height:40px;border-radius:50%;object-fit:cover;">@else <div style="width:40px;height:40px;border-radius:50%;background:#e2e4e8;display:flex;align-items:center;justify-content:center;color:#999;"><i class="fas fa-user"></i></div> @endif</td>
-                        <td>{{ $a->nama_lengkap }}</td>
-                        <td>{{ $a->nrp ?? '-' }}</td>
+                        <td>{{ $a->nama_lengkap }}<br><small style="color:#666;">NRP: {{ $a->nrp ?? '-' }}</small></td>
                         <td>{{ $a->pangkat }}</td>
+                        <td><span class="badge badge-info">{{ $a->bidang }}</span></td>
                         <td>{{ $a->jabatan }}</td>
                         <td class="actions">
                             <a href="{{ route('admin.anggota.show', $a) }}" class="btn btn-sm btn-info"><i class="fas fa-id-card"></i></a>

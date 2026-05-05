@@ -25,6 +25,7 @@ class AnggotaController extends Controller
             'nama_lengkap' => 'required|string|max:255',
             'nrp' => 'nullable|string|max:50',
             'pangkat' => 'required|string|max:100',
+            'bidang' => 'required|string|max:100',
             'jabatan' => 'required|string|max:100',
             'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
@@ -60,6 +61,7 @@ class AnggotaController extends Controller
             'nama_lengkap' => 'required|string|max:255',
             'nrp' => 'nullable|string|max:50',
             'pangkat' => 'required|string|max:100',
+            'bidang' => 'required|string|max:100',
             'jabatan' => 'required|string|max:100',
             'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);

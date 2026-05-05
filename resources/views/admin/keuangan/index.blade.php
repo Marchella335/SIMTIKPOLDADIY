@@ -201,9 +201,15 @@
                         </tbody>
                     </table>
                 </div>
-                <div style="padding: 15px 20px; background: var(--gray-50); border-top: 1px solid var(--gray-200); display: flex; justify-content: space-between; font-weight: 700;">
-                    <span>Total Pengeluaran Sheet ini:</span>
-                    <span id="sheetTotal">Rp 0</span>
+                <div style="padding: 15px 20px; background: var(--gray-50); border-top: 1px solid var(--gray-200); display: flex; flex-direction: column; gap: 8px; font-weight: 700; font-size: 14px;">
+                    <div style="display: flex; justify-content: space-between; color: var(--danger);">
+                        <span>Total Pengeluaran Sheet ini:</span>
+                        <span id="sheetTotal">Rp 0</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; color: var(--primary); border-top: 1px dashed var(--gray-300); padding-top: 8px;">
+                        <span>Saldo Tersisa (Pagu Dana - Pengeluaran):</span>
+                        <span id="sheetRemaining">Rp 0</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -475,6 +481,10 @@ function renderRows() {
     
     const total = (s.items || []).reduce((a, b) => b.tipe === 'Pengeluaran' ? a + parseFloat(b.nilai||0) : a, 0);
     document.getElementById('sheetTotal').textContent = fmt(total);
+    
+    const remaining = currentSourcePagu - total;
+    document.getElementById('sheetRemaining').textContent = fmt(remaining);
+    document.getElementById('sheetRemaining').style.color = remaining < 0 ? 'var(--danger)' : 'var(--primary)';
 }
 
 function addRow() {

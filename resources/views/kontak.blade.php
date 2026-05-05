@@ -10,10 +10,9 @@
                 <p style="color:var(--gray-500);margin-bottom:30px;">Bidang TIK Polda DIY siap melayani Anda. Hubungi kami melalui alamat, telepon, email, atau formulir kontak.</p>
                 <div class="kontak-detail">
                     <h3>Jl. Ring Road Utara, Sleman, DIY <i class="fas fa-arrow-right" style="color:var(--accent);"></i></h3>
-                    <p>Senin - Jumat | 08:00 - 16:00 WIB</p>
                 </div>
                 <div class="kontak-detail">
-                    <h3>+62 274 xxxxxx <i class="fas fa-arrow-right" style="color:var(--accent);"></i></h3>
+                    <h3>0274 884444 <i class="fas fa-arrow-right" style="color:var(--accent);"></i></h3>
                 </div>
                 <div class="kontak-detail">
                     <h3>bidtik@polda-diy.go.id <i class="fas fa-arrow-right" style="color:var(--accent);"></i></h3>
