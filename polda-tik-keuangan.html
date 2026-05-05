@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Transparansi Keuangan — Bidang TIK Polda</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg:        #03080f;
+      --surface:   #071221;
+      --surface2:  #0c1c32;
+      --border:    rgba(0,140,255,0.12);
+      --border2:   rgba(0,140,255,0.22);
+      --blue:      #0077e6;
+      --blue-br:   #1a9eff;
+      --blue-pale: #cce4ff;
+      --cyan:      #00d4ff;
+      --cyan-dim:  rgba(0,212,255,0.12);
+      --gold:      #f5b800;
+      --gold-dim:  rgba(245,184,0,0.12);
+      --green:     #00e898;
+      --red:       #ff4d4d;
+      --white:     #e8f0fb;
+      --muted:     #4d7aaa;
+    }
+
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+    body {
+      background: var(--bg);
+      color: var(--white);
+      font-family: 'IBM Plex Sans', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* grid dot pattern */
+    body::before {
+      content:'';
+      position:fixed; inset:0; z-index:0; pointer-events:none;
+      background-image: radial-gradient(rgba(0,140,255,0.07) 1px, transparent 1px);
+      background-size: 32px 32px;
+    }
+
+    /* animated glow blobs */
+    .blob {
+      position:fixed; border-radius:50%; filter:blur(90px);
+      pointer-events:none; z-index:0; opacity:0.18;
+    }
+    .blob-1 { width:600px; height:600px; background:#003f99; top:-150px; left:-200px; animation: drift1 18s ease-in-out infinite; }
+    .blob-2 { width:400px; height:400px; background:#00aacc; bottom:-100px; right:-100px; animation: drift2 14s ease-in-out infinite; }
+    @keyframes drift1 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(80px,60px)} }
+    @keyframes drift2 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-60px,-40px)} }
+
+    /* ── TOPBAR ── */
+    .topbar {
+      position: relative; z-index: 10;
+      background: rgba(3,8,15,0.85);
+      border-bottom: 1px solid var(--border2);
+      backdrop-filter: blur(16px);
+    }
+    .topbar-inner {
+      max-width: 1320px; margin:0 auto; padding:0 2rem;
+      display:flex; align-items:center; justify-content:space-between;
+      height: 68px;
+    }
+
+    .logo { display:flex; align-items:center; gap:14px; text-decoration:none; }
+    .logo-shield {
+      position:relative; width:46px; height:46px;
+      background:linear-gradient(145deg,#0077e6,#003fa3);
+      border-radius:10px 10px 14px 14px;
+      display:flex; align-items:center; justify-content:center;
+      box-shadow: 0 0 20px rgba(0,120,230,0.45);
+    }
+    .logo-shield::after {
+      content:''; position:absolute; inset:2px;
+      border-radius:8px 8px 12px 12px;
+      border:1px solid rgba(255,255,255,0.15);
+    }
+    .logo-shield svg { width:24px; height:24px; }
+
+    .logo-text .t1 { font-family:'Syne',sans-serif; font-size:0.95rem; font-weight:800; color:var(--white); letter-spacing:0.04em; }
+    .logo-text .t2 { font-size:0.72rem; color:var(--muted); letter-spacing:0.1em; text-transform:uppercase; margin-top:1px; }
+
+    nav { display:flex; gap:0.25rem; align-items:center; }
+    nav a {
+      color:var(--muted); text-decoration:none; font-size:0.84rem; font-weight:500;
+      padding:6px 14px; border-radius:6px; transition:all 0.2s; letter-spacing:0.02em;
+    }
+    nav a:hover { color:var(--white); background:rgba(255,255,255,0.04); }
+    nav a.active { color:var(--blue-pale); background:rgba(0,119,230,0.12); }
+    .nav-pill {
+      background:linear-gradient(135deg,var(--blue),#005fbf);
+      color:#fff !important; padding:7px 18px !important;
+      border-radius:6px !important; font-weight:600 !important;
+      box-shadow:0 4px 16px rgba(0,119,230,0.3);
+    }
+
+    /* status dot */
+    .live-dot {
+      display:flex; align-items:center; gap:7px;
+      font-size:0.74rem; color:var(--muted); letter-spacing:0.06em;
+    }
+    .live-dot::before {
+      content:''; width:7px; height:7px; border-radius:50%;
+      background:var(--green);
+      box-shadow:0 0 8px var(--green);
+      animation:blink 2s infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+    /* ── HERO ── */
+    .hero {
+      position:relative; z-index:1;
+      max-width:1320px; margin:0 auto;
+      padding:4.5rem 2rem 2.5rem;
+    }
+    .breadcrumb {
+      display:flex; align-items:center; gap:8px;
+      font-size:0.75rem; color:var(--muted);
+      letter-spacing:0.06em; text-transform:uppercase;
+      margin-bottom:1.5rem;
+    }
+    .breadcrumb span { color:var(--blue-br); }
+    .breadcrumb i { opacity:0.4; }
+
+    .hero-grid { display:grid; grid-template-columns:1fr auto; gap:3rem; align-items:end; }
+    .hero-eyebrow {
+      font-size:0.78rem; color:var(--cyan); font-weight:600;
+      letter-spacing:0.14em; text-transform:uppercase;
+      margin-bottom:0.9rem;
+      display:flex; align-items:center; gap:8px;
+    }
+    .hero-eyebrow::before { content:''; width:28px; height:2px; background:var(--cyan); }
+    h1 {
+      font-family:'Syne',sans-serif;
+      font-size:clamp(1.9rem,4vw,3.2rem);
+      font-weight:800; line-height:1.1;
+      color:var(--white); margin-bottom:1rem;
+      letter-spacing:-0.01em;
+    }
+    h1 .accent { color:var(--cyan); }
+    .hero-desc { font-size:0.95rem; color:var(--muted); line-height:1.7; max-width:520px; }
+
+    .hero-meta {
+      display:flex; flex-direction:column; align-items:flex-end; gap:10px;
+    }
+    .meta-chip {
+      display:flex; align-items:center; gap:8px;
+      background:var(--surface2); border:1px solid var(--border2);
+      border-radius:8px; padding:10px 16px;
+      font-size:0.8rem; white-space:nowrap;
+    }
+    .meta-chip .micon { font-size:1.1rem; }
+    .meta-chip .mval { color:var(--white); font-weight:600; font-family:'IBM Plex Mono',monospace; }
+    .meta-chip .mlb  { color:var(--muted); font-size:0.72rem; margin-top:1px; }
+
+    /* ── KPI STRIP ── */
+    .kpi-strip {
+      position:relative; z-index:1;
+      max-width:1320px; margin:0 auto;
+      padding:0 2rem 2rem;
+      display:grid; grid-template-columns:repeat(4,1fr); gap:1.25rem;
+    }
+    .kpi {
+      background:var(--surface);
+      border:1px solid var(--border);
+      border-radius:14px; padding:1.5rem 1.6rem;
+      position:relative; overflow:hidden;
+      transition:transform 0.25s,box-shadow 0.25s;
+      cursor:default;
+    }
+    .kpi:hover { transform:translateY(-3px); box-shadow:0 12px 40px rgba(0,0,0,0.5); }
+    .kpi::after {
+      content:''; position:absolute; inset:0;
+      background:linear-gradient(135deg,rgba(255,255,255,0.02) 0%,transparent 60%);
+      pointer-events:none;
+    }
+    .kpi-stripe {
+      position:absolute; top:0; left:0; right:0; height:3px; border-radius:14px 14px 0 0;
+    }
+    .kpi-icon { font-size:1.6rem; margin-bottom:0.9rem; }
+    .kpi-label { font-size:0.72rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:0.45rem; }
+    .kpi-val {
+      font-family:'Syne',sans-serif;
+      font-size:1.75rem; font-weight:800; color:var(--white);
+      line-height:1; margin-bottom:0.35rem;
+    }
+    .kpi-sub { font-size:0.78rem; }
+    .kpi-sub.up   { color:var(--green); }
+    .kpi-sub.down { color:var(--red); }
+    .kpi-sub.info { color:var(--blue-br); }
+
+    /* ── LAYOUT ── */
+    .layout {
+      position:relative; z-index:1;
+      max-width:1320px; margin:0 auto;
+      padding:0 2rem 4rem;
+      display:grid; grid-template-columns:1fr 360px; gap:1.5rem;
+    }
+
+    /* ── CARD ── */
+    .card {
+      background:var(--surface);
+      border:1px solid var(--border);
+      border-radius:14px; padding:1.75rem;
+      margin-bottom:1.5rem;
+    }
+    .card:last-child { margin-bottom:0; }
+
+    .ch { /* card header */
+      display:flex; align-items:flex-start; justify-content:space-between;
+      margin-bottom:1.4rem; gap:1rem;
+    }
+    .ch-title {
+      font-family:'Syne',sans-serif;
+      font-size:1.05rem; font-weight:700; color:var(--white); margin-bottom:2px;
+    }
+    .ch-sub { font-size:0.76rem; color:var(--muted); }
+    .ch-right { display:flex; gap:8px; align-items:center; flex-shrink:0; }
+
+    /* tabs */
+    .tabs { display:flex; gap:5px; background:rgba(0,0,0,0.3); padding:4px; border-radius:8px; }
+    .tab {
+      padding:5px 13px; border-radius:5px; font-size:0.76rem; font-weight:500;
+      cursor:pointer; border:none; background:transparent; color:var(--muted);
+      font-family:'IBM Plex Sans',sans-serif; transition:all 0.2s;
+    }
+    .tab.on { background:var(--blue); color:#fff; }
+    .tab:hover:not(.on) { color:var(--white); }
+
+    /* select */
+    .sel {
+      background:var(--surface2); border:1px solid var(--border2);
+      color:var(--white); padding:5px 10px; border-radius:6px;
+      font-size:0.78rem; font-family:'IBM Plex Sans',sans-serif; cursor:pointer;
+    }
+
+    /* btn */
+    .btn-dl {
+      display:inline-flex; align-items:center; gap:6px;
+      background:var(--cyan-dim); border:1px solid rgba(0,212,255,0.3);
+      color:var(--cyan); padding:5px 13px; border-radius:6px;
+      font-size:0.76rem; font-weight:500; cursor:pointer;
+      font-family:'IBM Plex Sans',sans-serif; transition:background 0.2s;
+    }
+    .btn-dl:hover { background:rgba(0,212,255,0.18); }
+
+    /* ── BAR CHART ── */
+    .barchart { display:flex; align-items:flex-end; gap:8px; height:180px; padding-bottom:2px; }
+    .bcol { flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; }
+    .bwrap { width:100%; display:flex; align-items:flex-end; gap:3px; height:156px; }
+    .bbar { flex:1; border-radius:5px 5px 0 0; cursor:pointer; transition:filter 0.2s; }
+    .bbar:hover { filter:brightness(1.3); }
+    .bbar.a { background:linear-gradient(180deg,var(--blue-br),#004fa3); }
+    .bbar.b { background:linear-gradient(180deg,var(--cyan),#007a96); }
+    .blabel { font-size:0.68rem; color:var(--muted); }
+    .blegend { display:flex; gap:1.5rem; margin-top:1.1rem; }
+    .bleg { display:flex; align-items:center; gap:7px; font-size:0.78rem; color:var(--muted); }
+    .bleg-dot { width:10px; height:10px; border-radius:3px; }
+
+    /* ── TABLE ── */
+    .search {
+      display:flex; align-items:center; gap:9px;
+      background:rgba(0,0,0,0.35); border:1px solid var(--border2);
+      border-radius:8px; padding:8px 14px; margin-bottom:1.25rem;
+    }
+    .search input {
+      background:none; border:none; outline:none;
+      color:var(--white); font-size:0.85rem; font-family:'IBM Plex Sans',sans-serif; flex:1;
+    }
+    .search input::placeholder { color:var(--muted); }
+
+    table { width:100%; border-collapse:collapse; font-size:0.855rem; }
+    thead th {
+      padding:0.55rem 1rem; text-align:left;
+      font-size:0.69rem; color:var(--muted);
+      text-transform:uppercase; letter-spacing:0.08em;
+      border-bottom:1px solid var(--border);
+    }
+    tbody tr { border-bottom:1px solid rgba(0,140,255,0.05); transition:background 0.15s; }
+    tbody tr:hover { background:rgba(0,119,230,0.05); }
+    td { padding:0.85rem 1rem; color:var(--white); vertical-align:middle; }
+    .td-dim { color:var(--muted); font-size:0.78rem; }
+    .mono { font-family:'IBM Plex Mono',monospace; font-size:0.85rem; }
+    .c-pos { color:var(--green); }
+    .c-neg { color:var(--red); }
+    .c-neu { color:var(--cyan); }
+
+    .badge {
+      display:inline-block; padding:3px 10px; border-radius:100px;
+      font-size:0.7rem; font-weight:600; white-space:nowrap;
+    }
+    .bg-green { background:rgba(0,232,152,0.12); color:var(--green); }
+    .bg-blue  { background:rgba(0,119,230,0.15); color:var(--blue-br); }
+    .bg-gold  { background:rgba(245,184,0,0.12); color:var(--gold); }
+    .bg-red   { background:rgba(255,77,77,0.12); color:var(--red); }
+    .bg-cyan  { background:rgba(0,212,255,0.1);  color:var(--cyan); }
+
+    /* ── SIDEBAR WIDGETS ── */
+    /* donut */
+    .donut-outer { position:relative; width:164px; height:164px; margin:0 auto 1.4rem; }
+    .donut-outer svg { transform:rotate(-90deg); }
+    .donut-ctr {
+      position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+      text-align:center;
+    }
+    .donut-big { font-family:'Syne',sans-serif; font-size:1.55rem; font-weight:800; color:var(--cyan); }
+    .donut-sm  { font-size:0.68rem; color:var(--muted); }
+    .dleg { display:flex; flex-direction:column; gap:9px; }
+    .dleg-row { display:flex; align-items:center; justify-content:space-between; font-size:0.8rem; }
+    .dleg-l { display:flex; align-items:center; gap:8px; color:var(--muted); }
+    .dleg-dot { width:9px; height:9px; border-radius:50%; flex-shrink:0; }
+    .dleg-r { font-family:'IBM Plex Mono',monospace; font-size:0.78rem; color:var(--white); }
+    .dleg-pct { font-size:0.7rem; color:var(--muted); margin-left:5px; }
+
+    /* prog bars */
+    .prows { display:flex; flex-direction:column; gap:1rem; }
+    .prow-hd { display:flex; justify-content:space-between; margin-bottom:6px; }
+    .prow-name { font-size:0.83rem; color:var(--white); font-weight:500; }
+    .prow-vals { font-size:0.75rem; color:var(--muted); font-family:'IBM Plex Mono',monospace; }
+    .ptrack { height:6px; background:rgba(255,255,255,0.07); border-radius:100px; overflow:hidden; }
+    .pfill  { height:100%; border-radius:100px; transition:width 1.1s cubic-bezier(.4,0,.2,1); }
+
+    /* activity */
+    .acts { display:flex; flex-direction:column; gap:0; }
+    .act { display:flex; gap:12px; padding-bottom:1.1rem; position:relative; }
+    .act:not(:last-child) .act-line { position:absolute; left:17px; top:34px; bottom:0; width:1px; background:var(--border); }
+    .act-ico {
+      width:34px; height:34px; border-radius:50%; flex-shrink:0;
+      display:flex; align-items:center; justify-content:center; font-size:0.95rem;
+    }
+    .act-title { font-size:0.84rem; font-weight:500; color:var(--white); margin-bottom:2px; }
+    .act-time  { font-size:0.72rem; color:var(--muted); }
+    .act-tag   { font-size:0.73rem; font-family:'IBM Plex Mono',monospace; margin-top:3px; }
+
+    /* scrollable table wrapper */
+    .tbl-wrap { overflow-x:auto; }
+
+    /* ── FOOTER ── */
+    footer {
+      position:relative; z-index:1;
+      background:rgba(0,0,0,0.6); border-top:1px solid var(--border);
+      padding:2rem;
+    }
+    .foot-in { max-width:1320px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; }
+    .foot-links { display:flex; gap:1.5rem; }
+    .foot-links a { font-size:0.78rem; color:var(--muted); text-decoration:none; }
+    .foot-links a:hover { color:var(--blue-pale); }
+    .foot-copy { font-size:0.74rem; color:var(--muted); }
+
+    /* ── ANIM ── */
+    @keyframes fadeUp {
+      from { opacity:0; transform:translateY(20px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+    .a1{animation:fadeUp .55s .05s both}
+    .a2{animation:fadeUp .55s .12s both}
+    .a3{animation:fadeUp .55s .19s both}
+    .a4{animation:fadeUp .55s .26s both}
+    .a5{animation:fadeUp .55s .33s both}
+
+    /* ── RESPONSIVE ── */
+    @media(max-width:1080px){ .layout{grid-template-columns:1fr} }
+    @media(max-width:768px){
+      .kpi-strip{grid-template-columns:1fr 1fr}
+      nav{display:none}
+      .hero-grid{grid-template-columns:1fr}
+      .hero-meta{display:none}
+    }
+    @media(max-width:440px){ .kpi-strip{grid-template-columns:1fr} }
+  </style>
+</head>
+<body>
+
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+
+<!-- TOP BAR -->
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="logo" href="#">
+      <div class="logo-shield">
+        <!-- shield/badge icon -->
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2L3 7v5c0 5.25 3.8 10.15 9 11.35C17.2 22.15 21 17.25 21 12V7L12 2z"/>
+          <polyline points="9 12 11 14 15 10"/>
+        </svg>
+      </div>
+      <div class="logo-text">
+        <div class="t1">POLDA — BIDANG TIK</div>
+        <div class="t2">Portal Transparansi Keuangan</div>
+      </div>
+    </a>
+    <nav>
+      <a href="#" class="active">Dashboard</a>
+      <a href="#">Anggaran</a>
+      <a href="#">Realisasi</a>
+      <a href="#">Pengadaan</a>
+      <a href="#">Dokumen</a>
+      <a href="#" class="nav-pill">⬇ Unduh Laporan</a>
+    </nav>
+    <div class="live-dot">DATA LIVE · 10 Mar 2025</div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero a1">
+  <div class="breadcrumb">
+    Polda <i>›</i> <span>Bidang TIK</span> <i>›</i> Laporan Keuangan 2025
+  </div>
+  <div class="hero-grid">
+    <div>
+      <div class="hero-eyebrow">Teknologi Informasi &amp; Komunikasi</div>
+      <h1>Laporan Keuangan<br><span class="accent">Bidang TIK</span> Polda<br>TA 2025</h1>
+      <p class="hero-desc">Portal resmi transparansi anggaran dan realisasi keuangan Bidang Teknologi Informasi dan Komunikasi. Data bersumber dari sistem SIMAK BMN dan SAKTI secara langsung.</p>
+    </div>
+    <div class="hero-meta">
+      <div class="meta-chip">
+        <span class="micon">🏦</span>
+        <div>
+          <div class="mval">DIPA 2025</div>
+          <div class="mlb">Sumber Dana</div>
+        </div>
+      </div>
+      <div class="meta-chip">
+        <span class="micon">📅</span>
+        <div>
+          <div class="mval">Triwulan I</div>
+          <div class="mlb">Periode Pelaporan</div>
+        </div>
+      </div>
+      <div class="meta-chip">
+        <span class="micon">✅</span>
+        <div>
+          <div class="mval">Terverifikasi</div>
+          <div class="mlb">Status Audit</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- KPI STRIP -->
+<section class="kpi-strip">
+  <div class="kpi a2">
+    <div class="kpi-stripe" style="background:linear-gradient(90deg,var(--blue),var(--cyan))"></div>
+    <div class="kpi-icon">💼</div>
+    <div class="kpi-label">Pagu Anggaran TIK 2025</div>
+    <div class="kpi-val">Rp 18,4M</div>
+    <div class="kpi-sub info">▲ 14,3% dari TA 2024</div>
+  </div>
+  <div class="kpi a3">
+    <div class="kpi-stripe" style="background:var(--green)"></div>
+    <div class="kpi-icon">✅</div>
+    <div class="kpi-label">Realisasi Anggaran</div>
+    <div class="kpi-val">Rp 7,92M</div>
+    <div class="kpi-sub up">▲ 43,0% terserap</div>
+  </div>
+  <div class="kpi a4">
+    <div class="kpi-stripe" style="background:var(--gold)"></div>
+    <div class="kpi-icon">📦</div>
+    <div class="kpi-label">Paket Pengadaan</div>
+    <div class="kpi-val">24</div>
+    <div class="kpi-sub up">▲ 18 selesai · 6 berjalan</div>
+  </div>
+  <div class="kpi a5">
+    <div class="kpi-stripe" style="background:var(--cyan)"></div>
+    <div class="kpi-icon">🖥️</div>
+    <div class="kpi-label">Aset TIK Tercatat</div>
+    <div class="kpi-val">1.247</div>
+    <div class="kpi-sub info">Unit perangkat aktif</div>
+  </div>
+</section>
+
+<!-- MAIN LAYOUT -->
+<div class="layout">
+  <!-- LEFT -->
+  <div>
+
+    <!-- BAR CHART -->
+    <div class="card a2">
+      <div class="ch">
+        <div>
+          <div class="ch-title">Realisasi Anggaran Bulanan</div>
+          <div class="ch-sub">Pagu vs Realisasi TIK — Januari s.d. Juni 2025 (dalam juta rupiah)</div>
+        </div>
+        <div class="ch-right">
+          <select class="sel"><option>2025</option><option>2024</option></select>
+        </div>
+      </div>
+      <div class="barchart" id="barChart"></div>
+      <div class="blegend">
+        <div class="bleg"><div class="bleg-dot" style="background:var(--blue-br)"></div>Pagu</div>
+        <div class="bleg"><div class="bleg-dot" style="background:var(--cyan)"></div>Realisasi</div>
+      </div>
+    </div>
+
+    <!-- TABLE -->
+    <div class="card a3">
+      <div class="ch">
+        <div>
+          <div class="ch-title">Rincian Belanja TIK</div>
+          <div class="ch-sub">Seluruh transaksi terverifikasi Bidang TIK</div>
+        </div>
+        <div class="ch-right">
+          <div class="tabs">
+            <button class="tab on" onclick="tabFilter(this,'semua')">Semua</button>
+            <button class="tab" onclick="tabFilter(this,'perangkat')">Perangkat</button>
+            <button class="tab" onclick="tabFilter(this,'jaringan')">Jaringan</button>
+            <button class="tab" onclick="tabFilter(this,'sistem')">Sistem</button>
+          </div>
+          <button class="btn-dl">⬇ CSV</button>
+        </div>
+      </div>
+      <div class="search">
+        <span>🔍</span>
+        <input type="text" placeholder="Cari kegiatan, kode MAK, atau jenis belanja..." oninput="searchTable(this.value)">
+      </div>
+      <div class="tbl-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Tanggal</th>
+              <th>Uraian Kegiatan</th>
+              <th>Jenis</th>
+              <th>MAK</th>
+              <th>Status</th>
+              <th style="text-align:right">Nilai</th>
+            </tr>
+          </thead>
+          <tbody id="txBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- SIDEBAR -->
+  <div>
+
+    <!-- DONUT -->
+    <div class="card a2">
+      <div class="ch">
+        <div>
+          <div class="ch-title">Komposisi Anggaran TIK</div>
+          <div class="ch-sub">Per jenis belanja 2025</div>
+        </div>
+      </div>
+      <div class="donut-outer">
+        <svg width="164" height="164" viewBox="0 0 164 164" id="donutSvg"></svg>
+        <div class="donut-ctr">
+          <div class="donut-big">100%</div>
+          <div class="donut-sm">Total Pagu</div>
+        </div>
+      </div>
+      <div class="dleg" id="donutLeg"></div>
+    </div>
+
+    <!-- REALISASI PROGRESS -->
+    <div class="card a3">
+      <div class="ch">
+        <div>
+          <div class="ch-title">Serapan per Sub-Komponen</div>
+          <div class="ch-sub">% realisasi dari pagu TIK</div>
+        </div>
+      </div>
+      <div class="prows" id="progRows"></div>
+    </div>
+
+    <!-- ACTIVITY FEED -->
+    <div class="card a4">
+      <div class="ch">
+        <div>
+          <div class="ch-title">Aktivitas Terkini</div>
+          <div class="ch-sub">Update sistem &amp; anggaran</div>
+        </div>
+      </div>
+      <div class="acts" id="actFeed"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-in">
+    <div style="font-family:'Syne',sans-serif;font-size:1rem;color:var(--blue-pale)">Bidang TIK · Portal Transparansi Keuangan Polda</div>
+    <div class="foot-links">
+      <a href="#">DIPA 2025</a>
+      <a href="#">Pedoman</a>
+      <a href="#">API Data</a>
+      <a href="#">Hubungi Kami</a>
+    </div>
+    <div class="foot-copy">Data bersumber dari SIMAK BMN & SAKTI. © 2025 Bidang TIK Polda.</div>
+  </div>
+</footer>
+
+<script>
+// ─── DATA ────────────────────────────────────────────────────
+const barData = [
+  {m:'Jan', pagu:3100, real:820},
+  {m:'Feb', pagu:3100, real:1240},
+  {m:'Mar', pagu:3100, real:1680},
+  {m:'Apr', pagu:3100, real:1120},
+  {m:'Mei', pagu:3100, real:1840},
+  {m:'Jun', pagu:3100, real:1220},
+];
+
+const donutData = [
+  {name:'Perangkat Keras', pct:38, color:'#1a9eff'},
+  {name:'Infrastruktur Jaringan', pct:27, color:'#00d4ff'},
+  {name:'Perangkat Lunak', pct:18, color:'#00e898'},
+  {name:'Pemeliharaan',    pct:11, color:'#f5b800'},
+  {name:'Lain-lain',       pct:6,  color:'#4d7aaa'},
+];
+
+const progData = [
+  {name:'Perangkat Keras',       pct:58, val:'6,98M', color:'#1a9eff'},
+  {name:'Infrastruktur Jaringan',pct:44, val:'4,97M', color:'#00d4ff'},
+  {name:'Perangkat Lunak',       pct:39, val:'3,31M', color:'#00e898'},
+  {name:'Pemeliharaan',          pct:31, val:'2,02M', color:'#f5b800'},
+  {name:'Lain-lain',             pct:22, val:'1,10M', color:'#4d7aaa'},
+];
+
+const txAll = [
+  {tgl:'08 Mar 2025',uraian:'Pengadaan Server Rack & UPS Data Center',jenis:'Perangkat',mak:'532111',status:'Selesai',val:'+Rp 2,14M',type:'pos'},
+  {tgl:'07 Mar 2025',uraian:'Langganan Bandwidth Internet Polda 1Gbps',jenis:'Jaringan',mak:'522111',status:'Berjalan',val:'-Rp 480Jt',type:'neg'},
+  {tgl:'06 Mar 2025',uraian:'Lisensi Microsoft 365 GCC (300 seat)',jenis:'Sistem',mak:'532112',status:'Selesai',val:'-Rp 215Jt',type:'neg'},
+  {tgl:'05 Mar 2025',uraian:'Pengadaan CCTV IP Camera 64 titik',jenis:'Perangkat',mak:'532111',status:'Selesai',val:'-Rp 840Jt',type:'neg'},
+  {tgl:'04 Mar 2025',uraian:'Pemeliharaan Jaringan Fiber Optic Ring',jenis:'Jaringan',mak:'523121',status:'Selesai',val:'-Rp 320Jt',type:'neg'},
+  {tgl:'03 Mar 2025',uraian:'Revisi DIPA Bidang TIK TA 2025',jenis:'Sistem',mak:'—',status:'Proses',val:'—',type:'neu'},
+  {tgl:'28 Feb 2025',uraian:'Pengadaan Laptop Operasional 50 unit',jenis:'Perangkat',mak:'532111',status:'Selesai',val:'-Rp 750Jt',type:'neg'},
+  {tgl:'27 Feb 2025',uraian:'Jasa Konsultansi Sistem ANPR',jenis:'Sistem',mak:'526311',status:'Proses',val:'-Rp 980Jt',type:'neg'},
+  {tgl:'25 Feb 2025',uraian:'Upgrade Core Switch Datacenter',jenis:'Jaringan',mak:'532111',status:'Selesai',val:'-Rp 430Jt',type:'neg'},
+  {tgl:'22 Feb 2025',uraian:'Pemeliharaan Sistem CCTV Kota',jenis:'Perangkat',mak:'523121',status:'Ditunda',val:'-Rp 260Jt',type:'neg'},
+];
+
+const actData = [
+  {ico:'🔄',bg:'rgba(0,119,230,0.18)', title:'DIPA Direvisi',       time:'08 Mar 2025, 09.14', tag:'Pagu +Rp 1,2M', tc:'var(--blue-br)'},
+  {ico:'✅',bg:'rgba(0,232,152,0.15)', title:'Pengadaan Server Selesai',time:'07 Mar 2025, 14.22', tag:'2 paket diverifikasi', tc:'var(--green)'},
+  {ico:'📋',bg:'rgba(245,184,0,0.15)', title:'LPJ Februari Diunggah',time:'05 Mar 2025, 08.00', tag:'Laporan PDF tersedia', tc:'var(--gold)'},
+  {ico:'⚠️',bg:'rgba(255,77,77,0.15)', title:'Kontrak ANPR Tertunda',time:'03 Mar 2025, 16.45', tag:'Menunggu persetujuan', tc:'var(--red)'},
+];
+
+const statusClass = {Selesai:'bg-green', Berjalan:'bg-blue', Proses:'bg-gold', Ditunda:'bg-red'};
+const jenisClass  = {Perangkat:'bg-cyan', Jaringan:'bg-blue', Sistem:'bg-gold'};
+
+// ─── BAR CHART ───────────────────────────────────────────────
+function renderBar(){
+  const el = document.getElementById('barChart');
+  const max = Math.max(...barData.flatMap(d=>[d.pagu,d.real]));
+  el.innerHTML = barData.map(d=>{
+    const ph = Math.round(d.pagu/max*152);
+    const rh = Math.round(d.real/max*152);
+    return `<div class="bcol">
+      <div class="bwrap">
+        <div class="bbar a" style="height:${ph}px" title="Pagu: Rp ${d.pagu}Jt"></div>
+        <div class="bbar b" style="height:${rh}px" title="Realisasi: Rp ${d.real}Jt"></div>
+      </div>
+      <div class="blabel">${d.m}</div>
+    </div>`;
+  }).join('');
+}
+
+// ─── DONUT ───────────────────────────────────────────────────
+function renderDonut(){
+  const svg = document.getElementById('donutSvg');
+  const cx=82,cy=82,r=64,sw=26,circ=2*Math.PI*r;
+  let off=0;
+  svg.innerHTML = donutData.map(d=>{
+    const dash=(d.pct/100)*circ, gap=circ-dash;
+    const el=`<circle cx="${cx}" cy="${cy}" r="${r}" fill="none"
+      stroke="${d.color}" stroke-width="${sw}"
+      stroke-dasharray="${dash} ${gap}"
+      stroke-dashoffset="${-off}"
+      style="cursor:pointer;transition:opacity .2s"
+      onmouseenter="this.style.opacity=.65"
+      onmouseleave="this.style.opacity=1">
+      <title>${d.name}: ${d.pct}%</title></circle>`;
+    off+=dash; return el;
+  }).join('');
+
+  document.getElementById('donutLeg').innerHTML = donutData.map(d=>`
+    <div class="dleg-row">
+      <div class="dleg-l"><div class="dleg-dot" style="background:${d.color}"></div>${d.name}</div>
+      <div class="dleg-r">${d.pct}%<span class="dleg-pct">${Math.round(d.pct*184/100)}Jt</span></div>
+    </div>`).join('');
+}
+
+// ─── PROGRESS ───────────────────────────────────────────────
+function renderProg(){
+  document.getElementById('progRows').innerHTML = progData.map(p=>`
+    <div>
+      <div class="prow-hd">
+        <span class="prow-name">${p.name}</span>
+        <span class="prow-vals">Rp ${p.val} · <span style="color:${p.color}">${p.pct}%</span></span>
+      </div>
+      <div class="ptrack"><div class="pfill" style="width:0;background:${p.color}" data-t="${p.pct}"></div></div>
+    </div>`).join('');
+  setTimeout(()=>{
+    document.querySelectorAll('.pfill').forEach(f=>f.style.width=f.dataset.t+'%');
+  },400);
+}
+
+// ─── ACTIVITY ───────────────────────────────────────────────
+function renderAct(){
+  document.getElementById('actFeed').innerHTML = actData.map((a,i)=>`
+    <div class="act">
+      ${i<actData.length-1?'<div class="act-line"></div>':''}
+      <div class="act-ico" style="background:${a.bg}">${a.ico}</div>
+      <div>
+        <div class="act-title">${a.title}</div>
+        <div class="act-time">${a.time}</div>
+        <div class="act-tag" style="color:${a.tc}">${a.tag}</div>
+      </div>
+    </div>`).join('');
+}
+
+// ─── TABLE ──────────────────────────────────────────────────
+let activeTab='semua';
+function renderTable(data){
+  document.getElementById('txBody').innerHTML = data.map(r=>`
+    <tr>
+      <td class="td-dim mono">${r.tgl}</td>
+      <td>${r.uraian}</td>
+      <td><span class="badge ${jenisClass[r.jenis]||'bg-blue'}">${r.jenis}</span></td>
+      <td class="mono td-dim">${r.mak}</td>
+      <td><span class="badge ${statusClass[r.status]||'bg-gold'}">${r.status}</span></td>
+      <td style="text-align:right" class="mono c-${r.type}">${r.val}</td>
+    </tr>`).join('');
+}
+
+function searchTable(q){
+  const l=q.toLowerCase();
+  let d=txAll.filter(r=>r.uraian.toLowerCase().includes(l)||r.jenis.toLowerCase().includes(l)||r.mak.includes(l));
+  if(activeTab!=='semua') d=d.filter(r=>r.jenis.toLowerCase()===activeTab);
+  renderTable(d);
+}
+
+function tabFilter(el,type){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  el.classList.add('on');
+  activeTab=type;
+  searchTable(document.querySelector('.search input').value);
+}
+
+// ─── INIT ────────────────────────────────────────────────────
+renderBar(); renderDonut(); renderProg(); renderAct(); renderTable(txAll);
+</script>
+</body>
+</html>

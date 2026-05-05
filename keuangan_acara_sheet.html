@@ -1,0 +1,470 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans);background:var(--color-background-tertiary);color:var(--color-text-primary)}
+
+.wrap{padding:16px}
+
+.top-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:10px}
+.top-bar h2{font-size:15px;font-weight:500}
+.btn-new{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);font-size:12px;font-weight:500;color:var(--color-text-primary);cursor:pointer;font-family:var(--font-sans)}
+.btn-new:hover{background:var(--color-background-secondary)}
+
+.sheet-tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px;margin-bottom:14px;align-items:flex-end}
+.tab{display:flex;align-items:center;gap:6px;padding:7px 14px;border-radius:var(--border-radius-md) var(--border-radius-md) 0 0;border:0.5px solid var(--color-border-tertiary);border-bottom:none;background:var(--color-background-secondary);font-size:12px;cursor:pointer;white-space:nowrap;color:var(--color-text-secondary);transition:all .15s}
+.tab.active{background:var(--color-background-primary);color:var(--color-text-primary);font-weight:500;border-color:var(--color-border-secondary)}
+.tab-close{font-size:14px;line-height:1;opacity:.4;padding:0 2px}
+.tab-close:hover{opacity:1;color:var(--color-text-danger)}
+
+.sheet-area{background:var(--color-background-primary);border:0.5px solid var(--color-border-secondary);border-radius:0 var(--border-radius-lg) var(--border-radius-lg) var(--border-radius-lg);overflow:hidden}
+
+.sheet-header{padding:14px 16px;border-bottom:0.5px solid var(--color-border-tertiary);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.sheet-name-input{font-size:14px;font-weight:500;border:none;outline:none;background:transparent;color:var(--color-text-primary);font-family:var(--font-sans);min-width:120px;max-width:260px}
+.sheet-name-input:focus{border-bottom:1.5px solid var(--color-border-info)}
+.sheet-actions{display:flex;gap:7px}
+.btn-act{display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);font-size:11.5px;color:var(--color-text-secondary);cursor:pointer;font-family:var(--font-sans);transition:all .15s}
+.btn-act:hover{background:var(--color-background-secondary);color:var(--color-text-primary)}
+.btn-act.primary{background:var(--color-background-info);border-color:var(--color-border-info);color:var(--color-text-info)}
+.btn-act.primary:hover{opacity:.85}
+.btn-act.danger{background:var(--color-background-danger);border-color:var(--color-border-danger);color:var(--color-text-danger)}
+
+.summary-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:12px 16px;border-bottom:0.5px solid var(--color-border-tertiary);background:var(--color-background-secondary)}
+.sum-card{border-radius:var(--border-radius-md);padding:10px 12px;background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary)}
+.sum-lbl{font-size:10px;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+.sum-val{font-size:16px;font-weight:500}
+.c-success{color:var(--color-text-success)}.c-danger{color:var(--color-text-danger)}.c-info{color:var(--color-text-info)}.c-warn{color:var(--color-text-warning)}
+
+.tbl-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12px;min-width:700px}
+thead tr{background:var(--color-background-secondary)}
+thead th{padding:8px 10px;text-align:left;font-size:10.5px;font-weight:500;color:var(--color-text-secondary);border-bottom:0.5px solid var(--color-border-secondary);white-space:nowrap;letter-spacing:.04em}
+thead th:first-child{width:36px;text-align:center}
+tbody tr{border-bottom:0.5px solid var(--color-border-tertiary);transition:background .1s}
+tbody tr:hover{background:var(--color-background-secondary)}
+tbody tr:last-child{border-bottom:none}
+td{padding:0;vertical-align:middle}
+td:first-child{text-align:center;padding:0 6px;font-size:10px;color:var(--color-text-tertiary)}
+
+.cell-input{width:100%;padding:8px 10px;border:none;outline:none;background:transparent;font-size:12px;font-family:var(--font-sans);color:var(--color-text-primary)}
+.cell-input:focus{background:var(--color-background-info);outline:1.5px solid var(--color-border-info);outline-offset:-1px}
+.cell-select{width:100%;padding:8px 6px;border:none;outline:none;background:transparent;font-size:12px;font-family:var(--font-sans);color:var(--color-text-primary);cursor:pointer}
+.cell-select:focus{background:var(--color-background-secondary)}
+
+.badge{display:inline-block;font-size:10px;font-weight:500;padding:2px 8px;border-radius:10px}
+.badge-in{background:var(--color-background-success);color:var(--color-text-success)}
+.badge-out{background:var(--color-background-danger);color:var(--color-text-danger)}
+
+.add-row-btn{width:100%;padding:9px;border:none;background:none;font-size:12px;color:var(--color-text-tertiary);cursor:pointer;text-align:left;padding-left:56px;border-top:0.5px solid var(--color-border-tertiary);transition:all .15s;font-family:var(--font-sans)}
+.add-row-btn:hover{background:var(--color-background-secondary);color:var(--color-text-primary)}
+
+.td-del{width:32px;text-align:center}
+.del-btn{background:none;border:none;cursor:pointer;font-size:14px;color:var(--color-text-tertiary);padding:4px 6px;border-radius:4px;line-height:1}
+.del-btn:hover{background:var(--color-background-danger);color:var(--color-text-danger)}
+
+.empty-state{padding:40px;text-align:center;color:var(--color-text-tertiary);font-size:13px}
+
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:50;display:flex;align-items:center;justify-content:center}
+.modal{background:var(--color-background-primary);border-radius:var(--border-radius-lg);border:0.5px solid var(--color-border-secondary);width:360px;max-width:95vw;overflow:hidden}
+.modal-hd{padding:14px 16px;border-bottom:0.5px solid var(--color-border-tertiary);font-size:13px;font-weight:500}
+.modal-body{padding:16px;display:flex;flex-direction:column;gap:10px}
+.modal-ft{padding:12px 16px;border-top:0.5px solid var(--color-border-tertiary);display:flex;justify-content:flex-end;gap:8px}
+.flbl{font-size:11px;color:var(--color-text-secondary);margin-bottom:4px}
+.finput{width:100%;padding:8px 10px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);background:var(--color-background-secondary);font-size:13px;font-family:var(--font-sans);color:var(--color-text-primary);outline:none}
+.finput:focus{border-color:var(--color-border-info)}
+
+.toast{position:fixed;bottom:20px;right:20px;z-index:100;background:var(--color-background-success);border:0.5px solid var(--color-border-success);color:var(--color-text-success);padding:9px 16px;border-radius:var(--border-radius-md);font-size:12px;font-weight:500;transform:translateY(60px);opacity:0;transition:all .3s}
+.toast.show{transform:translateY(0);opacity:1}
+</style>
+
+<h2 class="sr-only">Sistem keuangan acara BID TIK POLDA DIY — input pemasukan dan pengeluaran per acara</h2>
+
+<div class="wrap">
+
+<div class="top-bar">
+  <h2>Keuangan Acara</h2>
+  <button class="btn-new" onclick="openNewSheet()">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+    Buat Sheet Baru
+  </button>
+</div>
+
+<div class="sheet-tabs" id="sheetTabs"></div>
+
+<div class="sheet-area" id="sheetArea">
+  <div class="empty-state">Belum ada sheet. Klik "Buat Sheet Baru" untuk mulai.</div>
+</div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<div id="modalBg" style="display:none" class="modal-bg" onclick="closeModal(event)">
+  <div class="modal">
+    <div class="modal-hd">Buat Sheet Acara Baru</div>
+    <div class="modal-body">
+      <div>
+        <div class="flbl">Nama Acara *</div>
+        <input class="finput" id="mNama" placeholder="Contoh: Pelantikan Kapolda DIY 2025" />
+      </div>
+      <div>
+        <div class="flbl">Tanggal Acara</div>
+        <input class="finput" type="date" id="mTgl" />
+      </div>
+      <div>
+        <div class="flbl">Sumber Dana Awal (Rp)</div>
+        <input class="finput" type="number" id="mDana" placeholder="0" min="0" />
+      </div>
+    </div>
+    <div class="modal-ft">
+      <button class="btn-act" onclick="document.getElementById('modalBg').style.display='none'">Batal</button>
+      <button class="btn-act primary" onclick="createSheet()">Buat Sheet</button>
+    </div>
+  </div>
+</div>
+
+<script>
+let sheets = [];
+let activeIdx = 0;
+let rowCounter = 1000;
+
+const fmt = n => {
+  const num = parseInt(n) || 0;
+  return 'Rp ' + num.toLocaleString('id-ID');
+};
+
+const fmtNum = n => (parseInt(n) || 0).toLocaleString('id-ID');
+
+function openNewSheet() {
+  document.getElementById('mNama').value = '';
+  document.getElementById('mTgl').value = new Date().toISOString().slice(0,10);
+  document.getElementById('mDana').value = '';
+  document.getElementById('modalBg').style.display = 'flex';
+  setTimeout(() => document.getElementById('mNama').focus(), 50);
+}
+
+function closeModal(e) {
+  if (e.target.id === 'modalBg') document.getElementById('modalBg').style.display = 'none';
+}
+
+function createSheet() {
+  const nama = document.getElementById('mNama').value.trim();
+  if (!nama) { document.getElementById('mNama').style.borderColor = 'var(--color-border-danger)'; return; }
+  const tgl  = document.getElementById('mTgl').value;
+  const dana = parseInt(document.getElementById('mDana').value) || 0;
+  sheets.push({
+    id: Date.now(),
+    nama,
+    tgl,
+    dana,
+    rows: dana > 0 ? [{
+      id: rowCounter++,
+      tgl: tgl || new Date().toISOString().slice(0,10),
+      uraian: 'Dana Awal / Anggaran Diterima',
+      kategori: 'Lain-lain',
+      tipe: 'Pemasukan',
+      nilai: dana,
+      ket: 'Dana awal'
+    }] : []
+  });
+  activeIdx = sheets.length - 1;
+  document.getElementById('modalBg').style.display = 'none';
+  render();
+  showToast('Sheet "' + nama + '" berhasil dibuat');
+}
+
+function switchSheet(idx) {
+  activeIdx = idx;
+  render();
+}
+
+function closeSheet(idx, e) {
+  e.stopPropagation();
+  if (!confirm('Hapus sheet "' + sheets[idx].nama + '"?')) return;
+  sheets.splice(idx, 1);
+  if (activeIdx >= sheets.length) activeIdx = sheets.length - 1;
+  render();
+}
+
+function addRow(sheetIdx) {
+  const today = new Date().toISOString().slice(0,10);
+  sheets[sheetIdx].rows.push({
+    id: rowCounter++,
+    tgl: today,
+    uraian: '',
+    kategori: 'Konsumsi',
+    tipe: 'Pengeluaran',
+    nilai: 0,
+    ket: ''
+  });
+  render();
+  const inputs = document.querySelectorAll('.cell-input[data-field="uraian"]');
+  if (inputs.length) inputs[inputs.length - 1].focus();
+}
+
+function deleteRow(sheetIdx, rowId) {
+  sheets[sheetIdx].rows = sheets[sheetIdx].rows.filter(r => r.id !== rowId);
+  recalc(sheetIdx);
+  render();
+}
+
+function updateCell(sheetIdx, rowId, field, value) {
+  const row = sheets[sheetIdx].rows.find(r => r.id === rowId);
+  if (!row) return;
+  row[field] = field === 'nilai' ? (parseInt(value.replace(/\D/g,'')) || 0) : value;
+  recalc(sheetIdx);
+  renderSummary(sheetIdx);
+}
+
+function recalc(idx) {
+  const s = sheets[idx];
+  s._pemasukan = s.rows.filter(r=>r.tipe==='Pemasukan').reduce((a,r)=>a+r.nilai,0);
+  s._pengeluaran = s.rows.filter(r=>r.tipe==='Pengeluaran').reduce((a,r)=>a+r.nilai,0);
+  s._saldo = s._pemasukan - s._pengeluaran;
+}
+
+function renderSummary(idx) {
+  const s = sheets[idx];
+  const el = document.getElementById('summary-'+idx);
+  if (!el) return;
+  el.innerHTML = summaryHTML(idx);
+}
+
+function summaryHTML(idx) {
+  const s = sheets[idx];
+  const p = s._pemasukan || 0;
+  const q = s._pengeluaran || 0;
+  const saldo = p - q;
+  const n = s.rows.length;
+  return `
+    <div class="sum-card"><div class="sum-lbl">Total Pemasukan</div><div class="sum-val c-success">${fmt(p)}</div></div>
+    <div class="sum-card"><div class="sum-lbl">Total Pengeluaran</div><div class="sum-val c-danger">${fmt(q)}</div></div>
+    <div class="sum-card"><div class="sum-lbl">Saldo / Sisa</div><div class="sum-val ${saldo>=0?'c-success':'c-danger'}">${fmt(saldo)}</div></div>
+    <div class="sum-card"><div class="sum-lbl">Jumlah Baris</div><div class="sum-val c-info">${n} item</div></div>`;
+}
+
+function render() {
+  renderTabs();
+  if (!sheets.length) {
+    document.getElementById('sheetArea').innerHTML = '<div class="empty-state">Belum ada sheet. Klik "Buat Sheet Baru" untuk mulai.</div>';
+    return;
+  }
+  const s = sheets[activeIdx];
+  recalc(activeIdx);
+  document.getElementById('sheetArea').innerHTML = `
+    <div class="sheet-header">
+      <input class="sheet-name-input" value="${escHtml(s.nama)}"
+             onchange="sheets[${activeIdx}].nama=this.value;renderTabs()"
+             title="Klik untuk edit nama acara" />
+      <div class="sheet-actions">
+        <button class="btn-act" onclick="addRow(${activeIdx})">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Tambah Baris
+        </button>
+        <button class="btn-act primary" onclick="exportPDF(${activeIdx})">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          Export PDF
+        </button>
+      </div>
+    </div>
+    <div class="summary-row" id="summary-${activeIdx}">${summaryHTML(activeIdx)}</div>
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Tanggal</th>
+            <th style="min-width:200px">Uraian Kegiatan / Keterangan</th>
+            <th>Kategori</th>
+            <th>Tipe</th>
+            <th style="text-align:right;min-width:130px">Nilai (Rp)</th>
+            <th>Catatan</th>
+            <th style="width:32px"></th>
+          </tr>
+        </thead>
+        <tbody id="sheetBody"></tbody>
+      </table>
+    </div>
+    <button class="add-row-btn" onclick="addRow(${activeIdx})">+ Tambah baris baru...</button>`;
+
+  renderRows();
+}
+
+function renderRows() {
+  if (!sheets.length) return;
+  const s = sheets[activeIdx];
+  const body = document.getElementById('sheetBody');
+  if (!body) return;
+
+  const kategoriOpts = ['Konsumsi','Akomodasi','Transportasi','Perlengkapan','Dokumentasi','Honorarium','Kesekretariatan','Lain-lain'];
+
+  if (!s.rows.length) {
+    body.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:32px;color:var(--color-text-tertiary);font-size:12px">Belum ada item. Klik "+ Tambah Baris" untuk mulai mencatat.</td></tr>`;
+    return;
+  }
+
+  body.innerHTML = s.rows.map((row, i) => {
+    const katOpts = kategoriOpts.map(k => `<option value="${k}" ${row.kategori===k?'selected':''}>${k}</option>`).join('');
+    const isIn = row.tipe === 'Pemasukan';
+    return `<tr>
+      <td>${i+1}</td>
+      <td><input class="cell-input" type="date" value="${row.tgl||''}" onchange="updateCell(${activeIdx},${row.id},'tgl',this.value)" style="min-width:110px"/></td>
+      <td><input class="cell-input" data-field="uraian" value="${escHtml(row.uraian)}" placeholder="Isi uraian..." onchange="updateCell(${activeIdx},${row.id},'uraian',this.value)"/></td>
+      <td>
+        <select class="cell-select" onchange="updateCell(${activeIdx},${row.id},'kategori',this.value)">
+          ${katOpts}
+        </select>
+      </td>
+      <td>
+        <select class="cell-select" onchange="updateCell(${activeIdx},${row.id},'tipe',this.value);renderRows();renderSummary(${activeIdx})">
+          <option value="Pemasukan" ${isIn?'selected':''}>Pemasukan</option>
+          <option value="Pengeluaran" ${!isIn?'selected':''}>Pengeluaran</option>
+        </select>
+      </td>
+      <td style="text-align:right">
+        <input class="cell-input" style="text-align:right;font-family:var(--font-mono);color:${isIn?'var(--color-text-success)':'var(--color-text-danger)'}"
+               value="${row.nilai>0?row.nilai:''}"
+               placeholder="0"
+               type="number" min="0"
+               onchange="updateCell(${activeIdx},${row.id},'nilai',this.value);renderRows();renderSummary(${activeIdx})"/>
+      </td>
+      <td><input class="cell-input" value="${escHtml(row.ket||'')}" placeholder="Catatan..." onchange="updateCell(${activeIdx},${row.id},'ket',this.value)"/></td>
+      <td class="td-del"><button class="del-btn" onclick="deleteRow(${activeIdx},${row.id})" title="Hapus baris">&#x2715;</button></td>
+    </tr>`;
+  }).join('');
+}
+
+function renderTabs() {
+  const el = document.getElementById('sheetTabs');
+  el.innerHTML = sheets.map((s,i) => `
+    <div class="tab ${i===activeIdx?'active':''}" onclick="switchSheet(${i})">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      ${escHtml(s.nama)}
+      <span class="tab-close" onclick="closeSheet(${i},event)">&#x2715;</span>
+    </div>`).join('');
+}
+
+function escHtml(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+function exportPDF(idx) {
+  const s = sheets[idx];
+  recalc(idx);
+  const tgl = s.tgl ? new Date(s.tgl).toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'}) : '-';
+  const rows = s.rows.map((r,i) => {
+    const isIn = r.tipe === 'Pemasukan';
+    return `<tr>
+      <td>${i+1}</td>
+      <td>${r.tgl ? new Date(r.tgl).toLocaleDateString('id-ID') : '-'}</td>
+      <td>${r.uraian}</td>
+      <td>${r.kategori}</td>
+      <td style="color:${isIn?'#1d8f4e':'#c0392b'};font-weight:600">${r.tipe}</td>
+      <td style="text-align:right;color:${isIn?'#1d8f4e':'#c0392b'};font-weight:600">${r.nilai.toLocaleString('id-ID')}</td>
+      <td>${r.ket||''}</td>
+    </tr>`;
+  }).join('');
+
+  const html = `<!DOCTYPE html><html lang="id"><head><meta charset="UTF-8"/>
+  <title>Laporan Keuangan - ${s.nama}</title>
+  <style>
+    body{font-family:'Segoe UI',sans-serif;font-size:12px;color:#1a1a1a;margin:0;padding:0}
+    .cover{background:#1a2a4a;color:#fff;padding:32px 40px 28px}
+    .cover h1{font-size:20px;font-weight:700;margin-bottom:6px}
+    .cover p{font-size:12px;opacity:.75}
+    .logo-row{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+    .logo-circle{width:44px;height:44px;background:rgba(255,255,255,.15);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;color:#fff}
+    .content{padding:24px 40px}
+    .summary{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px}
+    .sum-box{border:1px solid #ddd;border-radius:8px;padding:12px 14px}
+    .sum-lbl{font-size:10px;color:#888;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+    .sum-val{font-size:18px;font-weight:700}
+    table{width:100%;border-collapse:collapse;font-size:11px}
+    thead th{background:#f0f2e8;padding:8px 10px;text-align:left;border-bottom:2px solid #3a4a20;font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:#3a4a20}
+    tbody tr:nth-child(even){background:#fafaf7}
+    tbody td{padding:7px 10px;border-bottom:1px solid #eee}
+    .total-row td{font-weight:700;border-top:2px solid #333;background:#f5f5f5}
+    .footer{margin-top:32px;padding-top:16px;border-top:1px solid #eee;font-size:10px;color:#888;text-align:center}
+    @media print{body{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+  </style></head><body>
+  <div class="cover">
+    <div class="logo-row">
+      <div class="logo-circle">TIK</div>
+      <div>
+        <div style="font-size:13px;font-weight:700">BID TIK POLDA DIY</div>
+        <div style="font-size:10px;opacity:.7">Bidang Teknologi Informasi dan Komunikasi</div>
+      </div>
+    </div>
+    <h1>Laporan Keuangan Acara</h1>
+    <div style="font-size:16px;font-weight:500;margin-bottom:4px">${s.nama}</div>
+    <p>Tanggal: ${tgl} &nbsp;|&nbsp; Dicetak: ${new Date().toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric',hour:'2-digit',minute:'2-digit'})}</p>
+  </div>
+  <div class="content">
+    <div class="summary">
+      <div class="sum-box"><div class="sum-lbl">Total Pemasukan</div><div class="sum-val" style="color:#1d8f4e">Rp ${(s._pemasukan||0).toLocaleString('id-ID')}</div></div>
+      <div class="sum-box"><div class="sum-lbl">Total Pengeluaran</div><div class="sum-val" style="color:#c0392b">Rp ${(s._pengeluaran||0).toLocaleString('id-ID')}</div></div>
+      <div class="sum-box"><div class="sum-lbl">Saldo / Sisa Dana</div><div class="sum-val" style="color:${(s._saldo||0)>=0?'#1d8f4e':'#c0392b'}">Rp ${((s._saldo||0)).toLocaleString('id-ID')}</div></div>
+    </div>
+    <table>
+      <thead><tr><th>#</th><th>Tanggal</th><th style="min-width:180px">Uraian Kegiatan</th><th>Kategori</th><th>Tipe</th><th style="text-align:right">Nilai (Rp)</th><th>Catatan</th></tr></thead>
+      <tbody>${rows}
+        <tr class="total-row">
+          <td colspan="5" style="text-align:right">TOTAL PENGELUARAN</td>
+          <td style="text-align:right;color:#c0392b">${(s._pengeluaran||0).toLocaleString('id-ID')}</td>
+          <td></td>
+        </tr>
+        <tr class="total-row">
+          <td colspan="5" style="text-align:right">TOTAL PEMASUKAN</td>
+          <td style="text-align:right;color:#1d8f4e">${(s._pemasukan||0).toLocaleString('id-ID')}</td>
+          <td></td>
+        </tr>
+        <tr class="total-row">
+          <td colspan="5" style="text-align:right">SALDO / SISA DANA</td>
+          <td style="text-align:right;color:${(s._saldo||0)>=0?'#1d8f4e':'#c0392b'}">${((s._saldo||0)).toLocaleString('id-ID')}</td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="footer">
+      Dokumen ini digenerate otomatis oleh Sistem Keuangan Acara BID TIK POLDA DIY &mdash; ${new Date().getFullYear()}
+    </div>
+  </div>
+  <script>window.onload=()=>{window.print()}<\/script>
+  </body></html>`;
+
+  const win = window.open('','_blank');
+  if (!win) { showToast('Aktifkan popup untuk export PDF'); return; }
+  win.document.write(html);
+  win.document.close();
+  showToast('PDF siap dicetak!');
+}
+
+document.getElementById('mNama').addEventListener('keydown', e => {
+  if (e.key === 'Enter') createSheet();
+});
+
+sheets.push({
+  id: 1,
+  nama: 'Pelantikan Kapolda DIY 2025',
+  tgl: '2025-03-15',
+  dana: 5000000,
+  rows: [
+    {id:rowCounter++,tgl:'2025-03-10',uraian:'Dana Awal / Anggaran Diterima',kategori:'Lain-lain',tipe:'Pemasukan',nilai:5000000,ket:'Dari Kasatker'},
+    {id:rowCounter++,tgl:'2025-03-12',uraian:'Konsumsi tamu undangan VIP',kategori:'Konsumsi',tipe:'Pengeluaran',nilai:1200000,ket:'60 porsi x Rp 20.000'},
+    {id:rowCounter++,tgl:'2025-03-12',uraian:'Sewa gedung & dekorasi',kategori:'Akomodasi',tipe:'Pengeluaran',nilai:800000,ket:'Gedung Serbaguna Polda'},
+    {id:rowCounter++,tgl:'2025-03-13',uraian:'Dokumentasi foto & video',kategori:'Dokumentasi',tipe:'Pengeluaran',nilai:500000,ket:'Fotografer + videografer'},
+    {id:rowCounter++,tgl:'2025-03-14',uraian:'Spanduk & atribut acara',kategori:'Perlengkapan',tipe:'Pengeluaran',nilai:350000,ket:'5 lembar spanduk'},
+    {id:rowCounter++,tgl:'2025-03-15',uraian:'Honorarium panitia 5 orang',kategori:'Honorarium',tipe:'Pengeluaran',nilai:750000,ket:'@Rp 150.000'},
+    {id:rowCounter++,tgl:'2025-03-15',uraian:'Transport antar jemput tamu',kategori:'Transportasi',tipe:'Pengeluaran',nilai:300000,ket:'BBM + driver'},
+    {id:rowCounter++,tgl:'2025-03-16',uraian:'Sisa dana dikembalikan ke Kasatker',kategori:'Lain-lain',tipe:'Pemasukan',nilai:0,ket:''},
+  ]
+});
+activeIdx = 0;
+render();
+</script>
