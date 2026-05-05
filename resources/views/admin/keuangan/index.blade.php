@@ -5,9 +5,9 @@
 @section('styles')
 <style>
 :root {
-    --primary: #1a3c34;
-    --primary-light: #2d5a4e;
-    --accent: #c8a96e;
+    --primary: #1a1a1a;
+    --primary-light: #2d2d2d;
+    --accent: #dc2626;
     --danger: #ef4444;
     --success: #22c55e;
     --info: #3b82f6;
@@ -36,7 +36,7 @@
     width: 100%; padding: 10px 15px; border-radius: 8px; border: 1px solid var(--gray-300); 
     font-size: 14px; font-weight: 600; color: var(--primary); outline: none; background: var(--gray-50);
 }
-.fund-select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(26,60,52,0.1); }
+.fund-select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(26,26,26,0.1); }
 
 /* TOP CARDS */
 .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }

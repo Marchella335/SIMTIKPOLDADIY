@@ -57,13 +57,13 @@ new Chart(document.getElementById('keuanganChart'), {
             {
                 label: 'Pagu Anggaran',
                 data: dataPagu,
-                backgroundColor: 'rgba(200, 169, 110, 0.8)', // Accent color
+                backgroundColor: 'rgba(220, 38, 38, 0.8)', // Accent color
                 borderRadius: 4
             },
             {
                 label: 'Total Realisasi',
                 data: dataRealisasi,
-                backgroundColor: 'rgba(26, 60, 52, 0.8)', // Primary color
+                backgroundColor: 'rgba(26, 26, 26, 0.8)', // Primary color
                 borderRadius: 4
             }
         ]

@@ -26,7 +26,7 @@
         <div class="dash-info"><h3>{{ $jumlahKegiatan }}</h3><p>Kegiatan</p></div>
     </div>
     <div class="dash-card">
-        <div class="dash-icon" style="background:#c8a96e;"><i class="fas fa-wallet"></i></div>
+        <div class="dash-icon" style="background:#dc2626;"><i class="fas fa-wallet"></i></div>
         <div class="dash-info"><h3 style="font-size:1.1rem;">Rp {{ number_format($paguTotal,0,',','.') }}</h3><p>Pagu {{ date('Y') }}</p></div>
     </div>
     <div class="dash-card">
@@ -71,13 +71,13 @@ new Chart(document.getElementById('dashChart'), {
             {
                 label: 'Pagu Anggaran',
                 data: dataPagu,
-                backgroundColor: 'rgba(200, 169, 110, 0.8)',
+                backgroundColor: 'rgba(220, 38, 38, 0.8)',
                 borderRadius: 4
             },
             {
                 label: 'Total Realisasi',
                 data: dataRealisasi,
-                backgroundColor: 'rgba(26, 60, 52, 0.8)',
+                backgroundColor: 'rgba(26, 26, 26, 0.8)',
                 borderRadius: 4
             }
         ]
