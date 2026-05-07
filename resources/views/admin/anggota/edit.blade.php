@@ -40,6 +40,19 @@
                 </select>
             </div>
 
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Awal Jabatan</label>
+                    <input type="date" name="awal_jabatan" class="form-control" value="{{ old('awal_jabatan', $anggota->awal_jabatan) }}">
+                    @error('awal_jabatan')<div class="form-error">{{ $message }}</div>@enderror
+                </div>
+                <div class="form-group">
+                    <label>Akhir Jabatan</label>
+                    <input type="date" name="akhir_jabatan" class="form-control" value="{{ old('akhir_jabatan', $anggota->akhir_jabatan) }}">
+                    @error('akhir_jabatan')<div class="form-error">{{ $message }}</div>@enderror
+                </div>
+            </div>
+
             <div class="form-group">
                 <label>Foto</label>
                 @if($anggota->foto)<div style="margin-bottom:10px;"><img src="{{ asset($anggota->foto) }}" style="width:80px;height:80px;object-fit:cover;border-radius:8px;"></div>@endif

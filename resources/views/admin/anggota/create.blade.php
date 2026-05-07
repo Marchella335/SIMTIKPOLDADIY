@@ -43,6 +43,19 @@
                 </select>
                 @error('jabatan')<div class="form-error">{{ $message }}</div>@enderror
             </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Awal Jabatan</label>
+                    <input type="date" name="awal_jabatan" class="form-control" value="{{ old('awal_jabatan') }}">
+                    @error('awal_jabatan')<div class="form-error">{{ $message }}</div>@enderror
+                </div>
+                <div class="form-group">
+                    <label>Akhir Jabatan</label>
+                    <input type="date" name="akhir_jabatan" class="form-control" value="{{ old('akhir_jabatan') }}">
+                    @error('akhir_jabatan')<div class="form-error">{{ $message }}</div>@enderror
+                </div>
+            </div>
 
             <div class="form-group">
                 <label>Foto</label>

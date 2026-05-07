@@ -12,6 +12,8 @@ class Anggota extends Model
         'pangkat',
         'bidang',
         'jabatan',
+        'awal_jabatan',
+        'akhir_jabatan',
         'foto',
     ];
 
