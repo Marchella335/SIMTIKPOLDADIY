@@ -45,6 +45,10 @@
                 <div class="footer-brand">
                     <img src="{{ asset('assets/LOGO_BID_TIK.png') }}" alt="Logo">
                     <p>Bidang Teknologi Informasi dan Komunikasi Kepolisian Daerah Daerah Istimewa Yogyakarta</p>
+                    <div class="footer-social">
+                        <a href="https://www.facebook.com/profile.php?id=100087924513256&sk=about" target="_blank" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://www.instagram.com/bidtik.diy?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" class="social-icon"><i class="fab fa-instagram"></i></a>
+                    </div>
                 </div>
                 <div>
                     <h4>Menu</h4>
@@ -66,8 +70,8 @@
                 <div>
                     <h4>Kontak</h4>
                     <ul>
-                        <li><a href="#">Jl. Ring Road Utara, Sleman, DIY</a></li>
-                        <li><a href="#">bidtik@polda-diy.go.id</a></li>
+                        <li><a href="{{ route('kontak') }}">Jl. Ring Road Utara, Sleman, DIY</a></li>
+                        <li><a href="{{ route('kontak') }}">bidtik@polda-diy.go.id</a></li>
                     </ul>
                 </div>
             </div>
