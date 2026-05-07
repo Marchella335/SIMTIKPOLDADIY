@@ -44,7 +44,8 @@ body { font-family: 'Inter', sans-serif; background: var(--gray-50); color: var(
 .admin-main { margin-left: var(--sidebar-w); min-height: 100vh; }
 .admin-header { background: var(--white); padding: 15px 30px; display: flex; align-items: center; justify-content: space-between; box-shadow: var(--shadow); position: sticky; top: 0; z-index: 50; }
 .admin-header h2 { font-family: 'Poppins', sans-serif; font-size: 1.3rem; font-weight: 600; }
-.admin-header .user-info { display: flex; align-items: center; gap: 10px; font-size: 0.9rem; color: var(--gray-500); }
+.admin-header .user-info { display: flex; align-items: center; gap: 10px; font-size: 0.9rem; color: var(--gray-500); padding: 8px 12px; border-radius: 8px; transition: var(--transition); }
+.admin-header .user-info:hover { background: var(--gray-50); color: var(--accent); }
 .admin-content { padding: 30px; }
 
 /* WELCOME CARD */

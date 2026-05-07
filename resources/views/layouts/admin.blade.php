@@ -45,10 +45,10 @@
     <main class="admin-main">
         <header class="admin-header">
             <h2>@yield('page-title', 'Dashboard')</h2>
-            <div class="user-info">
+            <a href="{{ route('admin.profile') }}" class="user-info" style="text-decoration:none; color:inherit; transition: var(--transition);">
                 <i class="bi bi-person-circle" style="font-size:1.5rem;"></i>
                 <span>{{ Auth::user()->name }}</span>
-            </div>
+            </a>
         </header>
         <div class="admin-content">
             @if(session('success'))

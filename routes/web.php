@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\AnggotaController;
 use App\Http\Controllers\Admin\SuratController;
 use App\Http\Controllers\Admin\KeuanganController;
 use App\Http\Controllers\Admin\KegiatanController;
+use App\Http\Controllers\Admin\ProfileController;
 
 // Public Routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -46,4 +47,6 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::resource('keuangan', KeuanganController::class);
     Route::post('keuangan/pagu', [KeuanganController::class, 'pagu'])->name('keuangan.pagu');
     Route::resource('kegiatan', KegiatanController::class);
+    Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
 });
