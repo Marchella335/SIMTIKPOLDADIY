@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Anggota;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\TenureExpirationAlert;
 
 class AnggotaController extends Controller
 {
@@ -41,7 +43,15 @@ class AnggotaController extends Controller
             $data['foto'] = 'uploads/anggota/' . $filename;
         }
 
-        Anggota::create($data);
+        $anggota = Anggota::create($data);
+
+        // Send notification if tenure is ending in less than 3 months
+        if ($anggota->akhir_jabatan) {
+            $expiry = \Carbon\Carbon::parse($anggota->akhir_jabatan);
+            if ($expiry->isFuture() && $expiry->diffInMonths(now()) < 3) {
+                Mail::to('simtikpoldadiy@gmail.com')->send(new TenureExpirationAlert($anggota));
+            }
+        }
 
         return redirect()->route('admin.anggota.index')
             ->with('success', 'Anggota berhasil ditambahkan.');
@@ -84,6 +94,14 @@ class AnggotaController extends Controller
         }
 
         $anggotum->update($data);
+
+        // Send notification if tenure is ending in less than 3 months
+        if ($anggotum->akhir_jabatan) {
+            $expiry = \Carbon\Carbon::parse($anggotum->akhir_jabatan);
+            if ($expiry->isFuture() && $expiry->diffInMonths(now()) < 3) {
+                Mail::to('simtikpoldadiy@gmail.com')->send(new TenureExpirationAlert($anggotum));
+            }
+        }
 
         return redirect()->route('admin.anggota.index')
             ->with('success', 'Anggota berhasil diperbarui.');

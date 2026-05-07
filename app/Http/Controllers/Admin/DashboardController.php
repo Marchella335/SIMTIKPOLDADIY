@@ -27,9 +27,16 @@ class DashboardController extends Controller
             ->whereYear('tanggal', date('Y'))
             ->get();
 
+        $expiringAnggotas = Anggota::whereNotNull('akhir_jabatan')
+            ->where('akhir_jabatan', '<=', now()->addMonths(3))
+            ->where('akhir_jabatan', '>=', now()->subDays(30)) // Show recently expired too
+            ->orderBy('akhir_jabatan', 'asc')
+            ->get();
+
         return view('admin.dashboard', compact(
             'jumlahAnggota', 'suratMasuk', 'suratKeluar',
-            'jumlahKegiatan', 'paguTotal', 'totalRealisasi', 'acaraComparison'
+            'jumlahKegiatan', 'paguTotal', 'totalRealisasi', 'acaraComparison',
+            'expiringAnggotas'
         ));
     }
 }
