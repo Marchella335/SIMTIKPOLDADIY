@@ -11,7 +11,7 @@
 @if($expiringAnggotas->count() > 0)
 <div class="card" style="margin-bottom:25px; border-left: 5px solid #dc2626; background: #fff5f5;">
     <div class="card-header" style="background:transparent; border:none; padding-bottom:0;">
-        <h3 style="color:#991b1b;"><i class="fas fa-exclamation-triangle"></i> Pemberitahuan Masa Jabatan</h3>
+        <h3 style="color:#991b1b;"><i class="bi bi-exclamation-triangle-fill"></i> Pemberitahuan Masa Jabatan</h3>
     </div>
     <div class="card-body">
         <p style="margin-bottom:15px; color:#b91c1c; font-weight:600;">Admin harus membuat surat perpanjangan pembaruan SK (Surat Keputusan) untuk anggota berikut:</p>
@@ -53,27 +53,27 @@
 
 <div class="dash-grid">
     <div class="dash-card">
-        <div class="dash-icon bg-primary"><i class="fas fa-users"></i></div>
+        <div class="dash-icon bg-primary"><i class="bi bi-people-fill"></i></div>
         <div class="dash-info"><h3>{{ $jumlahAnggota }}</h3><p>Jumlah Anggota</p></div>
     </div>
     <div class="dash-card">
-        <div class="dash-icon bg-success"><i class="fas fa-envelope"></i></div>
+        <div class="dash-icon bg-success"><i class="bi bi-inbox-fill"></i></div>
         <div class="dash-info"><h3>{{ $suratMasuk }}</h3><p>Surat Masuk</p></div>
     </div>
     <div class="dash-card">
-        <div class="dash-icon bg-danger"><i class="fas fa-paper-plane"></i></div>
+        <div class="dash-icon bg-danger"><i class="bi bi-send-fill"></i></div>
         <div class="dash-info"><h3>{{ $suratKeluar }}</h3><p>Surat Keluar</p></div>
     </div>
     <div class="dash-card">
-        <div class="dash-icon bg-info"><i class="fas fa-calendar-check"></i></div>
+        <div class="dash-icon bg-info"><i class="bi bi-calendar2-check"></i></div>
         <div class="dash-info"><h3>{{ $jumlahKegiatan }}</h3><p>Kegiatan</p></div>
     </div>
     <div class="dash-card">
-        <div class="dash-icon" style="background:#dc2626;"><i class="fas fa-wallet"></i></div>
+        <div class="dash-icon" style="background:#dc2626;"><i class="bi bi-wallet2"></i></div>
         <div class="dash-info"><h3 style="font-size:1.1rem;">Rp {{ number_format($paguTotal,0,',','.') }}</h3><p>Pagu {{ date('Y') }}</p></div>
     </div>
     <div class="dash-card">
-        <div class="dash-icon" style="background:var(--danger);"><i class="fas fa-money-bill-wave"></i></div>
+        <div class="dash-icon" style="background:var(--danger);"><i class="bi bi-cash-coin"></i></div>
         <div class="dash-info"><h3 style="font-size:1.1rem;">Rp {{ number_format($totalRealisasi,0,',','.') }}</h3><p>Realisasi</p></div>
     </div>
 </div>
