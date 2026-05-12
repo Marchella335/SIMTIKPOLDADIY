@@ -68,7 +68,7 @@
                     <h4>Layanan</h4>
                     <ul>
                         <li><a href="{{ route('administrasi') }}">Administrasi</a></li>
-                        <li><a href="{{ route('administrasi.persuratan') }}">Persuratan</a></li>
+                        <li><a href="{{ route('administrasi.persuratan.landing') }}">Persuratan</a></li>
                         <li><a href="{{ route('administrasi.keuangan') }}">Keuangan</a></li>
                     </ul>
                 </div>

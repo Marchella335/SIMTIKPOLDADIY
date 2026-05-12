@@ -5,19 +5,23 @@
 <section class="section" style="padding-top:120px;">
     <div class="container">
         <div class="section-header">
-            <h2 class="section-title">Data Persuratan</h2>
+            <h2 class="section-title">Persuratan Bidang {{ $bidang }}</h2>
+            <div style="margin-top:15px;">
+                <a href="{{ route('administrasi.persuratan.landing') }}" style="text-decoration:none;color:var(--accent);font-weight:600;"><i class="bi bi-arrow-left"></i> Kembali Pilih Bidang</a>
+            </div>
         </div>
         <div class="surat-summary">
             <div class="surat-card masuk">
-                <div class="surat-count">{{ $suratMasuk }}</div>
-                <div class="surat-label">Surat Masuk</div>
+                <div class="surat-count">{{ \App\Models\Surat::where('tipe', 'masuk')->where('bidang', $bidang)->count() }}</div>
+                <div class="surat-label">Surat Masuk {{ $bidang }}</div>
             </div>
             <div class="surat-card keluar">
-                <div class="surat-count">{{ $suratKeluar }}</div>
-                <div class="surat-label">Surat Keluar</div>
+                <div class="surat-count">{{ \App\Models\Surat::where('tipe', 'keluar')->where('bidang', $bidang)->count() }}</div>
+                <div class="surat-label">Surat Keluar {{ $bidang }}</div>
             </div>
         </div>
         <form method="GET" style="display:flex;gap:10px;margin-bottom:25px;flex-wrap:wrap;">
+            <input type="hidden" name="bidang" value="{{ $bidang }}">
             <input type="text" name="search" class="form-control" placeholder="Cari nomor, jenis, atau perihal surat..." value="{{ request('search') }}" style="max-width:300px;">
             <select name="tipe" class="form-control" style="max-width:160px;" onchange="this.form.submit()">
                 <option value="">Semua Tipe</option>

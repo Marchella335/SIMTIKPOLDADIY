@@ -9,6 +9,14 @@
         <form method="POST" action="{{ route('admin.persuratan.update', $surat) }}" enctype="multipart/form-data" style="max-width:600px;">
             @csrf @method('PUT')
             
+            <div class="form-group"><label>Bidang *</label>
+                <select name="bidang" class="form-control" required>
+                    <option value="Renmin" {{ old('bidang', $surat->bidang) == 'Renmin' ? 'selected' : '' }}>Renmin</option>
+                    <option value="Tekkom" {{ old('bidang', $surat->bidang) == 'Tekkom' ? 'selected' : '' }}>Tekkom</option>
+                    <option value="Tekinfo" {{ old('bidang', $surat->bidang) == 'Tekinfo' ? 'selected' : '' }}>Tekinfo</option>
+                </select>
+            </div>
+
             <div class="form-group"><label>Tipe Surat *</label>
                 <select name="tipe" id="tipeSurat" class="form-control" required onchange="toggleTipe()">
                     <option value="masuk" {{ old('tipe', $surat->tipe)=='masuk'?'selected':'' }}>Surat Masuk</option>
@@ -60,7 +68,7 @@
 
             <div style="display:flex;gap:10px;margin-top:25px;">
                 <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Update</button>
-                <a href="{{ route('admin.persuratan.index') }}" class="btn btn-outline">Batal</a>
+                <a href="{{ route('admin.persuratan.index', ['bidang' => $surat->bidang]) }}" class="btn btn-outline">Batal</a>
             </div>
         </form>
     </div>

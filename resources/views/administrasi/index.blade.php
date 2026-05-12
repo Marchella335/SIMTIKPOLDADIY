@@ -10,7 +10,7 @@
             <p class="section-subtitle">Pilih layanan administrasi yang ingin Anda akses</p>
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:30px;max-width:700px;margin:0 auto;">
-            <a href="{{ route('administrasi.persuratan') }}" class="feature-card" style="cursor:pointer;">
+            <a href="{{ route('administrasi.persuratan.landing') }}" class="feature-card" style="cursor:pointer;">
                 <div class="feature-icon"><i class="fas fa-envelope-open-text"></i></div>
                 <h3>Persuratan</h3>
                 <p>Akses data surat masuk dan surat keluar Bidang TIK Polda DIY</p>

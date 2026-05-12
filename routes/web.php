@@ -26,7 +26,8 @@ Route::get('/kegiatan/{id}', [KegiatanPublicController::class, 'show'])->name('k
 Route::get('/kontak', [KontakController::class, 'index'])->name('kontak');
 Route::post('/kontak', [KontakController::class, 'send'])->name('kontak.send');
 Route::get('/administrasi', [AdministrasiController::class, 'index'])->name('administrasi');
-Route::get('/administrasi/persuratan', [AdministrasiController::class, 'persuratan'])->name('administrasi.persuratan');
+Route::get('/administrasi/persuratan', [AdministrasiController::class, 'persuratanLanding'])->name('administrasi.persuratan.landing');
+Route::get('/administrasi/persuratan/data', [AdministrasiController::class, 'persuratan'])->name('administrasi.persuratan');
 Route::get('/administrasi/keuangan', [AdministrasiController::class, 'keuangan'])->name('administrasi.keuangan');
 
 // Layanan TIK (Public CRM)
@@ -44,6 +45,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::resource('anggota', AnggotaController::class);
+    Route::get('persuratan/landing', [SuratController::class, 'landing'])->name('persuratan.landing');
     Route::resource('persuratan', SuratController::class);
     // Keuangan Baru (Multi Sumber Dana)
     Route::get('keuangan/sumber-dana', [KeuanganController::class, 'getSumberDana'])->name('keuangan.sumber_dana.index');

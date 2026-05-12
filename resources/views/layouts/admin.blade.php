@@ -27,7 +27,7 @@
         <div class="sidebar-section">Data</div>
         <ul class="sidebar-nav">
             <li><a href="{{ route('admin.anggota.index') }}" class="{{ request()->routeIs('admin.anggota.*') ? 'active' : '' }}"><span class="icon"><i class="bi bi-people"></i></span> Anggota</a></li>
-            <li><a href="{{ route('admin.persuratan.index') }}" class="{{ request()->routeIs('admin.persuratan.*') ? 'active' : '' }}"><span class="icon"><i class="bi bi-mailbox"></i></span> Persuratan</a></li>
+            <li><a href="{{ route('admin.persuratan.landing') }}" class="{{ request()->routeIs('admin.persuratan.*') ? 'active' : '' }}"><span class="icon"><i class="bi bi-mailbox"></i></span> Persuratan</a></li>
             <li><a href="{{ route('admin.keuangan.index') }}" class="{{ request()->routeIs('admin.keuangan.*') ? 'active' : '' }}"><span class="icon"><i class="bi bi-cash-stack"></i></span> Keuangan</a></li>
             <li><a href="{{ route('admin.kegiatan.index') }}" class="{{ request()->routeIs('admin.kegiatan.*') ? 'active' : '' }}"><span class="icon"><i class="bi bi-calendar-event"></i></span> Kegiatan</a></li>
         </ul>

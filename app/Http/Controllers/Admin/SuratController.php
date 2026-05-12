@@ -8,6 +8,11 @@ use Illuminate\Http\Request;
 
 class SuratController extends Controller
 {
+    public function landing()
+    {
+        return view('admin.persuratan.landing');
+    }
+
     public function index()
     {
         $query = Surat::query();
@@ -25,16 +30,19 @@ class SuratController extends Controller
             $query->where('tipe', request('tipe'));
         }
 
-        $surats = $query->orderBy('tanggal', 'desc')->paginate(15);
-        $suratMasuk = Surat::where('tipe', 'masuk')->count();
-        $suratKeluar = Surat::where('tipe', 'keluar')->count();
+        if (request('bidang')) {
+            $query->where('bidang', request('bidang'));
+        }
 
-        return view('admin.persuratan.index', compact('surats', 'suratMasuk', 'suratKeluar'));
+        $surats = $query->orderBy('tanggal', 'desc')->paginate(15);
+        $bidang = request('bidang', 'Renmin');
+
+        return view('admin.persuratan.index', compact('surats', 'bidang'));
     }
 
     public function create()
     {
-        return view('admin.persuratan.create');
+        return view('admin.persuratan.create', ['bidang' => request('bidang', 'Renmin')]);
     }
 
     public function store(Request $request)
@@ -42,6 +50,7 @@ class SuratController extends Controller
         $request->validate([
             'nomor_surat' => 'required|string|max:255',
             'tipe' => 'required|in:masuk,keluar',
+            'bidang' => 'required|in:Renmin,Tekkom,Tekinfo',
             'jenis_surat' => 'required|string|max:255',
             'perihal' => 'required|string|max:255',
             'dari' => 'nullable|string|max:255',
@@ -62,7 +71,7 @@ class SuratController extends Controller
 
         Surat::create($data);
 
-        return redirect()->route('admin.persuratan.index')
+        return redirect()->route('admin.persuratan.index', ['bidang' => $request->bidang])
             ->with('success', 'Surat berhasil ditambahkan.');
     }
 
@@ -76,6 +85,7 @@ class SuratController extends Controller
         $request->validate([
             'nomor_surat' => 'required|string|max:255',
             'tipe' => 'required|in:masuk,keluar',
+            'bidang' => 'required|in:Renmin,Tekkom,Tekinfo',
             'jenis_surat' => 'required|string|max:255',
             'perihal' => 'required|string|max:255',
             'dari' => 'nullable|string|max:255',
@@ -99,7 +109,7 @@ class SuratController extends Controller
 
         $persuratan->update($data);
 
-        return redirect()->route('admin.persuratan.index')
+        return redirect()->route('admin.persuratan.index', ['bidang' => $request->bidang])
             ->with('success', 'Surat berhasil diperbarui.');
     }
 
@@ -108,9 +118,10 @@ class SuratController extends Controller
         if ($persuratan->file_pdf && file_exists(public_path($persuratan->file_pdf))) {
             unlink(public_path($persuratan->file_pdf));
         }
+        $bidang = $persuratan->bidang;
         $persuratan->delete();
 
-        return redirect()->route('admin.persuratan.index')
+        return redirect()->route('admin.persuratan.index', ['bidang' => $bidang])
             ->with('success', 'Surat berhasil dihapus.');
     }
 }

@@ -1,26 +1,31 @@
 @extends('layouts.admin')
 @section('title', 'Persuratan - Admin SIMTIK')
-@section('page-title', 'Persuratan')
+@section('page-title', 'Persuratan Bidang ' . ($bidang ?? 'Renmin'))
 
 @section('content')
+<div style="margin-bottom: 20px;">
+    <a href="{{ route('admin.persuratan.landing') }}" class="btn btn-secondary btn-sm"><i class="fas fa-arrow-left"></i> Kembali ke Pilihan Bidang</a>
+</div>
+
 <div class="surat-summary">
-    <div class="surat-card masuk" onclick="location.href='{{ route('admin.persuratan.index', ['tipe'=>'masuk']) }}'" style="cursor:pointer;">
-        <div class="surat-count">{{ $suratMasuk }}</div>
-        <div class="surat-label">Surat Masuk</div>
+    <div class="surat-card masuk" onclick="location.href='{{ route('admin.persuratan.index', ['tipe'=>'masuk', 'bidang' => $bidang]) }}'" style="cursor:pointer;">
+        <div class="surat-count">{{ \App\Models\Surat::where('tipe', 'masuk')->where('bidang', $bidang)->count() }}</div>
+        <div class="surat-label">Surat Masuk {{ $bidang }}</div>
     </div>
-    <div class="surat-card keluar" onclick="location.href='{{ route('admin.persuratan.index', ['tipe'=>'keluar']) }}'" style="cursor:pointer;">
-        <div class="surat-count">{{ $suratKeluar }}</div>
-        <div class="surat-label">Surat Keluar</div>
+    <div class="surat-card keluar" onclick="location.href='{{ route('admin.persuratan.index', ['tipe'=>'keluar', 'bidang' => $bidang]) }}'" style="cursor:pointer;">
+        <div class="surat-count">{{ \App\Models\Surat::where('tipe', 'keluar')->where('bidang', $bidang)->count() }}</div>
+        <div class="surat-label">Surat Keluar {{ $bidang }}</div>
     </div>
 </div>
 
 <div class="card">
     <div class="card-header">
-        <h3>Daftar Surat</h3>
-        <a href="{{ route('admin.persuratan.create') }}" class="btn btn-primary btn-sm"><i class="fas fa-plus"></i> Tambah</a>
+        <h3>Daftar Surat {{ $bidang }}</h3>
+        <a href="{{ route('admin.persuratan.create', ['bidang' => $bidang]) }}" class="btn btn-primary btn-sm"><i class="fas fa-plus"></i> Tambah</a>
     </div>
     <div class="card-body">
         <form method="GET" class="search-bar">
+            <input type="hidden" name="bidang" value="{{ $bidang }}">
             <input type="text" name="search" class="form-control" placeholder="Cari nomor, jenis, atau perihal surat..." value="{{ request('search') }}">
             <select name="tipe" class="form-control" style="max-width:150px;" onchange="this.form.submit()">
                 <option value="">Semua</option>

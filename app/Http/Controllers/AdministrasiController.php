@@ -15,6 +15,11 @@ class AdministrasiController extends Controller
         return view('administrasi.index', compact('suratMasuk', 'suratKeluar'));
     }
 
+    public function persuratanLanding()
+    {
+        return view('administrasi.persuratan_landing');
+    }
+
     public function persuratan()
     {
         $query = Surat::query();
@@ -32,11 +37,14 @@ class AdministrasiController extends Controller
             $query->where('tipe', request('tipe'));
         }
 
-        $surats = $query->orderBy('tanggal', 'desc')->paginate(15);
-        $suratMasuk = Surat::where('tipe', 'masuk')->count();
-        $suratKeluar = Surat::where('tipe', 'keluar')->count();
+        if (request('bidang')) {
+            $query->where('bidang', request('bidang'));
+        }
 
-        return view('administrasi.persuratan', compact('surats', 'suratMasuk', 'suratKeluar'));
+        $surats = $query->orderBy('tanggal', 'desc')->paginate(15);
+        $bidang = request('bidang', 'Renmin');
+
+        return view('administrasi.persuratan', compact('surats', 'bidang'));
     }
 
     public function keuangan()
