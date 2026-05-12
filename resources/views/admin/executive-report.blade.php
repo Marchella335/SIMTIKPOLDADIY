@@ -1,13 +1,13 @@
 @extends('layouts.admin')
-@section('title', 'Executive Report - SIMTIK')
-@section('page-title', 'Executive Intelligence Hub')
+@section('title', 'Rekapitulasi - SIMTIK')
+@section('page-title', 'Rekapitulasi')
 
 @section('content')
 <div class="welcome-card" style="background:linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%); color:#fff; border:1px solid rgba(220,38,38,0.3);">
     <div style="display:flex; justify-content:space-between; align-items:center;">
         <div>
-            <h2 style="color:#fff; margin-bottom:5px;"><i class="bi bi-bar-chart-line"></i> Executive Intelligence Hub</h2>
-            <p style="color:rgba(255,255,255,0.7);">Integrasi Data Warehouse — Analisis lintas modul ERP untuk pengambilan keputusan strategis Bid TIK Polda DIY.</p>
+            <h2 style="color:#fff; margin-bottom:5px;"><i class="bi bi-bar-chart-line"></i> Rekapitulasi Data</h2>
+            <p style="color:rgba(255,255,255,0.7);">Rangkuman seluruh data SDM, Persuratan, Keuangan, Kegiatan, dan Layanan TIK dalam satu halaman untuk memudahkan pengambilan keputusan.</p>
         </div>
         <div style="text-align:right; display:flex; align-items:center; gap:20px;">
             <button id="toggleMonitoring" style="background:rgba(220,38,38,0.1); border:1px solid var(--accent); color:var(--accent); padding:8px 16px; border-radius:30px; font-weight:600; cursor:pointer; display:flex; align-items:center; gap:8px; transition:var(--transition);">

@@ -33,7 +33,7 @@
         </ul>
         <div class="sidebar-section">Intelligence & CRM</div>
         <ul class="sidebar-nav">
-            <li><a href="{{ route('admin.executive-report') }}" class="{{ request()->routeIs('admin.executive-report') ? 'active' : '' }}"><span class="icon"><i class="bi bi-bar-chart-line"></i></span> Executive Report</a></li>
+            <li><a href="{{ route('admin.executive-report') }}" class="{{ request()->routeIs('admin.executive-report') ? 'active' : '' }}"><span class="icon"><i class="bi bi-bar-chart-line"></i></span> Rekapitulasi</a></li>
             <li><a href="{{ route('admin.layanan.index') }}" class="{{ request()->routeIs('admin.layanan.*') ? 'active' : '' }}"><span class="icon"><i class="bi bi-headset"></i></span> Layanan TIK</a></li>
             <li><a href="{{ route('admin.activity-log') }}" class="{{ request()->routeIs('admin.activity-log') ? 'active' : '' }}"><span class="icon"><i class="bi bi-shield-lock"></i></span> Activity Log</a></li>
         </ul>
