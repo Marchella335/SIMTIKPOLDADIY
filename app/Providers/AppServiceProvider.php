@@ -19,6 +19,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Force URL to use APP_URL (penting agar link di email benar)
+        \Illuminate\Support\Facades\URL::forceRootUrl(config('app.url'));
+
         \Illuminate\Support\Facades\View::composer('layouts.admin', function ($view) {
             $expiringAnggotas = \App\Models\Anggota::whereNotNull('akhir_jabatan')
                 ->where(function($q) {

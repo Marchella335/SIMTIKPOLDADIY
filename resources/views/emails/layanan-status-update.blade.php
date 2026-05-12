@@ -51,7 +51,7 @@
                 <div style="background:#fef3c7; border:1px solid #fbbf24; padding:20px; border-radius:10px; margin:20px 0; text-align:center;">
                     <p style="font-weight:700; margin-bottom:10px; color:#92400e;">⭐ Beri Penilaian Layanan Kami</p>
                     <p style="color:#92400e; font-size:0.9rem; margin-bottom:15px;">Pendapat Anda sangat berarti untuk meningkatkan kualitas layanan kami.</p>
-                    <a href="{{ route('layanan.rate', $layanan->token) }}" style="display:inline-block; background:#dc2626; color:#fff; padding:14px 40px; border-radius:8px; text-decoration:none; font-weight:700; font-size:1rem;">
+                    <a href="{{ url('/layanan/rate/' . $layanan->token) }}" style="display:inline-block; background:#dc2626; color:#fff; padding:14px 40px; border-radius:8px; text-decoration:none; font-weight:700; font-size:1rem;">
                         Beri Rating Sekarang →
                     </a>
                 </div>
