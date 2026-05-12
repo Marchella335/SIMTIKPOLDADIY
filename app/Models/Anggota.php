@@ -14,6 +14,7 @@ class Anggota extends Model
         'jabatan',
         'awal_jabatan',
         'akhir_jabatan',
+        'akhir_jabatan_notif',
         'foto',
     ];
 

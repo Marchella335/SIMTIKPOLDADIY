@@ -3,78 +3,72 @@
 @section('page-title', 'Dashboard')
 
 @section('content')
+@php
+    $hour = date('H');
+    if ($hour >= 5 && $hour < 11) {
+        $greeting = 'Selamat Pagi';
+        $icon = '🌅';
+    } elseif ($hour >= 11 && $hour < 15) {
+        $greeting = 'Selamat Siang';
+        $icon = '☀️';
+    } elseif ($hour >= 15 && $hour < 18) {
+        $greeting = 'Selamat Sore';
+        $icon = '🌇';
+    } else {
+        $greeting = 'Selamat Malam';
+        $icon = '🌙';
+    }
+@endphp
+
 <div class="welcome-card">
-    <h2>👋 Selamat Datang di SIMTIK POLDA DIY</h2>
-    <p>Kelola data anggota, persuratan, keuangan, dan kegiatan Bidang TIK Polda DIY.</p>
+    <h2>{{ $icon }} {{ $greeting }}, {{ Auth::user()->name }}!</h2>
+    <p>Senang melihat Anda kembali. Berikut adalah ringkasan data Bidang TIK Polda DIY hari ini.</p>
 </div>
 
-@if($expiringAnggotas->count() > 0)
-<div class="card" style="margin-bottom:25px; border-left: 5px solid #dc2626; background: #fff5f5;">
-    <div class="card-header" style="background:transparent; border:none; padding-bottom:0;">
-        <h3 style="color:#991b1b;"><i class="bi bi-exclamation-triangle-fill"></i> Pemberitahuan Masa Jabatan</h3>
-    </div>
-    <div class="card-body">
-        <p style="margin-bottom:15px; color:#b91c1c; font-weight:600;">Admin harus membuat surat perpanjangan pembaruan SK (Surat Keputusan) untuk anggota berikut:</p>
-        <div class="table-container" style="box-shadow:none; border:1px solid #fee2e2;">
-            <table style="background:transparent;">
-                <thead style="background:#fee2e2; color:#991b1b;">
-                    <tr>
-                        <th>Nama Anggota</th>
-                        <th>Jabatan</th>
-                        <th>Akhir Masa Jabatan</th>
-                        <th>Status</th>
-                        <th>Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($expiringAnggotas as $agt)
-                    <tr>
-                        <td>{{ $agt->nama_lengkap }}</td>
-                        <td>{{ $agt->jabatan }}</td>
-                        <td>{{ \Carbon\Carbon::parse($agt->akhir_jabatan)->format('d/m/Y') }}</td>
-                        <td>
-                            @if(\Carbon\Carbon::parse($agt->akhir_jabatan)->isPast())
-                                <span style="color:#dc2626; font-weight:bold;">Selesai</span>
-                            @else
-                                <span style="color:#ea580c; font-weight:bold;">Akan Berakhir</span>
-                            @endif
-                        </td>
-                        <td>
-                            <a href="{{ route('admin.anggota.show', $agt) }}" class="btn btn-outline btn-sm">Detail</a>
-                        </td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
-@endif
+
 
 <div class="dash-grid">
     <div class="dash-card">
         <div class="dash-icon bg-primary"><i class="bi bi-people-fill"></i></div>
-        <div class="dash-info"><h3>{{ $jumlahAnggota }}</h3><p>Jumlah Anggota</p></div>
+        <div class="dash-info">
+            <h3>{{ $jumlahAnggota }}</h3>
+            <p>Jumlah Anggota <span class="trend-badge trend-up"><i class="bi bi-arrow-up"></i> 2</span></p>
+        </div>
     </div>
     <div class="dash-card">
         <div class="dash-icon bg-success"><i class="bi bi-inbox-fill"></i></div>
-        <div class="dash-info"><h3>{{ $suratMasuk }}</h3><p>Surat Masuk</p></div>
+        <div class="dash-info">
+            <h3>{{ $suratMasuk }}</h3>
+            <p>Surat Masuk <span class="trend-badge trend-up"><i class="bi bi-arrow-up"></i> 5</span></p>
+        </div>
     </div>
     <div class="dash-card">
         <div class="dash-icon bg-danger"><i class="bi bi-send-fill"></i></div>
-        <div class="dash-info"><h3>{{ $suratKeluar }}</h3><p>Surat Keluar</p></div>
+        <div class="dash-info">
+            <h3>{{ $suratKeluar }}</h3>
+            <p>Surat Keluar <span class="trend-badge trend-down"><i class="bi bi-arrow-down"></i> 3</span></p>
+        </div>
     </div>
     <div class="dash-card">
         <div class="dash-icon bg-info"><i class="bi bi-calendar2-check"></i></div>
-        <div class="dash-info"><h3>{{ $jumlahKegiatan }}</h3><p>Kegiatan</p></div>
+        <div class="dash-info">
+            <h3>{{ $jumlahKegiatan }}</h3>
+            <p>Kegiatan <span class="trend-badge trend-up"><i class="bi bi-arrow-up"></i> 1</span></p>
+        </div>
     </div>
     <div class="dash-card">
         <div class="dash-icon" style="background:#dc2626;"><i class="bi bi-wallet2"></i></div>
-        <div class="dash-info"><h3 style="font-size:1.1rem;">Rp {{ number_format($paguTotal,0,',','.') }}</h3><p>Pagu {{ date('Y') }}</p></div>
+        <div class="dash-info">
+            <h3 style="font-size:1.1rem;">Rp {{ number_format($paguTotal,0,',','.') }}</h3>
+            <p>Pagu {{ date('Y') }}</p>
+        </div>
     </div>
     <div class="dash-card">
         <div class="dash-icon" style="background:var(--danger);"><i class="bi bi-cash-coin"></i></div>
-        <div class="dash-info"><h3 style="font-size:1.1rem;">Rp {{ number_format($totalRealisasi,0,',','.') }}</h3><p>Realisasi</p></div>
+        <div class="dash-info">
+            <h3 style="font-size:1.1rem;">Rp {{ number_format($totalRealisasi,0,',','.') }}</h3>
+            <p>Realisasi <span class="trend-badge trend-up" style="background:rgba(220,38,38,0.1); color:var(--danger);">{{ number_format(($totalRealisasi / max($paguTotal,1)) * 100, 1) }}%</span></p>
+        </div>
     </div>
 </div>
 

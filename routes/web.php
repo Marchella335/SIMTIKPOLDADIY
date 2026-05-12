@@ -7,12 +7,16 @@ use App\Http\Controllers\KegiatanPublicController;
 use App\Http\Controllers\KontakController;
 use App\Http\Controllers\AdministrasiController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\LayananPublicController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\AnggotaController;
 use App\Http\Controllers\Admin\SuratController;
 use App\Http\Controllers\Admin\KeuanganController;
 use App\Http\Controllers\Admin\KegiatanController;
 use App\Http\Controllers\Admin\ProfileController;
+use App\Http\Controllers\Admin\LayananController;
+use App\Http\Controllers\Admin\ExecutiveReportController;
+use App\Http\Controllers\Admin\ActivityLogController;
 
 // Public Routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -24,6 +28,12 @@ Route::post('/kontak', [KontakController::class, 'send'])->name('kontak.send');
 Route::get('/administrasi', [AdministrasiController::class, 'index'])->name('administrasi');
 Route::get('/administrasi/persuratan', [AdministrasiController::class, 'persuratan'])->name('administrasi.persuratan');
 Route::get('/administrasi/keuangan', [AdministrasiController::class, 'keuangan'])->name('administrasi.keuangan');
+
+// Layanan TIK (Public CRM)
+Route::get('/layanan', [LayananPublicController::class, 'index'])->name('layanan.form');
+Route::post('/layanan', [LayananPublicController::class, 'store'])->name('layanan.store');
+Route::get('/layanan/rate/{token}', [LayananPublicController::class, 'rate'])->name('layanan.rate');
+Route::post('/layanan/rate/{token}', [LayananPublicController::class, 'submitRate'])->name('layanan.submit-rate');
 
 // Auth Routes
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
@@ -49,4 +59,13 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::resource('kegiatan', KegiatanController::class);
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+
+    // === CPMK Features ===
+    // Executive Intelligence Hub (Data Warehouse & ERP)
+    Route::get('/executive-report', [ExecutiveReportController::class, 'index'])->name('executive-report');
+    // CRM — Layanan TIK
+    Route::resource('layanan', LayananController::class)->only(['index', 'edit', 'update', 'destroy']);
+    // Security & Activity Log
+    Route::get('/activity-log', [ActivityLogController::class, 'index'])->name('activity-log');
 });
+

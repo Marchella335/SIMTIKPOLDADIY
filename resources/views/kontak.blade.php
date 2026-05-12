@@ -15,7 +15,7 @@
                     <h3>0274 884444 <i class="fas fa-arrow-right" style="color:var(--accent);"></i></h3>
                 </div>
                 <div class="kontak-detail">
-                    <h3>bidtik@polda-diy.go.id <i class="fas fa-arrow-right" style="color:var(--accent);"></i></h3>
+                    <h3>simtikpoldadiy@gmail.com <i class="fas fa-arrow-right" style="color:var(--accent);"></i></h3>
                 </div>
                 <div style="display:flex;gap:15px;margin-top:20px;">
                     <a href="https://www.facebook.com/profile.php?id=100087924513256&sk=about" target="_blank" style="width:40px;height:40px;border-radius:8px;background:var(--gray-900);color:var(--white);display:flex;align-items:center;justify-content:center;font-size:1.1rem;"><i class="fab fa-facebook-f"></i></a>

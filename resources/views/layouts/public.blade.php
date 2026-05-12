@@ -8,6 +8,7 @@
     <link rel="icon" href="{{ asset('assets/LOGO_BID_TIK.png') }}">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     @yield('styles')
 </head>
 <body>
@@ -24,11 +25,15 @@
                 <a href="{{ route('kegiatan') }}" class="{{ request()->routeIs('kegiatan*') ? 'active' : '' }}">Kegiatan</a>
                 <a href="{{ route('kontak') }}" class="{{ request()->routeIs('kontak') ? 'active' : '' }}">Kontak</a>
                 <a href="{{ route('administrasi') }}" class="{{ request()->routeIs('administrasi*') ? 'active' : '' }}">Administrasi</a>
+                <a href="{{ route('layanan.form') }}" class="{{ request()->routeIs('layanan*') ? 'active' : '' }}">Layanan TIK</a>
                 @auth
                     <a href="{{ route('admin.dashboard') }}" class="btn-login">Dashboard</a>
                 @else
                     <a href="{{ route('login') }}" class="btn-login">Login</a>
                 @endauth
+                <button id="themeToggle" class="public-theme-toggle" title="Ganti Tema">
+                    <i class="bi bi-moon-fill" id="themeIcon"></i>
+                </button>
             </div>
             <button class="mobile-toggle" onclick="document.getElementById('navLinks').classList.toggle('active')">
                 <i class="fas fa-bars"></i>
@@ -89,6 +94,33 @@
             } else {
                 navbar.classList.remove('scrolled');
             }
+        });
+
+        // Theme Logic
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        const html = document.documentElement;
+
+        function setTheme(theme, isAuto = false) {
+            html.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+            themeIcon.className = theme === 'dark' ? 'bi bi-sun-fill' : 'bi bi-moon-fill';
+            if(!isAuto) localStorage.setItem('theme-manual', 'true');
+        }
+
+        const savedTheme = localStorage.getItem('theme');
+        const hour = new Date().getHours();
+        const isNight = hour >= 18 || hour < 6;
+
+        if (savedTheme) {
+            setTheme(savedTheme, true);
+        } else if (isNight) {
+            setTheme('dark', true);
+        }
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = html.getAttribute('data-theme');
+            setTheme(currentTheme === 'dark' ? 'light' : 'dark');
         });
     </script>
     @yield('scripts')

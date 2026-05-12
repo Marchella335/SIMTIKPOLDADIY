@@ -528,18 +528,17 @@ window.onbeforeunload = function() {
 // 3. SYNC & STATS
 function updateGlobalStats() {
     let totalExp = 0;
-    let totalInc = 0;
     let sheetCount = 0;
 
     allSheets.forEach(s => {
         sheetCount++;
         (s.items || []).forEach(item => {
             if(item.tipe === 'Pengeluaran') totalExp += parseFloat(item.nilai || 0);
-            else totalInc += parseFloat(item.nilai || 0);
         });
     });
 
-    const saldo = currentSourcePagu + totalInc - totalExp;
+    // Perbaikan: Total Pagu dikurangi Total Pengeluaran (Bukan ditambah pemasukan)
+    const saldo = currentSourcePagu - totalExp;
 
     document.getElementById('valRealisasi').textContent = fmt(totalExp);
     document.getElementById('valSaldo').textContent = fmt(saldo);
@@ -633,7 +632,154 @@ async function deleteActiveSheet() {
 }
 
 function exportPDF() {
-    window.print();
+    if (activeSheetIdx === -1) return showToast('Pilih sheet yang akan diekspor', true);
+    
+    const s = allSheets[activeSheetIdx];
+    const sourceName = document.getElementById('lblFundName').textContent;
+    const items = s.items || [];
+    
+    let runningSaldo = currentSourcePagu;
+    let totalDebet = 0;
+    let totalKredit = 0;
+
+    const rowsHtml = items.map((item, i) => {
+        const val = parseFloat(item.nilai || 0);
+        let debet = 0;
+        let kredit = 0;
+        
+        if (item.tipe === 'Pemasukan') {
+            debet = val;
+            runningSaldo += val; 
+        } else {
+            kredit = val;
+            runningSaldo -= val;
+        }
+        
+        totalDebet += debet;
+        totalKredit += kredit;
+
+        return `
+            <tr>
+                <td style="text-align:center">${i + 1}</td>
+                <td style="text-align:center">${item.tanggal ? new Date(item.tanggal).toLocaleDateString('id-ID') : '-'}</td>
+                <td>${esc(item.uraian)}</td>
+                <td style="text-align:right">${debet > 0 ? debet.toLocaleString('id-ID') : '-'}</td>
+                <td style="text-align:right">${kredit > 0 ? kredit.toLocaleString('id-ID') : '-'}</td>
+                <td style="text-align:right; font-weight:600">${runningSaldo.toLocaleString('id-ID')}</td>
+            </tr>
+        `;
+    }).join('');
+
+    const html = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Laporan Keuangan - ${s.nama_acara}</title>
+        <style>
+            body { font-family: 'Arial', sans-serif; padding: 40px; color: #333; line-height: 1.4; }
+            .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #000; padding-bottom: 10px; }
+            .header h1 { margin: 0; font-size: 18px; text-transform: uppercase; }
+            .header h2 { margin: 5px 0; font-size: 16px; color: #555; }
+            .header p { margin: 0; font-size: 12px; }
+            
+            .info-table { width: 100%; margin-bottom: 20px; font-size: 12px; }
+            .info-table td { padding: 3px 0; }
+            
+            .report-table { width: 100%; border-collapse: collapse; font-size: 11px; margin-bottom: 20px; }
+            .report-table th { background: #f2f2f2; border: 1px solid #000; padding: 8px 5px; text-transform: uppercase; }
+            .report-table td { border: 1px solid #000; padding: 6px 8px; }
+            
+            .footer-grid { display: grid; grid-template-columns: 1fr 200px; gap: 40px; margin-top: 30px; font-size: 12px; }
+            .signature { text-align: center; }
+            .signature .space { height: 60px; }
+            
+            .summary-box { background: #f9f9f9; border: 1px solid #ccc; padding: 15px; border-radius: 5px; font-size: 12px; }
+            .summary-line { display: flex; justify-content: space-between; margin-bottom: 5px; }
+            .summary-line.total { border-top: 1px solid #000; padding-top: 5px; font-weight: bold; margin-top: 10px; }
+            
+            @media print {
+                body { padding: 0; }
+                button { display: none; }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="header">
+            <h1>KEPOLISIAN DAERAH</h1>
+            <h2>DAERAH ISTIMEWA YOGYAKARTA</h2>
+            <p>BIDANG TEKNOLOGI INFORMASI DAN KOMUNIKASI</p>
+        </div>
+
+        <h3 style="text-align:center; text-decoration: underline; margin-bottom: 20px;">LAPORAN REALISASI ANGGARAN KEGIATAN</h3>
+
+        <table class="info-table">
+            <tr>
+                <td style="width: 120px;">Nama Kegiatan</td>
+                <td style="width: 10px;">:</td>
+                <td style="font-weight:bold">${s.nama_acara}</td>
+                <td style="text-align:right">Periode: ${s.periode_pelaporan || '-'}</td>
+            </tr>
+            <tr>
+                <td>Sumber Dana</td>
+                <td>:</td>
+                <td>${sourceName}</td>
+                <td style="text-align:right">Tanggal Cetak: ${new Date().toLocaleDateString('id-ID')}</td>
+            </tr>
+        </table>
+
+        <table class="report-table">
+            <thead>
+                <tr>
+                    <th style="width:30px">No</th>
+                    <th style="width:80px">Tanggal</th>
+                    <th>Keterangan / Uraian</th>
+                    <th style="width:100px">Debet (Rp)</th>
+                    <th style="width:100px">Kredit (Rp)</th>
+                    <th style="width:110px">Saldo (Rp)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td colspan="5" style="font-weight:bold; background:#fafafa">SALDO AWAL (PAGU DANA)</td>
+                    <td style="text-align:right; font-weight:bold; background:#fafafa">${currentSourcePagu.toLocaleString('id-ID')}</td>
+                </tr>
+                ${rowsHtml}
+            </tbody>
+            <tfoot>
+                <tr style="background: #f2f2f2; font-weight:bold">
+                    <td colspan="3" style="text-align:right">TOTAL</td>
+                    <td style="text-align:right">${totalDebet.toLocaleString('id-ID')}</td>
+                    <td style="text-align:right">${totalKredit.toLocaleString('id-ID')}</td>
+                    <td style="text-align:right">${runningSaldo.toLocaleString('id-ID')}</td>
+                </tr>
+            </tfoot>
+        </table>
+
+        <div class="footer-grid">
+            <div class="summary-box">
+                <div class="summary-line"><span>Total Pagu Dana</span> <span>Rp ${currentSourcePagu.toLocaleString('id-ID')}</span></div>
+                <div class="summary-line"><span>Total Pengeluaran</span> <span>Rp ${totalKredit.toLocaleString('id-ID')}</span></div>
+                <div class="summary-line total"><span>SISA SALDO ANGGARAN</span> <span>Rp ${runningSaldo.toLocaleString('id-ID')}</span></div>
+            </div>
+            <div class="signature">
+                <p>Yogyakarta, ${new Date().toLocaleDateString('id-ID', {day:'numeric', month:'long', year:'numeric'})}</p>
+                <p>Bendahara Pengeluaran,</p>
+                <div class="space"></div>
+                <p><strong>( ____________________ )</strong></p>
+                <p>NRP. ......................</p>
+            </div>
+        </div>
+
+        <script>
+            window.onload = function() { window.print(); }
+        <\/script>
+    </body>
+    </html>
+    `;
+
+    const win = window.open('', '_blank');
+    win.document.write(html);
+    win.document.close();
 }
 
 // Init

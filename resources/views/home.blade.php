@@ -101,15 +101,31 @@
             <div class="section-badge">&#9679; Berita & Kegiatan</div>
             <h2 class="section-title">Kegiatan Terbaru</h2>
         </div>
-        <div class="news-list">
+        <div class="kegiatan-grid">
             @forelse($kegiatanTerbaru as $k)
-            <a href="{{ route('kegiatan.show', $k->id) }}" class="news-item">
-                <span class="news-date">{{ $k->tanggal->format('d M Y') }}</span>
-                <span class="news-title">{{ $k->nama_kegiatan }}</span>
-                <span class="news-arrow"><i class="fas fa-arrow-right"></i></span>
-            </a>
+            <div class="kegiatan-card">
+                <div style="position:relative;">
+                    @if($k->gambar)
+                        <img src="{{ asset($k->gambar) }}" alt="{{ $k->nama_kegiatan }}">
+                    @else
+                        <div style="width:100%;height:200px;background:var(--gray-200);display:flex;align-items:center;justify-content:center;color:var(--gray-500);">
+                            <i class="fas fa-image fa-3x"></i>
+                        </div>
+                    @endif
+                    <div style="position:absolute;top:15px;left:15px;background:var(--accent);color:white;padding:4px 12px;border-radius:20px;font-size:0.75rem;font-weight:600;">Terbaru</div>
+                </div>
+                <div class="card-body">
+                    <div class="card-date"><i class="far fa-calendar-alt"></i> {{ $k->tanggal->format('d M Y') }}</div>
+                    <h3>{{ Str::limit($k->nama_kegiatan, 45) }}</h3>
+                    <p>{{ Str::limit(strip_tags($k->deskripsi), 90) }}</p>
+                    <a href="{{ route('kegiatan.show', $k->id) }}" style="display:inline-block;margin-top:12px;color:var(--accent);font-weight:600;font-size:0.85rem;">Baca Selengkapnya <i class="fas fa-chevron-right" style="font-size:0.7rem;"></i></a>
+                </div>
+            </div>
             @empty
-            <p style="text-align:center;color:var(--gray-500);">Belum ada kegiatan.</p>
+            <div style="grid-column: 1 / -1; text-align:center; padding: 40px; color:var(--gray-500);">
+                <i class="fas fa-calendar-times fa-3x" style="margin-bottom:15px; opacity:0.3;"></i>
+                <p>Belum ada kegiatan yang ditambahkan.</p>
+            </div>
             @endforelse
         </div>
         <div style="text-align:center;margin-top:30px;">

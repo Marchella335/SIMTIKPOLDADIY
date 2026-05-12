@@ -4,8 +4,14 @@
 
 @section('content')
 <div class="card">
-    <div class="card-header">
-        <h3>Daftar Anggota Bid TIK</h3>
+    <div class="card-header" style="display:flex; justify-content:space-between; align-items:center;">
+        <div style="display:flex; align-items:center; gap:20px;">
+            <h3 style="margin:0;">Daftar Anggota Bid TIK</h3>
+            <div class="search-box" style="position:relative;">
+                <i class="bi bi-search" style="position:absolute; left:12px; top:50%; transform:translateY(-50%); color:var(--gray-500); font-size:0.9rem;"></i>
+                <input type="text" class="table-search" data-table="table" placeholder="Cari nama, pangkat, atau NRP..." style="padding:8px 12px 8px 35px; border-radius:var(--radius-sm); border:1px solid var(--gray-200); font-size:0.9rem; width:280px; outline:none; transition:var(--transition);">
+            </div>
+        </div>
         <a href="{{ route('admin.anggota.create') }}" class="btn btn-primary btn-sm"><i class="fas fa-plus"></i> Tambah</a>
     </div>
     <div class="card-body">

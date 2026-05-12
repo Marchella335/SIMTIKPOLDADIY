@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Anggota;
+use App\Models\ActivityLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\TenureExpirationAlert;
@@ -43,7 +44,14 @@ class AnggotaController extends Controller
             $data['foto'] = 'uploads/anggota/' . $filename;
         }
 
+        $data['akhir_jabatan_notif'] = $request->akhir_jabatan;
+
         $anggota = Anggota::create($data);
+
+        ActivityLog::log('Create', 'Anggota', $anggota->id, [
+            'nama' => $anggota->nama_lengkap,
+            'pangkat' => $anggota->pangkat,
+        ]);
 
         // Send notification if tenure is ending in less than 3 months
         if ($anggota->akhir_jabatan) {
@@ -93,7 +101,13 @@ class AnggotaController extends Controller
             $data['foto'] = 'uploads/anggota/' . $filename;
         }
 
+        $data['akhir_jabatan_notif'] = $request->akhir_jabatan;
+
         $anggotum->update($data);
+
+        ActivityLog::log('Update', 'Anggota', $anggotum->id, [
+            'nama' => $anggotum->nama_lengkap,
+        ]);
 
         // Send notification if tenure is ending in less than 3 months
         if ($anggotum->akhir_jabatan) {
@@ -112,6 +126,9 @@ class AnggotaController extends Controller
         if ($anggotum->foto && file_exists(public_path($anggotum->foto))) {
             unlink(public_path($anggotum->foto));
         }
+        ActivityLog::log('Delete', 'Anggota', $anggotum->id, [
+            'nama' => $anggotum->nama_lengkap,
+        ]);
         $anggotum->delete();
 
         return redirect()->route('admin.anggota.index')
