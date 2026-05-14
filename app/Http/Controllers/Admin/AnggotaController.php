@@ -11,15 +11,29 @@ use App\Mail\TenureExpirationAlert;
 
 class AnggotaController extends Controller
 {
+    public function landing()
+    {
+        return view('admin.anggota.landing');
+    }
+
     public function index()
     {
-        $anggotas = Anggota::orderBy('jabatan')->get();
-        return view('admin.anggota.index', compact('anggotas'));
+        $query = Anggota::query();
+        
+        if (request('bidang')) {
+            $query->where('bidang', request('bidang'));
+        }
+
+        $anggotas = $query->orderBy('jabatan')->get();
+        $bidang = request('bidang');
+        
+        return view('admin.anggota.index', compact('anggotas', 'bidang'));
     }
 
     public function create()
     {
-        return view('admin.anggota.create');
+        $bidang = request('bidang');
+        return view('admin.anggota.create', compact('bidang'));
     }
 
     public function store(Request $request)
@@ -61,7 +75,7 @@ class AnggotaController extends Controller
             }
         }
 
-        return redirect()->route('admin.anggota.index')
+        return redirect()->route('admin.anggota.index', ['bidang' => $anggota->bidang])
             ->with('success', 'Anggota berhasil ditambahkan.');
     }
 
@@ -117,7 +131,7 @@ class AnggotaController extends Controller
             }
         }
 
-        return redirect()->route('admin.anggota.index')
+        return redirect()->route('admin.anggota.index', ['bidang' => $anggotum->bidang])
             ->with('success', 'Anggota berhasil diperbarui.');
     }
 
@@ -129,9 +143,10 @@ class AnggotaController extends Controller
         ActivityLog::log('Delete', 'Anggota', $anggotum->id, [
             'nama' => $anggotum->nama_lengkap,
         ]);
+        $bidang = $anggotum->bidang;
         $anggotum->delete();
 
-        return redirect()->route('admin.anggota.index')
+        return redirect()->route('admin.anggota.index', ['bidang' => $bidang])
             ->with('success', 'Anggota berhasil dihapus.');
     }
 }

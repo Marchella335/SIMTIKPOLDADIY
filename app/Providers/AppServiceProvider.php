@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Pagination\Paginator;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -21,6 +22,7 @@ class AppServiceProvider extends ServiceProvider
     {
         // Force URL to use APP_URL (penting agar link di email benar)
         \Illuminate\Support\Facades\URL::forceRootUrl(config('app.url'));
+        Paginator::useBootstrapFive();
 
         \Illuminate\Support\Facades\View::composer('layouts.admin', function ($view) {
             $expiringAnggotas = \App\Models\Anggota::whereNotNull('akhir_jabatan')

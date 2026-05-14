@@ -26,12 +26,12 @@
         </ul>
         <div class="sidebar-section">Data</div>
         <ul class="sidebar-nav">
-            <li><a href="{{ route('admin.anggota.index') }}" class="{{ request()->routeIs('admin.anggota.*') ? 'active' : '' }}"><span class="icon"><i class="bi bi-people"></i></span> Anggota</a></li>
+            <li><a href="{{ route('admin.anggota.landing') }}" class="{{ request()->routeIs('admin.anggota.*') ? 'active' : '' }}"><span class="icon"><i class="bi bi-people"></i></span> Anggota</a></li>
             <li><a href="{{ route('admin.persuratan.landing') }}" class="{{ request()->routeIs('admin.persuratan.*') ? 'active' : '' }}"><span class="icon"><i class="bi bi-mailbox"></i></span> Persuratan</a></li>
             <li><a href="{{ route('admin.keuangan.index') }}" class="{{ request()->routeIs('admin.keuangan.*') ? 'active' : '' }}"><span class="icon"><i class="bi bi-cash-stack"></i></span> Keuangan</a></li>
             <li><a href="{{ route('admin.kegiatan.index') }}" class="{{ request()->routeIs('admin.kegiatan.*') ? 'active' : '' }}"><span class="icon"><i class="bi bi-calendar-event"></i></span> Kegiatan</a></li>
         </ul>
-        <div class="sidebar-section">Intelligence & CRM</div>
+        <div class="sidebar-section">Monitoring & Pelayanan</div>
         <ul class="sidebar-nav">
             <li><a href="{{ route('admin.executive-report') }}" class="{{ request()->routeIs('admin.executive-report') ? 'active' : '' }}"><span class="icon"><i class="bi bi-bar-chart-line"></i></span> Rekapitulasi</a></li>
             <li><a href="{{ route('admin.layanan.index') }}" class="{{ request()->routeIs('admin.layanan.*') ? 'active' : '' }}"><span class="icon"><i class="bi bi-headset"></i></span> Layanan TIK</a></li>

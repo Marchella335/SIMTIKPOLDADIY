@@ -8,8 +8,8 @@
     <div style="display:flex; align-items:center; gap:15px;">
         <i class="bi bi-shield-lock-fill" style="font-size:2.5rem; color:var(--accent);"></i>
         <div>
-            <h2 style="color:#fff; margin-bottom:4px;">Privacy & Security Center</h2>
-            <p style="color:rgba(255,255,255,0.6);">Pencatatan aktivitas sistem untuk transparansi, etika, dan keamanan data. Sesuai dengan prinsip <em>Data Privacy</em> dan <em>Intellectual Property Rights</em>.</p>
+            <h2 style="color:#fff; margin-bottom:4px;">Audit Log & Monitoring Sistem</h2>
+            <p style="color:rgba(255,255,255,0.6);">Pencatatan riwayat aktivitas operasional untuk menjamin keamanan informasi, integritas data, dan akuntabilitas penggunaan sistem di lingkungan Bid TIK POLDA DIY.</p>
         </div>
     </div>
 </div>

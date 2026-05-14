@@ -118,7 +118,7 @@
 
     <div class="card">
         <div class="card-header">
-            <h3><i class="bi bi-arrow-left-right" style="color:var(--accent); margin-right:8px;"></i> Perbandingan YoY</h3>
+            <h3><i class="bi bi-arrow-left-right" style="color:var(--accent); margin-right:8px;"></i> Analisa Pertumbuhan Tahunan (YoY)</h3>
         </div>
         <div class="card-body">
             <div style="space-y:15px;">
@@ -159,7 +159,7 @@
 {{-- ROW 3: CRM & Satisfaction --}}
 <div class="card" style="margin-bottom:30px;">
     <div class="card-header">
-        <h3><i class="bi bi-heart" style="color:var(--accent); margin-right:8px;"></i> CRM — Customer Satisfaction Index</h3>
+        <h3><i class="bi bi-heart" style="color:var(--accent); margin-right:8px;"></i> Indeks Kepuasan Layanan TIK (IKL)</h3>
     </div>
     <div class="card-body">
         <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:20px;">

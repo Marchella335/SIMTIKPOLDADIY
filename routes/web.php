@@ -44,6 +44,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 // Admin Routes
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('anggota/landing', [AnggotaController::class, 'landing'])->name('anggota.landing');
     Route::resource('anggota', AnggotaController::class);
     Route::get('persuratan/landing', [SuratController::class, 'landing'])->name('persuratan.landing');
     Route::resource('persuratan', SuratController::class);

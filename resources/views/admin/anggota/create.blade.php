@@ -28,10 +28,10 @@
                 <label>Bidang *</label>
                 <select name="bidang" id="selectBidang" class="form-control" required onchange="updateJabatan()">
                     <option value="">-- Pilih Bidang --</option>
-                    <option value="TIK" {{ old('bidang')=='TIK'?'selected':'' }}>TIK</option>
-                    <option value="RENMIN" {{ old('bidang')=='RENMIN'?'selected':'' }}>RENMIN</option>
-                    <option value="TEKKOM" {{ old('bidang')=='TEKKOM'?'selected':'' }}>TEKKOM</option>
-                    <option value="TEKINFO" {{ old('bidang')=='TEKINFO'?'selected':'' }}>TEKINFO</option>
+                    <option value="TIK" {{ (old('bidang', $bidang))=='TIK'?'selected':'' }}>TIK</option>
+                    <option value="Renmin" {{ (old('bidang', $bidang))=='Renmin'?'selected':'' }}>Renmin</option>
+                    <option value="Tekkom" {{ (old('bidang', $bidang))=='Tekkom'?'selected':'' }}>Tekkom</option>
+                    <option value="Tekinfo" {{ (old('bidang', $bidang))=='Tekinfo'?'selected':'' }}>Tekinfo</option>
                 </select>
                 @error('bidang')<div class="form-error">{{ $message }}</div>@enderror
             </div>
@@ -65,7 +65,7 @@
 
             <div style="display:flex;gap:10px;margin-top:25px;">
                 <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Simpan</button>
-                <a href="{{ route('admin.anggota.index') }}" class="btn btn-outline">Batal</a>
+                <a href="{{ route('admin.anggota.index', ['bidang' => $bidang]) }}" class="btn btn-outline">Batal</a>
             </div>
         </form>
     </div>
@@ -74,9 +74,9 @@
 <script>
 const jabatanOptions = {
     'TIK': ['Kabid TIK'],
-    'RENMIN': ['Kasubbid Renmin', 'Kaurren', 'Kaurmintu', 'PS. Kaur Keu', 'Ps. Pamin 2', 'Ba. Urkeu', 'BA. Renmin', 'Ba. Urmin'],
-    'TEKKOM': ['Kasubbid Tekkom', 'Kaur Jarkom', 'PS. Paur Urjarkom', 'PS. Kaurharkan', 'PS. Kauryankom', 'PS. Pauryankom', 'PS. Paur 3 Harkan', 'Pamin 1', 'PS. Pamin 3', 'Ba. Yankom', 'Ps. Pmain 4', 'Ba. Tekkom'],
-    'TEKINFO': ['Kasubbid Tekinfo', 'Ps. Kaur Yanduknis', 'Kaurtini', 'PS. Kaurpulahta', 'Ps. Paur Yanduknis', 'Paur 2 Subidtekinfo', 'PS. Paur Subidtekinfo', 'Ba. Tekinfo', 'PNS Tekinfo']
+    'Renmin': ['Kasubbid Renmin', 'Kaurren', 'Kaurmintu', 'PS. Kaur Keu', 'Ps. Pamin 2', 'Ba. Urkeu', 'BA. Renmin', 'Ba. Urmin'],
+    'Tekkom': ['Kasubbid Tekkom', 'Kaur Jarkom', 'PS. Paur Urjarkom', 'PS. Kaurharkan', 'PS. Kauryankom', 'PS. Pauryankom', 'PS. Paur 3 Harkan', 'Pamin 1', 'PS. Pamin 3', 'Ba. Yankom', 'Ps. Pmain 4', 'Ba. Tekkom'],
+    'Tekinfo': ['Kasubbid Tekinfo', 'Ps. Kaur Yanduknis', 'Kaurtini', 'PS. Kaurpulahta', 'Ps. Paur Yanduknis', 'Paur 2 Subidtekinfo', 'PS. Paur Subidtekinfo', 'Ba. Tekinfo', 'PNS Tekinfo']
 };
 
 function updateJabatan() {
