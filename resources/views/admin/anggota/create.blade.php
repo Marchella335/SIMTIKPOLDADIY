@@ -20,18 +20,13 @@
                 </div>
                 <div class="form-group">
                     <label>Pangkat *</label>
-                    <select name="pangkat" class="form-control" required>
-                        <option value="">-- Pilih Pangkat --</option>
-                        @foreach($pangkats as $p)
-                            <option value="{{ $p->nama_pangkat }}" {{ old('pangkat') == $p->nama_pangkat ? 'selected' : '' }}>{{ $p->nama_pangkat }}</option>
-                        @endforeach
-                    </select>
+                    <input type="text" name="pangkat" class="form-control" value="{{ old('pangkat') }}" required placeholder="Contoh: KOMPOL, BRIPKA, PNS, dll.">
                 </div>
             </div>
 
             <div class="form-group">
                 <label>Bidang *</label>
-                <select name="bidang" id="selectBidang" class="form-control" required onchange="updateJabatan()">
+                <select name="bidang" id="selectBidang" class="form-control" required>
                     <option value="">-- Pilih Bidang --</option>
                     <option value="TIK" {{ (old('bidang', $bidang))=='TIK'?'selected':'' }}>TIK</option>
                     <option value="Renmin" {{ (old('bidang', $bidang))=='Renmin'?'selected':'' }}>Renmin</option>
@@ -43,8 +38,36 @@
 
             <div class="form-group">
                 <label>Jabatan *</label>
-                <select name="jabatan" id="selectJabatan" class="form-control" required>
+                <select name="jabatan" class="form-control" required>
                     <option value="">-- Pilih Jabatan --</option>
+                    @if($jabatans->where('bidang', 'Renmin')->count() > 0)
+                        <optgroup label="RENMIN">
+                            @foreach($jabatans->where('bidang', 'Renmin') as $j)
+                                <option value="{{ $j->nama_jabatan }}" {{ old('jabatan') == $j->nama_jabatan ? 'selected' : '' }}>{{ $j->nama_jabatan }}</option>
+                            @endforeach
+                        </optgroup>
+                    @endif
+                    @if($jabatans->where('bidang', 'Tekkom')->count() > 0)
+                        <optgroup label="TEKKOM">
+                            @foreach($jabatans->where('bidang', 'Tekkom') as $j)
+                                <option value="{{ $j->nama_jabatan }}" {{ old('jabatan') == $j->nama_jabatan ? 'selected' : '' }}>{{ $j->nama_jabatan }}</option>
+                            @endforeach
+                        </optgroup>
+                    @endif
+                    @if($jabatans->where('bidang', 'Tekinfo')->count() > 0)
+                        <optgroup label="TEKINFO">
+                            @foreach($jabatans->where('bidang', 'Tekinfo') as $j)
+                                <option value="{{ $j->nama_jabatan }}" {{ old('jabatan') == $j->nama_jabatan ? 'selected' : '' }}>{{ $j->nama_jabatan }}</option>
+                            @endforeach
+                        </optgroup>
+                    @endif
+                    @if($jabatans->whereNull('bidang')->count() > 0)
+                        <optgroup label="GLOBAL / LAINNYA">
+                            @foreach($jabatans->whereNull('bidang') as $j)
+                                <option value="{{ $j->nama_jabatan }}" {{ old('jabatan') == $j->nama_jabatan ? 'selected' : '' }}>{{ $j->nama_jabatan }}</option>
+                            @endforeach
+                        </optgroup>
+                    @endif
                 </select>
                 @error('jabatan')<div class="form-error">{{ $message }}</div>@enderror
             </div>
@@ -76,34 +99,4 @@
     </div>
 </div>
 
-<script>
-const jabatanOptions = {
-    'TIK': ['Kabid TIK'],
-    'Renmin': ['Kasubbid Renmin', 'Kaurren', 'Kaurmintu', 'PS. Kaur Keu', 'Ps. Pamin 2', 'Ba. Urkeu', 'BA. Renmin', 'Ba. Urmin'],
-    'Tekkom': ['Kasubbid Tekkom', 'Kaur Jarkom', 'PS. Paur Urjarkom', 'PS. Kaurharkan', 'PS. Kauryankom', 'PS. Pauryankom', 'PS. Paur 3 Harkan', 'Pamin 1', 'PS. Pamin 3', 'Ba. Yankom', 'Ps. Pmain 4', 'Ba. Tekkom'],
-    'Tekinfo': ['Kasubbid Tekinfo', 'Ps. Kaur Yanduknis', 'Kaurinti', 'PS. Kaurpulahta', 'Ps. Paur Yanduknis', 'Paur 2 Subidtekinfo', 'PS. Paur Subidtekinfo', 'Ba. Tekinfo', 'PNS Tekinfo']
-};
-
-function updateJabatan() {
-    const bidang = document.getElementById('selectBidang').value;
-    const selectJabatan = document.getElementById('selectJabatan');
-    const oldJabatan = "{{ old('jabatan') }}";
-    
-    // Clear existing options
-    selectJabatan.innerHTML = '<option value="">-- Pilih Jabatan --</option>';
-    
-    if (bidang && jabatanOptions[bidang]) {
-        jabatanOptions[bidang].forEach(j => {
-            const option = document.createElement('option');
-            option.value = j;
-            option.text = j;
-            if (j === oldJabatan) option.selected = true;
-            selectJabatan.appendChild(option);
-        });
-    }
-}
-
-// Trigger on load for validation errors
-document.addEventListener('DOMContentLoaded', updateJabatan);
-</script>
 @endsection

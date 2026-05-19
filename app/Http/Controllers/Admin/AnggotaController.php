@@ -33,8 +33,8 @@ class AnggotaController extends Controller
     public function create()
     {
         $bidang = request('bidang');
-        $pangkats = \App\Models\Pangkat::orderBy('nama_pangkat')->get();
-        return view('admin.anggota.create', compact('bidang', 'pangkats'));
+        $jabatans = \App\Models\Jabatan::orderBy('nama_jabatan')->get();
+        return view('admin.anggota.create', compact('bidang', 'jabatans'));
     }
 
     public function store(Request $request)
@@ -87,8 +87,8 @@ class AnggotaController extends Controller
 
     public function edit(Anggota $anggotum)
     {
-        $pangkats = \App\Models\Pangkat::orderBy('nama_pangkat')->get();
-        return view('admin.anggota.edit', ['anggota' => $anggotum, 'pangkats' => $pangkats]);
+        $jabatans = \App\Models\Jabatan::orderBy('nama_jabatan')->get();
+        return view('admin.anggota.edit', ['anggota' => $anggotum, 'jabatans' => $jabatans]);
     }
 
     public function update(Request $request, Anggota $anggotum)

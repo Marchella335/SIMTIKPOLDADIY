@@ -6,7 +6,7 @@
     <meta name="description" content="SIMTIK POLDA DIY - Sistem Informasi Manajemen Teknologi Informasi dan Komunikasi Polda DIY">
     <title>@yield('title', 'SIMTIK POLDA DIY')</title>
     <link rel="icon" href="{{ asset('assets/LOGO_BID_TIK.png') }}">
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}?v={{ filemtime(public_path('css/app.css')) }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     @yield('styles')
@@ -41,6 +41,21 @@
             </button>
         </div>
     </nav>
+
+    {{-- WEATHER BAR (below navbar, homepage only) --}}
+    @if(request()->routeIs('home'))
+    <div style="background:#0f172a; padding:8px 0; border-bottom:1px solid rgba(255,255,255,0.06); margin-top:70px;">
+        <div class="container" style="display:flex; align-items:center; justify-content:center; gap:16px; flex-wrap:wrap; font-size:0.82rem; color:rgba(255,255,255,0.6);">
+            <span id="weather-icon-public" style="font-size:1.2rem; line-height:1;">⛅</span>
+            <span id="weather-temp-public" style="font-weight:700; color:#fff; font-family:'Poppins',sans-serif; font-size:0.9rem;">--°C</span>
+            <span id="weather-desc-public">Memuat...</span>
+            <span style="color:rgba(255,255,255,0.15);">|</span>
+            <span><i class="fas fa-map-marker-alt"></i> Yogyakarta</span>
+            <span id="weather-wind-public"><i class="fas fa-wind"></i> --</span>
+            <span id="weather-humidity-public"><i class="fas fa-tint"></i> --</span>
+        </div>
+    </div>
+    @endif
 
     @yield('content')
 

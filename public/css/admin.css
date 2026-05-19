@@ -27,13 +27,13 @@
 [data-theme="dark"] {
     --primary: #ffffff;
     --primary-light: #f8fafc;
-    --white: #1a1a1a;
-    --gray-50: #222222;
-    --gray-100: #2a2a2a;
-    --gray-200: #3f3f3f;
-    --gray-300: #555555;
-    --gray-500: #a3a3a3;
-    --gray-700: #e5e5e5;
+    --white: #111827;
+    --gray-50: #090d16;
+    --gray-100: #1f2937;
+    --gray-200: #374151;
+    --gray-300: #4b5563;
+    --gray-500: #cbd5e1;
+    --gray-700: #f1f5f9;
     --gray-900: #ffffff;
     --shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
     --shadow-md: 0 10px 25px rgba(0, 0, 0, 0.6);
@@ -377,4 +377,137 @@ table .actions { display: flex; gap: 6px; }
     .form-row { grid-template-columns: 1fr; }
     .notification-menu { width: 300px; right: -50px; }
 }
+
+/* Premium High-legibility Admin Dark Mode Overrides */
+[data-theme="dark"] body {
+    color: #f8fafc;
+}
+
+[data-theme="dark"] h1,
+[data-theme="dark"] h2,
+[data-theme="dark"] h3,
+[data-theme="dark"] h4,
+[data-theme="dark"] h5,
+[data-theme="dark"] h6 {
+    color: #ffffff;
+}
+
+[data-theme="dark"] .sidebar-brand span {
+    color: #ffffff;
+}
+
+[data-theme="dark"] .admin-sidebar .sidebar-nav a {
+    color: #94a3b8;
+}
+
+[data-theme="dark"] .admin-sidebar .sidebar-nav a:hover {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="dark"] .admin-sidebar .sidebar-nav a.active {
+    color: #ffffff;
+    background: var(--accent);
+}
+
+[data-theme="dark"] .dash-info h3 {
+    color: #ffffff;
+}
+
+[data-theme="dark"] .dash-info p {
+    color: #cbd5e1;
+}
+
+[data-theme="dark"] .welcome-card {
+    background: linear-gradient(135deg, #1e293b, #0f172a) !important;
+    border: 1px solid #334155;
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] .welcome-card h2 {
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] .welcome-card p {
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+
+[data-theme="dark"] .form-group label {
+    color: #cbd5e1;
+}
+
+[data-theme="dark"] .surat-card.masuk {
+    background: linear-gradient(135deg, #3b82f6, #60a5fa) !important;
+    box-shadow: 0 8px 30px rgba(59, 130, 246, 0.6) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+}
+
+[data-theme="dark"] .surat-card.keluar {
+    background: linear-gradient(135deg, #ef4444, #f87171) !important;
+    box-shadow: 0 8px 30px rgba(239, 68, 68, 0.6) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+}
+
+[data-theme="dark"] .surat-card .surat-count {
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] .surat-card .surat-label {
+    color: #f8fafc !important;
+}
+
+[data-theme="dark"] table thead {
+    background: #1f2937 !important;
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] table th {
+    color: #ffffff !important;
+    border-bottom: 2px solid #334155 !important;
+}
+
+[data-theme="dark"] .card-header h3,
+[data-theme="dark"] .card-header h2,
+[data-theme="dark"] .card-header h1,
+[data-theme="dark"] .card h3 {
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] table td {
+    color: #cbd5e1;
+}
+
+[data-theme="dark"] table tbody tr:hover {
+    background: #1f2937;
+}
+
+[data-theme="dark"] .breadcrumb {
+    color: #94a3b8;
+}
+
+[data-theme="dark"] .breadcrumb a {
+    color: #94a3b8;
+}
+
+[data-theme="dark"] .breadcrumb a:hover {
+    color: var(--accent);
+}
+
+[data-theme="dark"] .breadcrumb .current {
+    color: #ffffff;
+}
+
+[data-theme="dark"] .pagu-card {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+}
+
+[data-theme="dark"] .pagu-card h4 {
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] .pagu-card p {
+    color: #cbd5e1 !important;
+}
+
 

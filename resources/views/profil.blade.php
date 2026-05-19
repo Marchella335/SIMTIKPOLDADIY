@@ -51,8 +51,9 @@
                         <div class="no-photo"><i class="fas fa-user"></i></div>
                     @endif
                     <div class="jabatan">{{ $a->jabatan }}</div>
-                    <h4>{{ $a->pangkat }} {{ $a->nama_lengkap }}</h4>
-                    <div class="pangkat">NRP: {{ $a->nrp ?? '-' }}</div>
+                    <div class="pangkat">{{ $a->pangkat }}</div>
+                    <h4>{{ $a->nama_lengkap }}</h4>
+                    <div style="font-size:0.8rem; color:var(--gray-500); margin-top:4px;">NRP: {{ $a->nrp ?? '-' }}</div>
                 </div>
                 @endforeach
             </div>
@@ -73,8 +74,9 @@
                         <div class="no-photo"><i class="fas fa-user"></i></div>
                     @endif
                     <div class="jabatan">{{ $a->jabatan }}</div>
-                    <h4>{{ $a->pangkat }} {{ $a->nama_lengkap }}</h4>
-                    <div class="pangkat">NRP: {{ $a->nrp ?? '-' }}</div>
+                    <div class="pangkat">{{ $a->pangkat }}</div>
+                    <h4>{{ $a->nama_lengkap }}</h4>
+                    <div style="font-size:0.8rem; color:var(--gray-500); margin-top:4px;">NRP: {{ $a->nrp ?? '-' }}</div>
                 </div>
                 @endforeach
             </div>
@@ -93,7 +95,8 @@
                                 <div class="no-photo"><i class="fas fa-user"></i></div>
                             @endif
                             <div class="jabatan">{{ $a->jabatan }}</div>
-                            <h4>{{ $a->pangkat }} {{ $a->nama_lengkap }}</h4>
+                            <div class="pangkat">{{ $a->pangkat }}</div>
+                            <h4>{{ $a->nama_lengkap }}</h4>
                         </div>
                         @empty
                         <p style="color:var(--gray-500);text-align:center;grid-column:1/-1;">Belum ada anggota</p>
@@ -111,7 +114,8 @@
                                 <div class="no-photo"><i class="fas fa-user"></i></div>
                             @endif
                             <div class="jabatan">{{ $a->jabatan }}</div>
-                            <h4>{{ $a->pangkat }} {{ $a->nama_lengkap }}</h4>
+                            <div class="pangkat">{{ $a->pangkat }}</div>
+                            <h4>{{ $a->nama_lengkap }}</h4>
                         </div>
                         @empty
                         <p style="color:var(--gray-500);text-align:center;grid-column:1/-1;">Belum ada anggota</p>
@@ -129,7 +133,8 @@
                                 <div class="no-photo"><i class="fas fa-user"></i></div>
                             @endif
                             <div class="jabatan">{{ $a->jabatan }}</div>
-                            <h4>{{ $a->pangkat }} {{ $a->nama_lengkap }}</h4>
+                            <div class="pangkat">{{ $a->pangkat }}</div>
+                            <h4>{{ $a->nama_lengkap }}</h4>
                         </div>
                         @empty
                         <p style="color:var(--gray-500);text-align:center;grid-column:1/-1;">Belum ada anggota</p>

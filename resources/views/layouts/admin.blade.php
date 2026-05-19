@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Admin - SIMTIK POLDA DIY')</title>
     <link rel="icon" href="{{ asset('assets/LOGO_BID_TIK.png') }}">
-    <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin.css') }}?v={{ filemtime(public_path('css/admin.css')) }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -27,12 +27,13 @@
         <div class="sidebar-section">Data</div>
         <ul class="sidebar-nav">
             <li><a href="{{ route('admin.anggota.landing') }}" class="{{ request()->routeIs('admin.anggota.*') ? 'active' : '' }}"><span class="icon"><i class="bi bi-people"></i></span> Anggota</a></li>
-            <li><a href="{{ route('admin.pangkat.index') }}" class="{{ request()->routeIs('admin.pangkat.*') ? 'active' : '' }}"><span class="icon"><i class="bi bi-award"></i></span> Pangkat</a></li>
+            <li><a href="{{ route('admin.jabatan.index') }}" class="{{ request()->routeIs('admin.jabatan.*') ? 'active' : '' }}"><span class="icon"><i class="bi bi-briefcase"></i></span> Jabatan</a></li>
             <li><a href="{{ route('admin.struktur.index') }}" class="{{ request()->routeIs('admin.struktur.*') ? 'active' : '' }}"><span class="icon"><i class="bi bi-diagram-3"></i></span> Struktur</a></li>
             <li><a href="{{ route('admin.persuratan.landing') }}" class="{{ request()->routeIs('admin.persuratan.*') ? 'active' : '' }}"><span class="icon"><i class="bi bi-mailbox"></i></span> Persuratan</a></li>
             <li><a href="{{ route('admin.keuangan.index') }}" class="{{ request()->routeIs('admin.keuangan.*') ? 'active' : '' }}"><span class="icon"><i class="bi bi-cash-stack"></i></span> Keuangan</a></li>
             <li><a href="{{ route('admin.kegiatan.index') }}" class="{{ request()->routeIs('admin.kegiatan.*') ? 'active' : '' }}"><span class="icon"><i class="bi bi-calendar-event"></i></span> Kegiatan</a></li>
             <li><a href="{{ route('admin.berita.index') }}" class="{{ request()->routeIs('admin.berita.*') ? 'active' : '' }}"><span class="icon"><i class="bi bi-newspaper"></i></span> Berita</a></li>
+            <li><a href="{{ route('admin.carousel.index') }}" class="{{ request()->routeIs('admin.carousel.*') ? 'active' : '' }}"><span class="icon"><i class="bi bi-images"></i></span> Carousel</a></li>
         </ul>
         <div class="sidebar-section">Monitoring & Pelayanan</div>
         <ul class="sidebar-nav">

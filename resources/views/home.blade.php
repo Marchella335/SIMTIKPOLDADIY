@@ -171,4 +171,40 @@
     <p>Bergabunglah bersama kami dalam mewujudkan transformasi digital kepolisian yang aman dan terpercaya.</p>
     <a href="{{ route('kontak') }}" class="btn btn-primary">Hubungi Kami <i class="fas fa-arrow-right"></i></a>
 </section>
+
+<script>
+// Real-time Weather — Open-Meteo API (free, no key)
+(function() {
+    const WMO_CODES = {
+        0: ['Cerah', '☀️'], 1: ['Cerah Berawan', '🌤️'], 2: ['Berawan Sebagian', '⛅'],
+        3: ['Mendung', '☁️'], 45: ['Berkabut', '🌫️'], 48: ['Kabut Tebal', '🌫️'],
+        51: ['Gerimis Ringan', '🌦️'], 53: ['Gerimis', '🌧️'], 55: ['Gerimis Lebat', '🌧️'],
+        61: ['Hujan Ringan', '🌦️'], 63: ['Hujan Sedang', '🌧️'], 65: ['Hujan Lebat', '⛈️'],
+        71: ['Salju Ringan', '🌨️'], 73: ['Salju', '❄️'], 75: ['Salju Lebat', '❄️'],
+        80: ['Hujan Lokal', '🌦️'], 81: ['Hujan Lokal Sedang', '🌧️'], 82: ['Hujan Lokal Lebat', '⛈️'],
+        95: ['Badai Petir', '⛈️'], 96: ['Badai + Hujan Es', '⛈️'], 99: ['Badai Besar', '⛈️']
+    };
+
+    fetch('https://api.open-meteo.com/v1/forecast?latitude=-7.7956&longitude=110.3695&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m&timezone=Asia%2FBangkok')
+        .then(r => r.json())
+        .then(data => {
+            const c = data.current;
+            const code = c.weather_code;
+            const [desc, icon] = WMO_CODES[code] || ['Tidak Diketahui', '🌡️'];
+
+            const setEl = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+            const setHtml = (id, val) => { const el = document.getElementById(id); if (el) el.innerHTML = val; };
+
+            setEl('weather-temp-public', Math.round(c.temperature_2m) + '°C');
+            setEl('weather-desc-public', desc);
+            setEl('weather-icon-public', icon);
+            setHtml('weather-wind-public', '<i class="fas fa-wind"></i> ' + Math.round(c.wind_speed_10m) + ' km/h');
+            setHtml('weather-humidity-public', '<i class="fas fa-tint"></i> ' + c.relative_humidity_2m + '%');
+        })
+        .catch(() => {
+            const el = document.getElementById('weather-desc-public');
+            if (el) el.textContent = 'Gagal memuat cuaca';
+        });
+})();
+</script>
 @endsection

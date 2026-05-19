@@ -9,8 +9,23 @@ class BeritaPublicController extends Controller
 {
     public function index()
     {
+        $carouselItems = \App\Models\Carousel::orderBy('created_at', 'desc')->get();
+        
+        if ($carouselItems->isEmpty()) {
+            $latestNews = Berita::orderBy('tanggal', 'desc')->orderBy('created_at', 'desc')->take(3)->get();
+            $carouselItems = $latestNews->map(function ($news) {
+                return (object)[
+                    'judul' => $news->judul,
+                    'deskripsi' => \Illuminate\Support\Str::limit(strip_tags($news->konten), 160),
+                    'gambar' => $news->foto,
+                    'link' => route('berita.show', $news->id),
+                    'tanggal' => $news->tanggal,
+                ];
+            });
+        }
+        
         $beritas = Berita::orderBy('tanggal', 'desc')->orderBy('created_at', 'desc')->paginate(9);
-        return view('berita.index', compact('beritas'));
+        return view('berita.index', compact('beritas', 'carouselItems'));
     }
 
     public function show($id)

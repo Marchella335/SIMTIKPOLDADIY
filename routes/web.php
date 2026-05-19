@@ -48,7 +48,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('anggota/landing', [AnggotaController::class, 'landing'])->name('anggota.landing');
     Route::resource('anggota', AnggotaController::class);
-    Route::resource('pangkat', \App\Http\Controllers\Admin\PangkatController::class)->except(['create', 'show', 'edit', 'update']);
+    Route::resource('jabatan', \App\Http\Controllers\Admin\JabatanController::class)->except(['create', 'show', 'edit', 'update']);
     Route::resource('struktur', \App\Http\Controllers\Admin\StrukturOrganisasiController::class)->only(['index', 'store', 'destroy']);
     Route::get('persuratan/landing', [SuratController::class, 'landing'])->name('persuratan.landing');
     Route::resource('persuratan', SuratController::class);
@@ -65,6 +65,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::post('keuangan/pagu', [KeuanganController::class, 'pagu'])->name('keuangan.pagu');
     Route::resource('kegiatan', KegiatanController::class);
     Route::resource('berita', \App\Http\Controllers\Admin\BeritaController::class);
+    Route::resource('carousel', \App\Http\Controllers\Admin\CarouselController::class);
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
 

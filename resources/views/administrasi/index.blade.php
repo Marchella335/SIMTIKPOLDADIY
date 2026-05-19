@@ -15,8 +15,8 @@
                 <h3>Persuratan</h3>
                 <p>Akses data surat masuk dan surat keluar Bidang TIK Polda DIY</p>
                 <div style="margin-top:15px;">
-                    <span style="background:#d1fae5;color:#065f46;padding:4px 12px;border-radius:12px;font-size:0.8rem;font-weight:600;">{{ $suratMasuk }} Masuk</span>
-                    <span style="background:#fee2e2;color:#991b1b;padding:4px 12px;border-radius:12px;font-size:0.8rem;font-weight:600;">{{ $suratKeluar }} Keluar</span>
+                    <span class="persuratan-badge masuk-badge">{{ $suratMasuk }} Masuk</span>
+                    <span class="persuratan-badge keluar-badge">{{ $suratKeluar }} Keluar</span>
                 </div>
             </a>
             <a href="{{ route('administrasi.keuangan') }}" class="feature-card" style="cursor:pointer;">

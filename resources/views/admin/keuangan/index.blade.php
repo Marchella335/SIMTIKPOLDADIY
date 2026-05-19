@@ -518,7 +518,14 @@ function updateSheetChart(pagu, pengeluaran) {
             responsive: true,
             maintainAspectRatio: false,
             plugins: {
-                legend: { position: 'right', labels: { boxWidth: 12, font: { size: 11, family: "'Inter', sans-serif" } } }
+                legend: { 
+                    position: 'right', 
+                    labels: { 
+                        boxWidth: 12, 
+                        color: document.documentElement.getAttribute('data-theme') === 'dark' ? '#f8fafc' : '#374151',
+                        font: { size: 11, family: "'Inter', sans-serif" } 
+                    } 
+                }
             },
             cutout: '60%'
         }

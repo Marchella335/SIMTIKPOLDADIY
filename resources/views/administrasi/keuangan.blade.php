@@ -57,13 +57,13 @@ new Chart(document.getElementById('keuanganChart'), {
             {
                 label: 'Pagu Anggaran',
                 data: dataPagu,
-                backgroundColor: 'rgba(220, 38, 38, 0.8)', // Accent color
+                backgroundColor: 'rgba(239, 68, 68, 0.85)',
                 borderRadius: 4
             },
             {
                 label: 'Total Realisasi',
                 data: dataRealisasi,
-                backgroundColor: 'rgba(26, 26, 26, 0.8)', // Primary color
+                backgroundColor: 'rgba(59, 130, 246, 0.85)',
                 borderRadius: 4
             }
         ]
@@ -71,7 +71,13 @@ new Chart(document.getElementById('keuanganChart'), {
     options: {
         responsive: true,
         plugins: {
-            legend: { position: 'top' },
+            legend: { 
+                position: 'top',
+                labels: {
+                    color: document.documentElement.getAttribute('data-theme') === 'dark' ? '#f8fafc' : '#374151',
+                    font: { family: "'Inter', sans-serif" }
+                }
+            },
             tooltip: {
                 callbacks: {
                     label: function(context) {
@@ -81,10 +87,22 @@ new Chart(document.getElementById('keuanganChart'), {
             }
         },
         scales: {
+            x: {
+                ticks: {
+                    color: document.documentElement.getAttribute('data-theme') === 'dark' ? '#cbd5e1' : '#374151'
+                },
+                grid: {
+                    color: document.documentElement.getAttribute('data-theme') === 'dark' ? '#334155' : '#e5e7eb'
+                }
+            },
             y: {
                 beginAtZero: true,
                 ticks: {
+                    color: document.documentElement.getAttribute('data-theme') === 'dark' ? '#cbd5e1' : '#374151',
                     callback: v => 'Rp ' + v.toLocaleString('id-ID')
+                },
+                grid: {
+                    color: document.documentElement.getAttribute('data-theme') === 'dark' ? '#334155' : '#e5e7eb'
                 }
             }
         }

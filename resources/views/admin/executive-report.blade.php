@@ -22,39 +22,39 @@
     </div>
 </div>
 
-{{-- CROSS-MODULE KPI (Data Warehouse) --}}
+{{-- RINGKASAN STATISTIK UTAMA --}}
 <div style="margin-bottom:30px;">
-    <h3 style="font-size:1rem; font-weight:700; margin-bottom:15px; display:flex; align-items:center; gap:8px;">
+    <h3 style="font-size:1.1rem; font-weight:700; margin-bottom:15px; display:flex; align-items:center; gap:8px;">
         <span style="width:4px; height:20px; background:var(--accent); border-radius:2px;"></span>
-        Cross-Module KPI — Data Warehouse Analytics
+        Statistik Utama & Ringkasan Kinerja Bidang TIK
     </h3>
     <div class="dash-grid">
         <div class="dash-card" style="border-left:3px solid var(--accent);">
-            <div class="dash-icon" style="background:var(--accent);"><i class="bi bi-speedometer2"></i></div>
+            <div class="dash-icon" style="background:var(--accent);"><i class="bi bi-person-badge"></i></div>
             <div class="dash-info">
-                <h3 style="font-size:1rem;">{{ $kpiData['produktivitas'] }}</h3>
-                <p>Biaya per Kegiatan</p>
+                <h3>{{ $totalAnggota }}</h3>
+                <p>Total Personel TIK</p>
             </div>
         </div>
         <div class="dash-card" style="border-left:3px solid var(--success);">
-            <div class="dash-icon bg-success"><i class="bi bi-graph-up-arrow"></i></div>
+            <div class="dash-icon bg-success"><i class="bi bi-calendar2-event"></i></div>
             <div class="dash-info">
-                <h3>{{ $efisiensiAnggaran }}%</h3>
-                <p>Efisiensi Anggaran</p>
+                <h3>{{ $kegiatanThisYear }}</h3>
+                <p>Total Kegiatan</p>
             </div>
         </div>
         <div class="dash-card" style="border-left:3px solid var(--info);">
             <div class="dash-icon bg-info"><i class="bi bi-envelope-paper"></i></div>
             <div class="dash-info">
                 <h3>{{ $kpiData['efisiensi_surat'] }}</h3>
-                <p>Total Surat {{ $currentYear }}</p>
+                <p>Total Persuratan</p>
             </div>
         </div>
         <div class="dash-card" style="border-left:3px solid var(--warning);">
-            <div class="dash-icon bg-warning"><i class="bi bi-person-check"></i></div>
+            <div class="dash-icon bg-warning"><i class="bi bi-cash-coin"></i></div>
             <div class="dash-info">
-                <h3>{{ $kpiData['rasio_sdm_kegiatan'] }}</h3>
-                <p>Rasio Kegiatan / SDM</p>
+                <h3>{{ $efisiensiAnggaran }}%</h3>
+                <p>Realisasi Anggaran</p>
             </div>
         </div>
     </div>
@@ -230,11 +230,22 @@ new Chart(document.getElementById('sdmChart'), {
         labels: {!! json_encode(array_keys($anggotaByBidang)) !!},
         datasets: [{
             data: {!! json_encode(array_values($anggotaByBidang)) !!},
-            backgroundColor: ['#dc2626', '#1a1a1a', '#6b7280', '#ef4444', '#374151', '#9ca3af'],
+            backgroundColor: ['#ef4444', '#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899'],
             borderWidth: 0,
         }]
     },
-    options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { padding: 15, color: '#999' } } } }
+    options: { 
+        responsive: true, 
+        plugins: { 
+            legend: { 
+                position: 'bottom', 
+                labels: { 
+                    padding: 15, 
+                    color: document.documentElement.getAttribute('data-theme') === 'dark' ? '#f8fafc' : '#374151' 
+                } 
+            } 
+        } 
+    }
 });
 
 // Keuangan Chart (Bar)
@@ -243,16 +254,28 @@ new Chart(document.getElementById('keuanganChart'), {
     data: {
         labels: {!! json_encode($sumberDanas->pluck('nama')) !!},
         datasets: [
-            { label: 'Pagu', data: {!! json_encode($sumberDanas->pluck('pagu')) !!}, backgroundColor: 'rgba(220,38,38,0.8)', borderRadius: 4 },
-            { label: 'Realisasi', data: {!! json_encode($sumberDanas->pluck('total_realisasi')) !!}, backgroundColor: 'rgba(255,255,255,0.1)', borderRadius: 4 }
+            { label: 'Pagu', data: {!! json_encode($sumberDanas->pluck('pagu')) !!}, backgroundColor: 'rgba(239, 68, 68, 0.85)', borderRadius: 4 },
+            { label: 'Realisasi', data: {!! json_encode($sumberDanas->pluck('total_realisasi')) !!}, backgroundColor: 'rgba(59, 130, 246, 0.85)', borderRadius: 4 }
         ]
     },
     options: {
         responsive: true,
-        plugins: { legend: { position: 'top', labels: { color: '#999' } } },
+        plugins: { 
+            legend: { 
+                position: 'top', 
+                labels: { color: document.documentElement.getAttribute('data-theme') === 'dark' ? '#f8fafc' : '#374151' } 
+            } 
+        },
         scales: { 
-            y: { grid: { color: 'rgba(255,255,255,0.05)' }, beginAtZero: true, ticks: { color: '#666', callback: v => 'Rp ' + v.toLocaleString('id-ID') } },
-            x: { grid: { display: false }, ticks: { color: '#666' } }
+            y: { 
+                grid: { color: document.documentElement.getAttribute('data-theme') === 'dark' ? '#334155' : '#e5e7eb' }, 
+                beginAtZero: true, 
+                ticks: { color: document.documentElement.getAttribute('data-theme') === 'dark' ? '#cbd5e1' : '#374151', callback: v => 'Rp ' + v.toLocaleString('id-ID') } 
+            },
+            x: { 
+                grid: { display: false }, 
+                ticks: { color: document.documentElement.getAttribute('data-theme') === 'dark' ? '#cbd5e1' : '#374151' } 
+            }
         }
     }
 });
@@ -266,26 +289,38 @@ new Chart(document.getElementById('suratTrendChart'), {
             {
                 label: 'Surat Masuk',
                 data: {!! json_encode(collect($suratTrend)->pluck('masuk')) !!},
-                borderColor: '#dc2626',
-                backgroundColor: 'rgba(220,38,38,0.1)',
+                borderColor: '#ef4444',
+                backgroundColor: 'rgba(239, 68, 68, 0.1)',
                 fill: true, tension: 0.4, pointRadius: 4
             },
             {
                 label: 'Surat Keluar',
                 data: {!! json_encode(collect($suratTrend)->pluck('keluar')) !!},
-                borderColor: '#fff',
-                backgroundColor: 'rgba(255,255,255,0.05)',
+                borderColor: '#3b82f6',
+                backgroundColor: 'rgba(59, 130, 246, 0.1)',
                 fill: true, tension: 0.4, pointRadius: 4
             }
         ]
     },
-    options: { 
-        responsive: true, 
-        plugins: { legend: { position: 'top', labels: { color: '#999' } } }, 
+    options: {
+        responsive: true,
+        plugins: { 
+            legend: { 
+                position: 'top', 
+                labels: { color: document.documentElement.getAttribute('data-theme') === 'dark' ? '#f8fafc' : '#374151' } 
+            } 
+        },
         scales: { 
-            y: { grid: { color: 'rgba(255,255,255,0.05)' }, beginAtZero: true, ticks: { color: '#666' } },
-            x: { grid: { display: false }, ticks: { color: '#666' } }
-        } 
+            y: { 
+                grid: { color: document.documentElement.getAttribute('data-theme') === 'dark' ? '#334155' : '#e5e7eb' }, 
+                beginAtZero: true, 
+                ticks: { color: document.documentElement.getAttribute('data-theme') === 'dark' ? '#cbd5e1' : '#374151' } 
+            },
+            x: { 
+                grid: { display: false }, 
+                ticks: { color: document.documentElement.getAttribute('data-theme') === 'dark' ? '#cbd5e1' : '#374151' } 
+            }
+        }
     }
 });
 </script>

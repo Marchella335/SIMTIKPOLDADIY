@@ -54,7 +54,7 @@
                     <tr>
                         <td>{{ $surats->firstItem() + $i }}</td>
                         <td>{{ $s->nomor_surat }}</td>
-                        <td><span style="padding:3px 10px;border-radius:12px;font-size:0.75rem;font-weight:600;color:#fff;background:{{ $s->tipe=='masuk'?'#22c55e':'#ef4444' }}">{{ ucfirst($s->tipe) }}</span></td>
+                        <td><span style="padding:4px 12px;border-radius:20px;font-size:0.75rem;font-weight:700;color:#ffffff;background:{{ $s->tipe=='masuk'?'#3b82f6':'#ef4444' }};text-transform:uppercase;letter-spacing:0.5px;">{{ ucfirst($s->tipe) }}</span></td>
                         <td>{{ $s->jenis_surat }}</td>
                         <td>{{ Str::limit($s->perihal, 30) }}</td>
                         <td>
