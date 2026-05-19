@@ -18,7 +18,7 @@
                     <div style="height:200px;background:linear-gradient(135deg,var(--primary),var(--primary-light));display:flex;align-items:center;justify-content:center;color:var(--white);font-size:3rem;"><i class="fas fa-calendar-alt"></i></div>
                 @endif
                 <div class="card-body">
-                    <div class="card-date"><i class="far fa-calendar"></i> {{ $k->tanggal->format('d M Y') }}</div>
+                    <div class="card-date"><i class="far fa-calendar"></i> {{ $k->tanggal->format('d M Y') }} | <i class="far fa-clock"></i> {{ $k->created_at->format('H:i') }} WIB</div>
                     <h3>{{ $k->nama_kegiatan }}</h3>
                     <p>{{ Str::limit($k->deskripsi, 100) }}</p>
                 </div>

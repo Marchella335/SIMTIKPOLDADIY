@@ -15,6 +15,7 @@ class HomeController extends Controller
         $jumlahSuratMasuk = Surat::where('tipe', 'masuk')->count();
         $jumlahSuratKeluar = Surat::where('tipe', 'keluar')->count();
         $kegiatanTerbaru = Kegiatan::orderBy('created_at', 'desc')->take(3)->get();
+        $beritaTerbaru = \App\Models\Berita::orderBy('created_at', 'desc')->take(3)->get();
 
         // Finance Summary (Multi-Fund)
         $paguTotal = \App\Models\SumberDana::where('tahun', date('Y'))->sum('pagu');
@@ -26,6 +27,7 @@ class HomeController extends Controller
             'jumlahSuratMasuk',
             'jumlahSuratKeluar',
             'kegiatanTerbaru',
+            'beritaTerbaru',
             'paguTotal',
             'totalRealisasi'
         ));

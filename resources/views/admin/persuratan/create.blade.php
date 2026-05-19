@@ -46,12 +46,12 @@
                 <input type="text" name="perihal" class="form-control" value="{{ old('perihal') }}" required>
             </div>
 
-            <div class="form-group" id="groupDari"><label>Dari *</label>
-                <input type="text" name="dari" id="inputDari" class="form-control" value="{{ old('dari') }}">
+            <div class="form-group" id="groupDari"><label>Dari (Sebutkan Jabatan, Pangkat, Nama - pisahkan dengan Enter) *</label>
+                <textarea name="dari" id="inputDari" class="form-control" rows="3">{{ old('dari') }}</textarea>
             </div>
 
-            <div class="form-group" id="groupKepada" style="display:none;"><label>Kepada *</label>
-                <input type="text" name="kepada" id="inputKepada" class="form-control" value="{{ old('kepada') }}">
+            <div class="form-group" id="groupKepada" style="display:none;"><label>Kepada (Sebutkan Jabatan, Pangkat, Nama - pisahkan dengan Enter) *</label>
+                <textarea name="kepada" id="inputKepada" class="form-control" rows="3">{{ old('kepada') }}</textarea>
             </div>
 
             <div class="form-group"><label>Keterangan Tambahan</label>

@@ -63,22 +63,10 @@ class KeuanganController extends Controller
             'sumber_dana_id' => 'required|exists:sumber_danas,id',
             'nama_acara' => 'required|string|max:255',
             'tanggal' => 'nullable|date',
-            'dana_awal' => 'nullable|numeric|min:0',
             'periode_pelaporan' => 'nullable|string|max:255',
         ]);
 
-        $acara = KeuanganAcara::create($request->all());
-
-        if ($request->dana_awal > 0) {
-            $acara->items()->create([
-                'tanggal' => $request->tanggal ?? now()->format('Y-m-d'),
-                'uraian' => 'Dana Awal / Anggaran Diterima',
-                'kategori' => 'Lain-lain',
-                'tipe' => 'Pemasukan',
-                'nilai' => $request->dana_awal,
-                'keterangan' => 'Dana awal',
-            ]);
-        }
+        $acara = KeuanganAcara::create($request->only('sumber_dana_id', 'nama_acara', 'tanggal', 'periode_pelaporan'));
 
         return response()->json($acara->load('items'));
     }
@@ -86,7 +74,7 @@ class KeuanganController extends Controller
     public function updateAcara(Request $request, $id)
     {
         $acara = KeuanganAcara::findOrFail($id);
-        $acara->update($request->only('nama_acara', 'tanggal', 'dana_awal', 'periode_pelaporan', 'sumber_dana_id'));
+        $acara->update($request->only('nama_acara', 'tanggal', 'periode_pelaporan', 'sumber_dana_id'));
         return response()->json($acara);
     }
 

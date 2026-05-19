@@ -47,12 +47,14 @@
                 <input type="text" name="perihal" class="form-control" value="{{ old('perihal', $surat->perihal) }}" required>
             </div>
 
-            <div class="form-group" id="groupDari"><label>Dari *</label>
-                <input type="text" name="dari" id="inputDari" class="form-control" value="{{ old('dari', $surat->dari) }}">
+            <div class="form-group" id="groupDari" style="{{ $surat->tipe == 'masuk' ? '' : 'display:none;' }}">
+                <label>Dari (Sebutkan Jabatan, Pangkat, Nama - pisahkan dengan Enter) *</label>
+                <textarea name="dari" id="inputDari" class="form-control" rows="3">{{ old('dari', $surat->dari) }}</textarea>
             </div>
 
-            <div class="form-group" id="groupKepada" style="display:none;"><label>Kepada *</label>
-                <input type="text" name="kepada" id="inputKepada" class="form-control" value="{{ old('kepada', $surat->kepada) }}">
+            <div class="form-group" id="groupKepada" style="{{ $surat->tipe == 'keluar' ? '' : 'display:none;' }}">
+                <label>Kepada (Sebutkan Jabatan, Pangkat, Nama - pisahkan dengan Enter) *</label>
+                <textarea name="kepada" id="inputKepada" class="form-control" rows="3">{{ old('kepada', $surat->kepada) }}</textarea>
             </div>
 
             <div class="form-group"><label>Keterangan Tambahan</label>

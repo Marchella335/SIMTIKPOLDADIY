@@ -22,6 +22,7 @@
             <div class="nav-links" id="navLinks">
                 <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'active' : '' }}">Home</a>
                 <a href="{{ route('profil') }}" class="{{ request()->routeIs('profil') ? 'active' : '' }}">Profil</a>
+                <a href="{{ route('berita') }}" class="{{ request()->routeIs('berita*') ? 'active' : '' }}">Berita</a>
                 <a href="{{ route('kegiatan') }}" class="{{ request()->routeIs('kegiatan*') ? 'active' : '' }}">Kegiatan</a>
                 <a href="{{ route('kontak') }}" class="{{ request()->routeIs('kontak') ? 'active' : '' }}">Kontak</a>
                 <a href="{{ route('administrasi') }}" class="{{ request()->routeIs('administrasi*') ? 'active' : '' }}">Administrasi</a>
@@ -51,8 +52,11 @@
                     <img src="{{ asset('assets/LOGO_BID_TIK.png') }}" alt="Logo">
                     <p>Bidang Teknologi Informasi dan Komunikasi Kepolisian Daerah Daerah Istimewa Yogyakarta</p>
                     <div class="footer-social">
-                        <a href="https://www.facebook.com/profile.php?id=100087924513256&sk=about" target="_blank" class="social-icon"><i class="fab fa-facebook-f"></i></a>
-                        <a href="https://www.instagram.com/bidtik.diy?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" class="social-icon"><i class="fab fa-instagram"></i></a>
+                        <a href="https://www.facebook.com/profile.php?id=100087924513256&sk=about" target="_blank" class="social-icon" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://www.instagram.com/bidtik.diy?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" class="social-icon" title="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="https://x.com/BidTIKjogja" target="_blank" class="social-icon" title="X (Twitter)"><i class="fab fa-twitter"></i></a>
+                        <a href="https://youtube.com/@bidtikpoldadiy1072?si=pFzMMZ4dhKKUNX9M" target="_blank" class="social-icon" title="YouTube"><i class="fab fa-youtube"></i></a>
+                        <a href="https://www.tiktok.com/@bidtikpoldadiy?_r=1&_t=ZS-96TksA0vPsO" target="_blank" class="social-icon" title="TikTok"><i class="fab fa-tiktok"></i></a>
                     </div>
                 </div>
                 <div>

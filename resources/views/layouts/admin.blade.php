@@ -27,9 +27,12 @@
         <div class="sidebar-section">Data</div>
         <ul class="sidebar-nav">
             <li><a href="{{ route('admin.anggota.landing') }}" class="{{ request()->routeIs('admin.anggota.*') ? 'active' : '' }}"><span class="icon"><i class="bi bi-people"></i></span> Anggota</a></li>
+            <li><a href="{{ route('admin.pangkat.index') }}" class="{{ request()->routeIs('admin.pangkat.*') ? 'active' : '' }}"><span class="icon"><i class="bi bi-award"></i></span> Pangkat</a></li>
+            <li><a href="{{ route('admin.struktur.index') }}" class="{{ request()->routeIs('admin.struktur.*') ? 'active' : '' }}"><span class="icon"><i class="bi bi-diagram-3"></i></span> Struktur</a></li>
             <li><a href="{{ route('admin.persuratan.landing') }}" class="{{ request()->routeIs('admin.persuratan.*') ? 'active' : '' }}"><span class="icon"><i class="bi bi-mailbox"></i></span> Persuratan</a></li>
             <li><a href="{{ route('admin.keuangan.index') }}" class="{{ request()->routeIs('admin.keuangan.*') ? 'active' : '' }}"><span class="icon"><i class="bi bi-cash-stack"></i></span> Keuangan</a></li>
             <li><a href="{{ route('admin.kegiatan.index') }}" class="{{ request()->routeIs('admin.kegiatan.*') ? 'active' : '' }}"><span class="icon"><i class="bi bi-calendar-event"></i></span> Kegiatan</a></li>
+            <li><a href="{{ route('admin.berita.index') }}" class="{{ request()->routeIs('admin.berita.*') ? 'active' : '' }}"><span class="icon"><i class="bi bi-newspaper"></i></span> Berita</a></li>
         </ul>
         <div class="sidebar-section">Monitoring & Pelayanan</div>
         <ul class="sidebar-nav">

@@ -18,6 +18,11 @@ class ProfilController extends Controller
         $tekkom = Anggota::where('bidang', 'TEKKOM')->where('jabatan', 'not like', 'Kasubbid%')->get();
         $tekinfo = Anggota::where('bidang', 'TEKINFO')->where('jabatan', 'not like', 'Kasubbid%')->get();
 
-        return view('profil', compact('kabid', 'kasubbid', 'renmin', 'tekkom', 'tekinfo'));
+        $struktur = [];
+        foreach (\App\Models\StrukturOrganisasi::all() as $s) {
+            $struktur[$s->bidang] = $s->foto;
+        }
+
+        return view('profil', compact('kabid', 'kasubbid', 'renmin', 'tekkom', 'tekinfo', 'struktur'));
     }
 }

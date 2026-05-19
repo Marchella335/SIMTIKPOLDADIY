@@ -54,9 +54,9 @@
                         <td>{{ $s->perihal }}</td>
                         <td>
                             @if($s->tipe == 'masuk')
-                                <small>Dari:</small> {{ $s->dari }}
+                                <small>Dari:</small><br>{!! nl2br(e($s->dari)) !!}
                             @else
-                                <small>Kepada:</small> {{ $s->kepada }}
+                                <small>Kepada:</small><br>{!! nl2br(e($s->kepada)) !!}
                             @endif
                         </td>
                         <td>{{ $s->tanggal->format('d/m/Y') }}</td>

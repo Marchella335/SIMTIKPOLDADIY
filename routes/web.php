@@ -23,6 +23,8 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/profil', [ProfilController::class, 'index'])->name('profil');
 Route::get('/kegiatan', [KegiatanPublicController::class, 'index'])->name('kegiatan');
 Route::get('/kegiatan/{id}', [KegiatanPublicController::class, 'show'])->name('kegiatan.show');
+Route::get('/berita', [\App\Http\Controllers\BeritaPublicController::class, 'index'])->name('berita');
+Route::get('/berita/{id}', [\App\Http\Controllers\BeritaPublicController::class, 'show'])->name('berita.show');
 Route::get('/kontak', [KontakController::class, 'index'])->name('kontak');
 Route::post('/kontak', [KontakController::class, 'send'])->name('kontak.send');
 Route::get('/administrasi', [AdministrasiController::class, 'index'])->name('administrasi');
@@ -46,6 +48,8 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('anggota/landing', [AnggotaController::class, 'landing'])->name('anggota.landing');
     Route::resource('anggota', AnggotaController::class);
+    Route::resource('pangkat', \App\Http\Controllers\Admin\PangkatController::class)->except(['create', 'show', 'edit', 'update']);
+    Route::resource('struktur', \App\Http\Controllers\Admin\StrukturOrganisasiController::class)->only(['index', 'store', 'destroy']);
     Route::get('persuratan/landing', [SuratController::class, 'landing'])->name('persuratan.landing');
     Route::resource('persuratan', SuratController::class);
     // Keuangan Baru (Multi Sumber Dana)
@@ -60,6 +64,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::resource('keuangan', KeuanganController::class);
     Route::post('keuangan/pagu', [KeuanganController::class, 'pagu'])->name('keuangan.pagu');
     Route::resource('kegiatan', KegiatanController::class);
+    Route::resource('berita', \App\Http\Controllers\Admin\BeritaController::class);
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
 

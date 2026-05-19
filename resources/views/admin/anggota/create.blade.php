@@ -20,7 +20,12 @@
                 </div>
                 <div class="form-group">
                     <label>Pangkat *</label>
-                    <input type="text" name="pangkat" class="form-control" value="{{ old('pangkat') }}" required>
+                    <select name="pangkat" class="form-control" required>
+                        <option value="">-- Pilih Pangkat --</option>
+                        @foreach($pangkats as $p)
+                            <option value="{{ $p->nama_pangkat }}" {{ old('pangkat') == $p->nama_pangkat ? 'selected' : '' }}>{{ $p->nama_pangkat }}</option>
+                        @endforeach
+                    </select>
                 </div>
             </div>
 

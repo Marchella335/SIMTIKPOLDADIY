@@ -202,13 +202,20 @@
                     </table>
                 </div>
                 <div style="padding: 15px 20px; background: var(--gray-50); border-top: 1px solid var(--gray-200); display: flex; flex-direction: column; gap: 8px; font-weight: 700; font-size: 14px;">
-                    <div style="display: flex; justify-content: space-between; color: var(--danger);">
-                        <span>Total Pengeluaran Sheet ini:</span>
-                        <span id="sheetTotal">Rp 0</span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; color: var(--primary); border-top: 1px dashed var(--gray-300); padding-top: 8px;">
-                        <span>Saldo Tersisa (Pagu Dana - Pengeluaran):</span>
-                        <span id="sheetRemaining">Rp 0</span>
+                    <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                        <div style="flex: 1; min-width: 300px; display: flex; flex-direction: column; justify-content: center; gap: 10px;">
+                            <div style="display: flex; justify-content: space-between; color: var(--danger);">
+                                <span>Total Pengeluaran Sheet ini:</span>
+                                <span id="sheetTotal">Rp 0</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; color: var(--primary); border-top: 1px dashed var(--gray-300); padding-top: 8px;">
+                                <span>Saldo Tersisa (Pagu Dana - Pengeluaran):</span>
+                                <span id="sheetRemaining">Rp 0</span>
+                            </div>
+                        </div>
+                        <div style="flex: 1; min-width: 300px; height: 150px; position: relative;">
+                            <canvas id="sheetChart"></canvas>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -260,10 +267,7 @@
                 <label>Tanggal Pelaksanaan</label>
                 <input class="form-control" type="date" id="aTanggal" value="{{ date('Y-m-d') }}" />
             </div>
-            <div class="form-group">
-                <label>Dana Awal (Opsional - Masuk sebagai Pemasukan)</label>
-                <input class="form-control" type="number" id="aDana" placeholder="0" />
-            </div>
+
             <div class="form-group">
                 <label>Periode Pelaporan</label>
                 <select class="form-control" id="aPeriode">
@@ -286,6 +290,7 @@
 @endsection
 
 @section('scripts')
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 const CSRF_TOKEN = '{{ csrf_token() }}';
 let allSheets = [];
@@ -293,6 +298,7 @@ let activeSheetIdx = -1;
 let currentSourceId = null;
 let currentSourcePagu = 0;
 let saveTimeout = null;
+let sheetChartInstance = null;
 
 // Helpers
 const fmt = n => 'Rp ' + (parseInt(n)||0).toLocaleString('id-ID');
@@ -464,9 +470,8 @@ function renderRows() {
                     </select>
                 </td>
                 <td>
-                    <select class="cell-input" style="font-weight:700; color:${isExp?'var(--danger)':'var(--success)'}" onchange="updateCell(${i}, 'tipe', this.value)">
-                        <option value="Pengeluaran" ${isExp?'selected':''}>Keluar</option>
-                        <option value="Pemasukan" ${!isExp?'selected':''}>Masuk</option>
+                    <select class="cell-input" style="font-weight:700; color:var(--danger);" onchange="updateCell(${i}, 'tipe', this.value)">
+                        <option value="Pengeluaran" selected>Keluar</option>
                     </select>
                 </td>
                 <td>
@@ -485,6 +490,39 @@ function renderRows() {
     const remaining = currentSourcePagu - total;
     document.getElementById('sheetRemaining').textContent = fmt(remaining);
     document.getElementById('sheetRemaining').style.color = remaining < 0 ? 'var(--danger)' : 'var(--primary)';
+
+    updateSheetChart(currentSourcePagu, total);
+}
+
+function updateSheetChart(pagu, pengeluaran) {
+    const ctx = document.getElementById('sheetChart');
+    if (!ctx) return;
+    
+    if (sheetChartInstance) {
+        sheetChartInstance.destroy();
+    }
+    
+    const saldo = Math.max(0, pagu - pengeluaran);
+
+    sheetChartInstance = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Pengeluaran', 'Sisa Pagu'],
+            datasets: [{
+                data: [pengeluaran, saldo],
+                backgroundColor: ['#ef4444', '#10b981'],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { position: 'right', labels: { boxWidth: 12, font: { size: 11, family: "'Inter', sans-serif" } } }
+            },
+            cutout: '60%'
+        }
+    });
 }
 
 function addRow() {

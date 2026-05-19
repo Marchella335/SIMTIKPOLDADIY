@@ -9,7 +9,7 @@ class ActivityLogController extends Controller
 {
     public function index()
     {
-        $logs = ActivityLog::with('user')->latest()->paginate(50);
+        $logs = ActivityLog::with('user')->latest()->paginate(50)->withPath(route('admin.activity-log'));
 
         $stats = [
             'total' => ActivityLog::count(),

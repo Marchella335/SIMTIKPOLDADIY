@@ -15,7 +15,7 @@
             </div>
         </div>
         <div class="hero-image">
-            <img src="{{ asset('assets/LOGO_BID_TIK.png') }}" alt="Bid TIK Polda DIY" style="padding:40px;background:rgba(255,255,255,0.08);border-radius:20px;">
+            <img src="{{ asset('assets/logo_tik_polri.jpeg') }}" alt="Bid TIK Polda DIY" style="padding:40px;background:rgba(255,255,255,0.08);border-radius:20px;">
         </div>
     </div>
 </section>
@@ -99,6 +99,37 @@
     <div class="container">
         <div class="section-header">
             <div class="section-badge">&#9679; Berita & Kegiatan</div>
+            <h2 class="section-title">Berita Terbaru</h2>
+        </div>
+        <div class="kegiatan-grid" style="margin-bottom:60px;">
+            @forelse($beritaTerbaru as $b)
+            <div class="kegiatan-card">
+                <div style="position:relative;">
+                    @if($b->foto)
+                        <img src="{{ asset($b->foto) }}" alt="{{ $b->judul }}">
+                    @else
+                        <div style="width:100%;height:200px;background:var(--gray-200);display:flex;align-items:center;justify-content:center;color:var(--gray-500);">
+                            <i class="fas fa-newspaper fa-3x"></i>
+                        </div>
+                    @endif
+                    <div style="position:absolute;top:15px;left:15px;background:var(--accent);color:white;padding:4px 12px;border-radius:20px;font-size:0.75rem;font-weight:600;">Berita</div>
+                </div>
+                <div class="card-body">
+                    <div class="card-date"><i class="far fa-calendar-alt"></i> {{ \Carbon\Carbon::parse($b->tanggal)->format('d M Y') }} | <i class="far fa-clock"></i> {{ $b->created_at->format('H:i') }} WIB</div>
+                    <h3>{{ Str::limit($b->judul, 45) }}</h3>
+                    <p>{{ Str::limit(strip_tags($b->konten), 90) }}</p>
+                    <a href="{{ route('berita.show', $b->id) }}" style="display:inline-block;margin-top:12px;color:var(--accent);font-weight:600;font-size:0.85rem;">Baca Selengkapnya <i class="fas fa-chevron-right" style="font-size:0.7rem;"></i></a>
+                </div>
+            </div>
+            @empty
+            <div style="grid-column: 1 / -1; text-align:center; padding: 40px; color:var(--gray-500);">
+                <i class="fas fa-newspaper fa-3x" style="margin-bottom:15px; opacity:0.3;"></i>
+                <p>Belum ada berita yang ditambahkan.</p>
+            </div>
+            @endforelse
+        </div>
+
+        <div class="section-header">
             <h2 class="section-title">Kegiatan Terbaru</h2>
         </div>
         <div class="kegiatan-grid">
@@ -115,7 +146,7 @@
                     <div style="position:absolute;top:15px;left:15px;background:var(--accent);color:white;padding:4px 12px;border-radius:20px;font-size:0.75rem;font-weight:600;">Terbaru</div>
                 </div>
                 <div class="card-body">
-                    <div class="card-date"><i class="far fa-calendar-alt"></i> {{ $k->tanggal->format('d M Y') }}</div>
+                    <div class="card-date"><i class="far fa-calendar-alt"></i> {{ $k->tanggal->format('d M Y') }} | <i class="far fa-clock"></i> {{ $k->created_at->format('H:i') }} WIB</div>
                     <h3>{{ Str::limit($k->nama_kegiatan, 45) }}</h3>
                     <p>{{ Str::limit(strip_tags($k->deskripsi), 90) }}</p>
                     <a href="{{ route('kegiatan.show', $k->id) }}" style="display:inline-block;margin-top:12px;color:var(--accent);font-weight:600;font-size:0.85rem;">Baca Selengkapnya <i class="fas fa-chevron-right" style="font-size:0.7rem;"></i></a>
