@@ -15,24 +15,27 @@
             @else
                 <div style="width: 100%; height: 100%; background: linear-gradient(135deg, #1e293b, #0f172a);"></div>
             @endif
-            <!-- Solid High-Contrast Dark Overlay -->
-            <div style="position: absolute; inset: 0; background: linear-gradient(rgba(11, 15, 23, 0.65), rgba(11, 15, 23, 0.85));"></div>
+            <!-- Premium Gradated Dark Overlay (Lighter at top, darker at bottom) -->
+            <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(11, 15, 23, 0.75) 0%, rgba(11, 15, 23, 0.35) 60%, rgba(11, 15, 23, 0.1) 100%); z-index: 1;"></div>
+
+            <!-- Slide Content Overlay -->
+            <div class="carousel-content-wrapper">
+                <h1>{{ $cb->judul }}</h1>
+                @if($cb->deskripsi)
+                    <p>{{ $cb->deskripsi }}</p>
+                @endif
+                @if($cb->link)
+                    <a href="{{ $cb->link }}" class="btn btn-primary btn-carousel-link">
+                        Baca Selengkapnya <i class="fas fa-arrow-right"></i>
+                    </a>
+                @endif
+            </div>
         </div>
         @endforeach
     </div>
 
-    <!-- Button overlay only -->
-    <div class="container text-center" style="position: relative; z-index: 5; max-width: 850px; padding: 0 20px;">
-        <div class="dynamic-news-content" style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
-            @foreach($carouselItems as $index => $cb)
-            <div class="news-text-slide" id="news-text-{{ $index }}" style="display: {{ $index === 0 ? 'block' : 'none' }};">
-                @if($cb->link)
-                    <a href="{{ $cb->link }}" class="btn btn-primary" style="padding: 12px 36px; border-radius: 30px; font-weight: 600; font-size: 0.95rem; box-shadow: 0 6px 20px rgba(220, 38, 38, 0.4);"><i class="fas fa-book-open"></i> Baca Selengkapnya</a>
-                @endif
-            </div>
-            @endforeach
-        </div>
-    </div>
+
+
 
     <!-- Navigation Arrows -->
     <button onclick="moveCarousel(-1)" class="carousel-arrow" style="position: absolute; left: 30px; top: 55%; transform: translateY(-50%); background: rgba(255, 255, 255, 0.08); color: #fff; border: none; width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s ease; z-index: 10; backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.15);"><i class="fas fa-chevron-left"></i></button>
@@ -90,8 +93,59 @@
 
 <style>
     @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(10px); }
+        from { opacity: 0; transform: translateY(20px); }
         to { opacity: 1; transform: translateY(0); }
+    }
+    .carousel-content-wrapper {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        align-items: center;
+        text-align: center;
+        padding: 0 100px 90px; /* Lowering the content slightly more */
+        z-index: 2;
+        color: #fff;
+    }
+    .hero-carousel h1 {
+        font-family: 'Poppins', sans-serif;
+        font-size: 2.75rem;
+        font-weight: 800;
+        line-height: 1.25;
+        margin-bottom: 15px;
+        color: #ffffff !important;
+        text-shadow: 0 4px 15px rgba(0,0,0,0.6);
+        max-width: 850px;
+        animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    .hero-carousel p {
+        font-family: 'Inter', sans-serif;
+        font-size: 1.05rem;
+        line-height: 1.6;
+        color: rgba(255, 255, 255, 0.9) !important;
+        margin-bottom: 25px;
+        max-width: 680px;
+        text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+        animation: fadeIn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    .btn-carousel-link {
+        border-radius: 30px !important;
+        padding: 12px 30px !important;
+        font-weight: 600 !important;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 4px 15px rgba(220, 38, 38, 0.3) !important;
+        transition: var(--transition) !important;
+        animation: fadeIn 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    .btn-carousel-link:hover {
+        background: var(--accent-light) !important;
+        transform: translateY(-2px) scale(1.02) !important;
+        box-shadow: 0 6px 20px rgba(220, 38, 38, 0.5) !important;
     }
     .carousel-arrow:hover {
         background: var(--accent) !important;
@@ -103,15 +157,24 @@
         .hero-carousel {
             height: 55vh !important;
         }
+        .carousel-content-wrapper {
+            padding: 0 24px 60px !important; /* Keep nice bottom space on mobile too */
+        }
         .hero-carousel h1 {
             font-size: 1.5rem !important;
+            margin-bottom: 10px;
         }
         .hero-carousel p {
             font-size: 0.85rem !important;
+            margin-bottom: 15px;
             display: -webkit-box !important;
-            -webkit-line-clamp: 2 !important;
+            -webkit-line-clamp: 3 !important;
             -webkit-box-orient: vertical !important;
             overflow: hidden !important;
+        }
+        .btn-carousel-link {
+            padding: 8px 20px !important;
+            font-size: 0.8rem !important;
         }
         .carousel-arrow {
             display: none !important;
@@ -123,7 +186,6 @@
     let currentSlide = 0;
     const slidesContainer = document.querySelector('.carousel-slides');
     const dots = document.querySelectorAll('.carousel-dot');
-    const textSlides = document.querySelectorAll('.news-text-slide');
     const totalSlides = {{ $carouselItems->count() }};
     let autoPlayInterval;
 
@@ -132,15 +194,6 @@
         
         // Slide the background
         slidesContainer.style.transform = `translateX(-${currentSlide * 100}%)`;
-        
-        // Toggle active text overlay
-        textSlides.forEach((slide, idx) => {
-            if (idx === currentSlide) {
-                slide.style.display = 'block';
-            } else {
-                slide.style.display = 'none';
-            }
-        });
 
         // Toggle dots
         dots.forEach((dot, idx) => {

@@ -9,7 +9,10 @@
             <h2 style="color:#fff; margin-bottom:5px;"><i class="bi bi-bar-chart-line"></i> Rekapitulasi Data</h2>
             <p style="color:rgba(255,255,255,0.7);">Rangkuman seluruh data SDM, Persuratan, Keuangan, Kegiatan, dan Layanan TIK dalam satu halaman untuk memudahkan pengambilan keputusan.</p>
         </div>
-        <div style="text-align:right; display:flex; align-items:center; gap:20px;">
+        <div style="text-align:right; display:flex; align-items:center; gap:15px;">
+            <button onclick="window.print()" style="background:rgba(16,185,129,0.1); border:1px solid var(--success); color:var(--success); padding:8px 16px; border-radius:30px; font-weight:600; cursor:pointer; display:flex; align-items:center; gap:8px; transition:var(--transition);">
+                <i class="bi bi-file-earmark-pdf-fill"></i> Export PDF
+            </button>
             <button id="toggleMonitoring" style="background:rgba(220,38,38,0.1); border:1px solid var(--accent); color:var(--accent); padding:8px 16px; border-radius:30px; font-weight:600; cursor:pointer; display:flex; align-items:center; gap:8px; transition:var(--transition);">
                 <span class="pulse-red" style="width:8px; height:8px; background:var(--accent); border-radius:50%; display:inline-block;"></span>
                 TV Monitoring Mode
@@ -20,6 +23,16 @@
             </div>
         </div>
     </div>
+</div>
+
+{{-- PRINT KOP SURAT --}}
+<div class="print-header" style="display:none;">
+    <div style="text-align: center; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 20px;">
+        <h1 style="margin: 0; font-size: 22px; text-transform: uppercase;">KEPOLISIAN DAERAH</h1>
+        <h2 style="margin: 5px 0; font-size: 18px; color: #333;">DAERAH ISTIMEWA YOGYAKARTA</h2>
+        <p style="margin: 0; font-size: 14px;">BIDANG TEKNOLOGI INFORMASI DAN KOMUNIKASI</p>
+    </div>
+    <h3 style="text-align: center; text-decoration: underline; margin-bottom: 20px; font-size: 16px;">LAPORAN REKAPITULASI EKSEKUTIF - {{ $currentYear }}</h3>
 </div>
 
 {{-- RINGKASAN STATISTIK UTAMA --}}
@@ -200,6 +213,46 @@
     body.monitoring-mode .card-header { background: #111 !important; border-bottom: 1px solid rgba(255,255,255,0.05) !important; }
     body.monitoring-mode .card-body { color: #ccc !important; }
     body.monitoring-mode .dash-card { background: #0a0a0a !important; border: 1px solid rgba(255,255,255,0.1) !important; }
+
+    @media print {
+        @page { size: A4 portrait; margin: 15mm; }
+        body { background: #fff !important; color: #000 !important; font-family: 'Arial', sans-serif !important; }
+        .admin-sidebar, .admin-header, button, .pulse-red, .welcome-card, .footer { display: none !important; }
+        .admin-content { margin: 0 !important; padding: 0 !important; width: 100% !important; max-width: 100% !important; }
+        
+        .print-header { display: block !important; }
+        
+        /* Grid resets */
+        .dash-grid { display: grid !important; grid-template-columns: repeat(4, 1fr) !important; gap: 10px !important; margin-bottom: 20px !important; }
+        .dash-card { border: 1px solid #ccc !important; box-shadow: none !important; padding: 10px !important; break-inside: avoid; background: #fff !important; }
+        .dash-icon { display: none !important; }
+        .dash-info h3 { font-size: 18px !important; color: #000 !important; margin: 0 !important; }
+        .dash-info p { font-size: 12px !important; color: #333 !important; }
+        
+        /* Rows structure */
+        div[style*="display:grid; grid-template-columns:1fr 1fr"] { display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 15px !important; }
+        div[style*="display:grid; grid-template-columns:2fr 1fr"] { display: grid !important; grid-template-columns: 2fr 1fr !important; gap: 15px !important; }
+        div[style*="display:grid; grid-template-columns:repeat(4, 1fr)"] { display: grid !important; grid-template-columns: repeat(4, 1fr) !important; gap: 10px !important; }
+        
+        /* Cards */
+        .card { border: 1px solid #ddd !important; box-shadow: none !important; margin-bottom: 20px !important; break-inside: avoid; background: #fff !important; }
+        .card-header { background: #f8f8f8 !important; border-bottom: 1px solid #ddd !important; padding: 10px 15px !important; }
+        .card-header h3 { font-size: 14px !important; font-weight: bold !important; color: #000 !important; margin: 0 !important; }
+        .card-header i { display: none !important; }
+        .card-body { padding: 15px !important; }
+        
+        /* Typography */
+        h3, p, span, small { color: #000 !important; }
+        
+        /* Backgrounds & borders */
+        .trend-badge { border: 1px solid #ccc !important; background: transparent !important; color: #000 !important; }
+        div[style*="background:var(--gray-50)"] { background: transparent !important; border: 1px solid #eee !important; color: #000 !important; }
+        
+        /* Fix Charts */
+        canvas { max-width: 100% !important; }
+        
+        * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    }
 </style>
 
 <script>

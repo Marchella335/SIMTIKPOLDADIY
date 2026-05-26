@@ -18,8 +18,25 @@ class KeuanganAcara extends Model
         'dana_awal' => 'decimal:2',
     ];
 
+    protected $appends = ['total_pemasukan', 'total_pengeluaran', 'saldo_sheet'];
+
     public function items()
     {
         return $this->hasMany(KeuanganAcaraItem::class);
+    }
+
+    public function getTotalPemasukanAttribute()
+    {
+        return $this->items()->where('tipe', 'Pemasukan')->sum('nilai');
+    }
+
+    public function getTotalPengeluaranAttribute()
+    {
+        return $this->items()->where('tipe', 'Pengeluaran')->sum('nilai');
+    }
+
+    public function getSaldoSheetAttribute()
+    {
+        return $this->total_pemasukan - $this->total_pengeluaran;
     }
 }

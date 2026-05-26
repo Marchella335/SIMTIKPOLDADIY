@@ -3,6 +3,17 @@
 @section('page-title', 'Security & Activity Log')
 
 @section('content')
+
+{{-- PRINT KOP SURAT --}}
+<div class="print-header" style="display:none;">
+    <div style="text-align: center; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 20px;">
+        <h1 style="margin: 0; font-size: 22px; text-transform: uppercase;">KEPOLISIAN DAERAH</h1>
+        <h2 style="margin: 5px 0; font-size: 18px; color: #333;">DAERAH ISTIMEWA YOGYAKARTA</h2>
+        <p style="margin: 0; font-size: 14px;">BIDANG TEKNOLOGI INFORMASI DAN KOMUNIKASI</p>
+    </div>
+    <h3 style="text-align: center; text-decoration: underline; margin-bottom: 20px; font-size: 16px;">LOG AKTIVITAS (AUDIT TRAIL)</h3>
+</div>
+
 {{-- Privacy & Ethics Banner --}}
 <div class="welcome-card" style="background:linear-gradient(135deg, #0a0a0a, #1a1a2e); color:#fff; border:1px solid rgba(220,38,38,0.2);">
     <div style="display:flex; align-items:center; gap:15px;">
@@ -57,9 +68,12 @@
 </div>
 
 {{-- Log Table --}}
-<div class="card">
-    <div class="card-header">
-        <h3><i class="bi bi-journal-text" style="color:var(--accent); margin-right:8px;"></i> Audit Trail — Riwayat Aktivitas</h3>
+<div class="card" id="logTableCard">
+    <div class="card-header" style="display:flex; justify-content:space-between; align-items:center;">
+        <h3 style="margin:0;"><i class="bi bi-journal-text" style="color:var(--accent); margin-right:8px;"></i> Audit Trail — Riwayat Aktivitas</h3>
+        <button onclick="window.print()" style="background:rgba(16,185,129,0.1); border:1px solid var(--success); color:var(--success); padding:6px 16px; border-radius:30px; font-weight:600; cursor:pointer; font-size:14px; display:flex; align-items:center; gap:8px;">
+            <i class="bi bi-printer-fill"></i> Cetak PDF
+        </button>
     </div>
     <div class="card-body">
         <div class="table-container">
@@ -113,4 +127,34 @@
 <div style="text-align:center; padding:20px; color:var(--gray-500); font-size:0.8rem;">
     <i class="bi bi-shield-check"></i> Sistem ini mematuhi standar Etika Penggunaan Komputer, Keamanan Data Pribadi, dan Hak Kekayaan Intelektual.
 </div>
+
+@endsection
+
+@section('scripts')
+<style>
+    @media print {
+        @page { size: A4 landscape; margin: 15mm; }
+        body { background: #fff !important; color: #000 !important; font-family: 'Arial', sans-serif !important; }
+        
+        .admin-sidebar, .admin-header, .welcome-card, .dash-grid, .card:not(#logTableCard), button, .pagination, .footer, nav[aria-label="Pagination Navigation"], .bi-shield-check { display: none !important; }
+        .admin-content { margin: 0 !important; padding: 0 !important; width: 100% !important; max-width: 100% !important; }
+        
+        .print-header { display: block !important; }
+        
+        .card { border: none !important; box-shadow: none !important; }
+        .card-header { display: none !important; }
+        .card-body { padding: 0 !important; }
+        
+        table { width: 100% !important; border-collapse: collapse !important; font-size: 11px !important; }
+        th, td { border: 1px solid #000 !important; padding: 8px !important; color: #000 !important; }
+        th { background: #f2f2f2 !important; font-weight: bold !important; text-transform: uppercase !important; }
+        
+        /* Badges & specific elements */
+        .badge { border: 1px solid #000 !important; color: #000 !important; background: transparent !important; box-shadow: none !important; }
+        code { border: none !important; background: transparent !important; padding: 0 !important; color: #000 !important; }
+        small, span { color: #000 !important; }
+        
+        * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    }
+</style>
 @endsection

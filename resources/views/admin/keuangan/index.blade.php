@@ -136,15 +136,15 @@
             <div class="stat-sub" id="lblFundName">-</div>
         </div>
         <div class="stat-card card-realisasi">
-            <div class="stat-label">Total Pengeluaran</div>
+            <div class="stat-label">Total Dialokasikan</div>
             <div class="stat-value" id="valRealisasi">Rp 0</div>
             <div class="stat-sub" id="lblSheetCount">0 sheet acara</div>
         </div>
         <div class="stat-card card-saldo">
-            <div class="stat-label">Saldo Tersisa</div>
+            <div class="stat-label">Sisa Pagu Anggaran</div>
             <div class="stat-value" id="valSaldo">Rp 0</div>
             <div class="stat-sub" id="warnBalance" style="color: var(--danger); font-weight: 700; display: none;">
-                <i class="fas fa-exclamation-triangle"></i> Saldo Tidak Mencukupi!
+                <i class="fas fa-exclamation-triangle"></i> Sisa Pagu Habis!
             </div>
         </div>
     </div>
@@ -178,6 +178,7 @@
                         <button class="btn btn-sm btn-primary" onclick="saveActiveSheet(true)" id="btnManualSave">
                             <i class="fas fa-save"></i> Simpan
                         </button>
+                        <button class="btn btn-sm btn-info" onclick="openTambahDanaModal()"><i class="fas fa-wallet"></i> Tambah Dana</button>
                         <button class="btn btn-sm btn-success" onclick="addRow()"><i class="fas fa-plus"></i> Tambah Baris</button>
                         <button class="btn btn-sm btn-outline" onclick="exportPDF()"><i class="fas fa-file-pdf"></i> PDF</button>
                         <button class="btn btn-sm btn-danger" onclick="deleteActiveSheet()"><i class="fas fa-trash"></i></button>
@@ -204,12 +205,16 @@
                 <div style="padding: 15px 20px; background: var(--gray-50); border-top: 1px solid var(--gray-200); display: flex; flex-direction: column; gap: 8px; font-weight: 700; font-size: 14px;">
                     <div style="display: flex; gap: 20px; flex-wrap: wrap;">
                         <div style="flex: 1; min-width: 300px; display: flex; flex-direction: column; justify-content: center; gap: 10px;">
+                            <div style="display: flex; justify-content: space-between; color: var(--success);">
+                                <span>Total Dana Masuk (Alokasi):</span>
+                                <span id="sheetDanaAwal">Rp 0</span>
+                            </div>
                             <div style="display: flex; justify-content: space-between; color: var(--danger);">
                                 <span>Total Pengeluaran Sheet ini:</span>
                                 <span id="sheetTotal">Rp 0</span>
                             </div>
                             <div style="display: flex; justify-content: space-between; color: var(--primary); border-top: 1px dashed var(--gray-300); padding-top: 8px;">
-                                <span>Saldo Tersisa (Pagu Dana - Pengeluaran):</span>
+                                <span>Saldo Sheet Tersisa:</span>
                                 <span id="sheetRemaining">Rp 0</span>
                             </div>
                         </div>
@@ -259,6 +264,11 @@
             <button class="btn-close" onclick="closeModal('modalAcara')">&times;</button>
         </div>
         <div class="modal-body">
+            <div style="background: var(--gray-50); padding: 12px; border-radius: 8px; border: 1px solid var(--gray-300); margin-bottom: 10px;">
+                <div style="font-size: 11px; color: var(--gray-500); font-weight: 700;">SISA PAGU TERSEDIA:</div>
+                <div style="font-size: 18px; font-weight: 800; color: var(--success);" id="lblSisaPaguModal">Rp 0</div>
+            </div>
+            
             <div class="form-group">
                 <label>Nama Acara / Kegiatan</label>
                 <input class="form-control" id="aNama" placeholder="Contoh: Pelatihan Cyber Crime" />
@@ -267,6 +277,11 @@
                 <label>Tanggal Pelaksanaan</label>
                 <input class="form-control" type="date" id="aTanggal" value="{{ date('Y-m-d') }}" />
             </div>
+            <div class="form-group">
+                <label>Dana Awal (Rp)</label>
+                <input class="form-control" type="number" id="aDanaAwal" placeholder="0" min="0" />
+            </div>
+
 
             <div class="form-group">
                 <label>Periode Pelaporan</label>
@@ -286,6 +301,30 @@
     </div>
 </div>
 
+{{-- MODAL: TAMBAH DANA SHEET --}}
+<div class="modal-bg" id="modalTambahDana">
+    <div class="modal">
+        <div class="modal-header">
+            <h3>Tambah Dana ke Sheet Acara</h3>
+            <button class="btn-close" onclick="closeModal('modalTambahDana')">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div style="background: var(--gray-50); padding: 12px; border-radius: 8px; border: 1px solid var(--gray-300); margin-bottom: 10px;">
+                <div style="font-size: 11px; color: var(--gray-500); font-weight: 700;">SISA PAGU TERSEDIA:</div>
+                <div style="font-size: 18px; font-weight: 800; color: var(--success);" id="lblSisaPaguModalDana">Rp 0</div>
+            </div>
+            <div class="form-group">
+                <label>Tambahan Dana (Rp)</label>
+                <input class="form-control" type="number" id="tDana" placeholder="0" min="0" />
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" onclick="closeModal('modalTambahDana')">Batal</button>
+            <button class="btn btn-primary" onclick="submitTambahDana()">Tambah Dana</button>
+        </div>
+    </div>
+</div>
+
 <div class="toast-msg" id="toast">Notifikasi...</div>
 @endsection
 
@@ -297,6 +336,7 @@ let allSheets = [];
 let activeSheetIdx = -1;
 let currentSourceId = null;
 let currentSourcePagu = 0;
+let currentSourceSisaPagu = 0;
 let saveTimeout = null;
 let sheetChartInstance = null;
 
@@ -372,7 +412,10 @@ async function loadSheetsBySource(sourceId) {
     if(!sourceId) return;
     try {
         const res = await fetch(`{{ url('admin/keuangan/sumber-dana') }}/${sourceId}/acaras`);
-        allSheets = await res.json();
+        const data = await res.json();
+        allSheets = data.acaras;
+        currentSourcePagu = parseFloat(data.sumber_dana.pagu);
+        currentSourceSisaPagu = parseFloat(data.sumber_dana.sisa_pagu);
         activeSheetIdx = allSheets.length > 0 ? 0 : -1;
         renderTabs();
         renderActiveSheet();
@@ -382,16 +425,19 @@ async function loadSheetsBySource(sourceId) {
 
 function openNewSheet() {
     if(!currentSourceId) return showToast('Pilih sumber dana terlebih dahulu', true);
+    document.getElementById('lblSisaPaguModal').textContent = fmt(currentSourceSisaPagu);
+    document.getElementById('aDanaAwal').value = '';
     openModal('modalAcara');
 }
 
 async function saveAcara() {
     const nama = document.getElementById('aNama').value;
     const tgl = document.getElementById('aTanggal').value;
-    const dana = document.getElementById('aDana').value || 0;
     const periode = document.getElementById('aPeriode').value;
+    const dana_awal = document.getElementById('aDanaAwal').value;
 
     if(!nama) return showToast('Nama acara wajib diisi', true);
+    if(!dana_awal) return showToast('Dana awal wajib diisi', true);
 
     try {
         const res = await fetch('{{ route('admin.keuangan.acara.store') }}', {
@@ -400,19 +446,21 @@ async function saveAcara() {
             body: JSON.stringify({ 
                 nama_acara: nama, 
                 tanggal: tgl, 
-                dana_awal: dana, 
+                dana_awal: dana_awal,
                 periode_pelaporan: periode,
                 sumber_dana_id: currentSourceId 
             })
         });
-        const newData = await res.json();
-        allSheets.unshift(newData);
-        activeSheetIdx = 0;
+        
+        if(!res.ok) {
+            const err = await res.json();
+            throw new Error(err.message || 'Gagal membuat sheet');
+        }
+        
+        loadSheetsBySource(currentSourceId);
         closeModal('modalAcara');
-        renderTabs();
-        renderActiveSheet();
-        updateGlobalStats();
-    } catch(e) { showToast('Gagal membuat sheet', true); }
+        showToast('Sheet berhasil dibuat');
+    } catch(e) { showToast(e.message, true); }
 }
 
 function renderTabs() {
@@ -457,41 +505,46 @@ function renderRows() {
     const kategoriOpts = ['Konsumsi','Akomodasi','Transportasi','Perlengkapan','Dokumentasi','Honorarium','Lain-lain'];
     
     body.innerHTML = (s.items || []).map((item, i) => {
+        const isPemasukan = item.tipe === 'Pemasukan';
         const katOpts = kategoriOpts.map(k => `<option value="${k}" ${item.kategori===k?'selected':''}>${k}</option>`).join('');
-        const isExp = item.tipe === 'Pengeluaran';
+        const tipeOpts = isPemasukan ? `<option value="Pemasukan" selected>Masuk / Debet</option>` : `<option value="Pengeluaran" selected>Keluar / Kredit</option>`;
+        
         return `
             <tr>
                 <td style="text-align:center">${i+1}</td>
-                <td><input type="date" class="cell-input" value="${item.tanggal||''}" onchange="updateCell(${i}, 'tanggal', this.value)"></td>
-                <td><input class="cell-input" value="${esc(item.uraian)}" placeholder="Ketik deskripsi..." onchange="updateCell(${i}, 'uraian', this.value)"></td>
+                <td><input type="date" class="cell-input" value="${item.tanggal||''}" onchange="updateCell(${i}, 'tanggal', this.value)" ${isPemasukan ? 'disabled' : ''}></td>
+                <td><input class="cell-input" value="${esc(item.uraian)}" placeholder="Ketik deskripsi..." onchange="updateCell(${i}, 'uraian', this.value)" ${isPemasukan ? 'readonly' : ''}></td>
                 <td>
-                    <select class="cell-input" onchange="updateCell(${i}, 'kategori', this.value)">
+                    <select class="cell-input" onchange="updateCell(${i}, 'kategori', this.value)" ${isPemasukan ? 'disabled' : ''}>
                         ${katOpts}
                     </select>
                 </td>
                 <td>
-                    <select class="cell-input" style="font-weight:700; color:var(--danger);" onchange="updateCell(${i}, 'tipe', this.value)">
-                        <option value="Pengeluaran" selected>Keluar</option>
+                    <select class="cell-input" style="font-weight:700; color:var(--${isPemasukan?'success':'danger'});" onchange="updateCell(${i}, 'tipe', this.value)" ${isPemasukan ? 'disabled' : ''}>
+                        ${tipeOpts}
                     </select>
                 </td>
                 <td>
-                    <input type="number" class="cell-input" style="text-align:right; font-weight:700;" value="${item.nilai}" onchange="updateCell(${i}, 'nilai', this.value)">
+                    <input type="number" class="cell-input" style="text-align:right; font-weight:700;" value="${item.nilai}" onchange="updateCell(${i}, 'nilai', this.value)" ${isPemasukan ? 'readonly' : ''}>
                 </td>
                 <td style="text-align:center">
-                    <button class="btn-close" onclick="removeRow(${i})" style="color:var(--gray-500)">&times;</button>
+                    ${!isPemasukan ? `<button class="btn-close" onclick="removeRow(${i})" style="color:var(--gray-500)">&times;</button>` : ''}
                 </td>
             </tr>
         `;
     }).join('');
     
-    const total = (s.items || []).reduce((a, b) => b.tipe === 'Pengeluaran' ? a + parseFloat(b.nilai||0) : a, 0);
-    document.getElementById('sheetTotal').textContent = fmt(total);
+    const totalPemasukan = (s.items || []).reduce((a, b) => b.tipe === 'Pemasukan' ? a + parseFloat(b.nilai||0) : a, 0);
+    const totalPengeluaran = (s.items || []).reduce((a, b) => b.tipe === 'Pengeluaran' ? a + parseFloat(b.nilai||0) : a, 0);
     
-    const remaining = currentSourcePagu - total;
+    document.getElementById('sheetDanaAwal').textContent = fmt(totalPemasukan);
+    document.getElementById('sheetTotal').textContent = fmt(totalPengeluaran);
+    
+    const remaining = totalPemasukan - totalPengeluaran;
     document.getElementById('sheetRemaining').textContent = fmt(remaining);
     document.getElementById('sheetRemaining').style.color = remaining < 0 ? 'var(--danger)' : 'var(--primary)';
 
-    updateSheetChart(currentSourcePagu, total);
+    updateSheetChart(totalPemasukan, totalPengeluaran);
 }
 
 function updateSheetChart(pagu, pengeluaran) {
@@ -572,31 +625,59 @@ window.onbeforeunload = function() {
 
 // 3. SYNC & STATS
 function updateGlobalStats() {
-    let totalExp = 0;
+    let totalAlokasi = 0;
     let sheetCount = 0;
 
     allSheets.forEach(s => {
         sheetCount++;
-        (s.items || []).forEach(item => {
-            if(item.tipe === 'Pengeluaran') totalExp += parseFloat(item.nilai || 0);
-        });
+        totalAlokasi += parseFloat(s.dana_awal || 0);
     });
 
-    // Perbaikan: Total Pagu dikurangi Total Pengeluaran (Bukan ditambah pemasukan)
-    const saldo = currentSourcePagu - totalExp;
+    currentSourceSisaPagu = currentSourcePagu - totalAlokasi;
 
-    document.getElementById('valRealisasi').textContent = fmt(totalExp);
-    document.getElementById('valSaldo').textContent = fmt(saldo);
+    document.getElementById('valRealisasi').textContent = fmt(totalAlokasi);
+    document.getElementById('valSaldo').textContent = fmt(currentSourceSisaPagu);
     document.getElementById('lblSheetCount').textContent = sheetCount + ' sheet acara';
     
     const warn = document.getElementById('warnBalance');
-    warn.style.display = saldo < 0 ? 'block' : 'none';
+    warn.style.display = currentSourceSisaPagu < 0 ? 'block' : 'none';
 }
 
 function queueSave() {
     if(saveTimeout) clearTimeout(saveTimeout);
     document.getElementById('saveStatus').textContent = 'Menunggu...';
     saveTimeout = setTimeout(saveActiveSheet, 1500);
+}
+
+function openTambahDanaModal() {
+    document.getElementById('lblSisaPaguModalDana').textContent = fmt(currentSourceSisaPagu);
+    document.getElementById('tDana').value = '';
+    openModal('modalTambahDana');
+}
+
+async function submitTambahDana() {
+    const dana = document.getElementById('tDana').value;
+    if (!dana) return showToast('Nominal tambahan dana wajib diisi', true);
+    
+    const s = allSheets[activeSheetIdx];
+    try {
+        const res = await fetch(`{{ url('admin/keuangan/acara') }}/${s.id}/tambah-dana`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': CSRF_TOKEN },
+            body: JSON.stringify({ tambahan_dana: dana })
+        });
+        
+        if(!res.ok) {
+            const err = await res.json();
+            throw new Error(err.message || 'Gagal menambah dana');
+        }
+        
+        loadSheetsBySource(currentSourceId);
+        closeModal('modalTambahDana');
+        showToast('Dana berhasil ditambahkan');
+    } catch(e) {
+        showToast(e.message, true);
+    }
 }
 
 async function saveActiveSheet(manual = false) {
@@ -683,7 +764,7 @@ function exportPDF() {
     const sourceName = document.getElementById('lblFundName').textContent;
     const items = s.items || [];
     
-    let runningSaldo = currentSourcePagu;
+    let runningSaldo = 0;
     let totalDebet = 0;
     let totalKredit = 0;
 
@@ -784,10 +865,6 @@ function exportPDF() {
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td colspan="5" style="font-weight:bold; background:#fafafa">SALDO AWAL (PAGU DANA)</td>
-                    <td style="text-align:right; font-weight:bold; background:#fafafa">${currentSourcePagu.toLocaleString('id-ID')}</td>
-                </tr>
                 ${rowsHtml}
             </tbody>
             <tfoot>
@@ -802,9 +879,9 @@ function exportPDF() {
 
         <div class="footer-grid">
             <div class="summary-box">
-                <div class="summary-line"><span>Total Pagu Dana</span> <span>Rp ${currentSourcePagu.toLocaleString('id-ID')}</span></div>
+                <div class="summary-line"><span>Total Pemasukan / Dana Masuk</span> <span>Rp ${totalDebet.toLocaleString('id-ID')}</span></div>
                 <div class="summary-line"><span>Total Pengeluaran</span> <span>Rp ${totalKredit.toLocaleString('id-ID')}</span></div>
-                <div class="summary-line total"><span>SISA SALDO ANGGARAN</span> <span>Rp ${runningSaldo.toLocaleString('id-ID')}</span></div>
+                <div class="summary-line total"><span>SISA SALDO SHEET</span> <span>Rp ${runningSaldo.toLocaleString('id-ID')}</span></div>
             </div>
             <div class="signature">
                 <p>Yogyakarta, ${new Date().toLocaleDateString('id-ID', {day:'numeric', month:'long', year:'numeric'})}</p>

@@ -44,11 +44,16 @@ class KeuanganController extends Controller
 
     public function getAcarasBySource($id)
     {
+        $sumberDana = SumberDana::findOrFail($id);
         $acaras = KeuanganAcara::with('items')
             ->where('sumber_dana_id', $id)
             ->orderBy('created_at', 'desc')
             ->get();
-        return response()->json($acaras);
+            
+        return response()->json([
+            'sumber_dana' => $sumberDana,
+            'acaras' => $acaras
+        ]);
     }
 
     public function getAcaraData()
@@ -63,10 +68,55 @@ class KeuanganController extends Controller
             'sumber_dana_id' => 'required|exists:sumber_danas,id',
             'nama_acara' => 'required|string|max:255',
             'tanggal' => 'nullable|date',
+            'dana_awal' => 'required|numeric|min:0',
             'periode_pelaporan' => 'nullable|string|max:255',
         ]);
 
-        $acara = KeuanganAcara::create($request->only('sumber_dana_id', 'nama_acara', 'tanggal', 'periode_pelaporan'));
+        $sumberDana = SumberDana::findOrFail($request->sumber_dana_id);
+        
+        if ($request->dana_awal > $sumberDana->sisa_pagu) {
+            return response()->json(['message' => 'Dana awal melebihi sisa pagu anggaran.'], 422);
+        }
+
+        $acara = KeuanganAcara::create($request->only('sumber_dana_id', 'nama_acara', 'tanggal', 'dana_awal', 'periode_pelaporan'));
+
+        // Auto-insert first transaction for Dana Awal
+        $acara->items()->create([
+            'tanggal' => $request->tanggal ?? now()->format('Y-m-d'),
+            'uraian' => 'Dana Awal Acara',
+            'kategori' => 'Lain-lain',
+            'tipe' => 'Pemasukan',
+            'nilai' => $request->dana_awal
+        ]);
+
+        return response()->json($acara->load('items'));
+    }
+
+    public function addDanaToSheet(Request $request, $id)
+    {
+        $request->validate([
+            'tambahan_dana' => 'required|numeric|min:0'
+        ]);
+
+        $acara = KeuanganAcara::findOrFail($id);
+        $sumberDana = $acara->source;
+
+        if ($request->tambahan_dana > $sumberDana->sisa_pagu) {
+            return response()->json(['message' => 'Tambahan dana melebihi sisa pagu anggaran.'], 422);
+        }
+
+        $acara->update([
+            'dana_awal' => $acara->dana_awal + $request->tambahan_dana
+        ]);
+
+        // Auto-insert transaction for Tambahan Dana
+        $acara->items()->create([
+            'tanggal' => now()->format('Y-m-d'),
+            'uraian' => 'Tambahan Dana Acara',
+            'kategori' => 'Lain-lain',
+            'tipe' => 'Pemasukan',
+            'nilai' => $request->tambahan_dana
+        ]);
 
         return response()->json($acara->load('items'));
     }

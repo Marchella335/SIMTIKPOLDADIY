@@ -58,6 +58,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::delete('keuangan/sumber-dana/{id}', [KeuanganController::class, 'destroySumberDana'])->name('keuangan.sumber_dana.destroy');
     Route::get('keuangan/sumber-dana/{id}/acaras', [KeuanganController::class, 'getAcarasBySource'])->name('keuangan.sumber_dana.acaras');
     Route::post('keuangan/acara', [KeuanganController::class, 'storeAcara'])->name('keuangan.acara.store');
+    Route::post('keuangan/acara/{id}/tambah-dana', [KeuanganController::class, 'addDanaToSheet'])->name('keuangan.acara.tambah_dana');
     Route::put('keuangan/acara/{id}', [KeuanganController::class, 'updateAcara'])->name('keuangan.acara.update');
     Route::delete('keuangan/acara/{id}', [KeuanganController::class, 'destroyAcara'])->name('keuangan.acara.destroy');
     Route::post('keuangan/acara/{id}/items', [KeuanganController::class, 'syncAcaraItems'])->name('keuangan.acara.items.sync');

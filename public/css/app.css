@@ -350,7 +350,14 @@ table .actions { display: flex; gap: 8px; }
     .nav-links.active { display: flex; }
     .mobile-toggle { display: block; }
     .surat-summary { grid-template-columns: 1fr; }
+    #rating-layanan .container > div:first-of-type { grid-template-columns: 1fr !important; }
 }
+
+/* Testimonial scrollbar */
+#testimonialTrack::-webkit-scrollbar { height: 6px; }
+#testimonialTrack::-webkit-scrollbar-track { background: rgba(255,255,255,0.04); border-radius: 3px; }
+#testimonialTrack::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 3px; }
+#testimonialTrack::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
 
 /* Premium High-legibility Dark Mode Overrides */
 [data-theme="dark"] p,
