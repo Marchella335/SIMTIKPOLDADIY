@@ -8,6 +8,8 @@ class Surat extends Model
 {
     protected $fillable = [
         'nomor_surat',
+        'agenda_surat',
+        'nomor_agenda',
         'tipe',
         'bidang',
         'jenis_surat',
@@ -15,6 +17,7 @@ class Surat extends Model
         'dari',
         'kepada',
         'keterangan',
+        'disposisi',
         'file_pdf',
         'tanggal',
     ];

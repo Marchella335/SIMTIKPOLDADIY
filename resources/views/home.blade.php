@@ -24,10 +24,7 @@
 <section class="stats-section">
     <div class="container">
         <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-number" id="statAnggota">{{ $jumlahAnggota }}</div>
-                <div class="stat-label">Anggota Bid TIK</div>
-            </div>
+
             <div class="stat-card">
                 <div class="stat-number">{{ $jumlahKegiatan }}</div>
                 <div class="stat-label">Kegiatan Terlaksana</div>
@@ -94,154 +91,13 @@
     </div>
 </section>
 
-{{-- RATING LAYANAN --}}
-<section class="section section-dark" id="rating-layanan">
-    <div class="container">
-        <div class="section-header">
-            <div class="section-badge">&#9679; Indeks Kepuasan Layanan</div>
-            <h2 class="section-title">Hasil Rating Layanan TIK</h2>
-            <p class="section-subtitle">Penilaian langsung dari pengguna layanan Bidang TIK Polda DIY</p>
-        </div>
 
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:40px; align-items:start; margin-bottom:50px;">
-            {{-- LEFT: Big Rating Overview --}}
-            <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:20px; padding:40px; text-align:center; position:relative; overflow:hidden;">
-                {{-- Decorative glow --}}
-                <div style="position:absolute; top:-60px; right:-60px; width:180px; height:180px; background:radial-gradient(circle, rgba(99,102,241,0.15) 0%, transparent 70%); border-radius:50%;"></div>
-                <div style="position:absolute; bottom:-40px; left:-40px; width:120px; height:120px; background:radial-gradient(circle, rgba(245,158,11,0.1) 0%, transparent 70%); border-radius:50%;"></div>
-
-                <div style="position:relative; z-index:1;">
-                    <div style="font-size:4.5rem; font-weight:900; font-family:'Poppins',sans-serif; background:linear-gradient(135deg, #f59e0b, #f97316); -webkit-background-clip:text; -webkit-text-fill-color:transparent; line-height:1;">
-                        {{ $ratingData['avg'] > 0 ? number_format($ratingData['avg'], 1) : '—' }}
-                    </div>
-                    <div style="display:flex; justify-content:center; gap:4px; margin:12px 0 8px;">
-                        @for($s = 1; $s <= 5; $s++)
-                            <i class="bi bi-star-fill" style="font-size:1.5rem; color:{{ $s <= round($ratingData['avg']) ? '#f59e0b' : 'rgba(255,255,255,0.12)' }};"></i>
-                        @endfor
-                    </div>
-                    <p style="color:rgba(255,255,255,0.5); font-size:0.9rem; margin-bottom:20px;">dari <strong style="color:rgba(255,255,255,0.8);">{{ $ratingData['total'] }}</strong> penilaian</p>
-
-                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:20px;">
-                        <div style="background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.2); padding:16px; border-radius:12px;">
-                            <div style="font-size:1.6rem; font-weight:800; color:#10b981; font-family:'Poppins',sans-serif;">{{ $ratingData['completed'] }}</div>
-                            <div style="font-size:0.78rem; color:rgba(255,255,255,0.45); margin-top:4px;">Layanan Selesai</div>
-                        </div>
-                        <div style="background:rgba(99,102,241,0.1); border:1px solid rgba(99,102,241,0.2); padding:16px; border-radius:12px;">
-                            <div style="font-size:1.6rem; font-weight:800; color:#6366f1; font-family:'Poppins',sans-serif;">{{ $ratingData['total'] > 0 ? round(($ratingData['total'] / max($ratingData['completed'],1)) * 100) : 0 }}%</div>
-                            <div style="font-size:0.78rem; color:rgba(255,255,255,0.45); margin-top:4px;">Response Rate</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {{-- RIGHT: Rating Distribution Bars --}}
-            <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:20px; padding:40px;">
-                <h4 style="font-weight:700; font-family:'Poppins',sans-serif; margin-bottom:24px; font-size:1.1rem;">
-                    <i class="bi bi-bar-chart-fill" style="color:var(--accent); margin-right:8px;"></i> Distribusi Rating
-                </h4>
-                @php $maxCount = max(1, max($ratingData['distribution'])); @endphp
-                @foreach($ratingData['distribution'] as $star => $count)
-                <div style="display:flex; align-items:center; gap:12px; margin-bottom:14px;">
-                    <div style="display:flex; align-items:center; gap:4px; min-width:44px; justify-content:flex-end;">
-                        <span style="font-weight:700; font-size:0.95rem; color:rgba(255,255,255,0.85);">{{ $star }}</span>
-                        <i class="bi bi-star-fill" style="color:#f59e0b; font-size:0.85rem;"></i>
-                    </div>
-                    <div style="flex:1; background:rgba(255,255,255,0.06); border-radius:8px; height:14px; overflow:hidden; position:relative;">
-                        @php
-                            $pct = $ratingData['total'] > 0 ? round(($count / $ratingData['total']) * 100) : 0;
-                            $barColors = [5 => '#10b981', 4 => '#34d399', 3 => '#f59e0b', 2 => '#f97316', 1 => '#ef4444'];
-                        @endphp
-                        <div style="height:100%; width:{{ $pct }}%; background:{{ $barColors[$star] }}; border-radius:8px; transition:width 1.2s cubic-bezier(0.22,1,0.36,1); min-width:{{ $count > 0 ? '6px' : '0' }};"></div>
-                    </div>
-                    <div style="min-width:50px; text-align:right;">
-                        <span style="font-weight:600; font-size:0.85rem; color:rgba(255,255,255,0.7);">{{ $count }}</span>
-                        <span style="font-size:0.7rem; color:rgba(255,255,255,0.35); margin-left:2px;">({{ $pct }}%)</span>
-                    </div>
-                </div>
-                @endforeach
-
-                {{-- Satisfaction Summary --}}
-                @php
-                    $satisfied = ($ratingData['distribution'][5] ?? 0) + ($ratingData['distribution'][4] ?? 0);
-                    $satisfiedPct = $ratingData['total'] > 0 ? round(($satisfied / $ratingData['total']) * 100) : 0;
-                @endphp
-                <div style="margin-top:24px; padding:16px 20px; background:rgba(16,185,129,0.08); border:1px solid rgba(16,185,129,0.15); border-radius:12px; display:flex; align-items:center; justify-content:space-between;">
-                    <div>
-                        <div style="font-weight:700; font-size:0.9rem; color:rgba(255,255,255,0.85);">Tingkat Kepuasan</div>
-                        <div style="font-size:0.78rem; color:rgba(255,255,255,0.45);">Rating 4-5 bintang</div>
-                    </div>
-                    <div style="font-size:1.8rem; font-weight:900; color:#10b981; font-family:'Poppins',sans-serif;">{{ $satisfiedPct }}%</div>
-                </div>
-            </div>
-        </div>
-
-        {{-- Testimonials Slider --}}
-        @if($testimonials->count() > 0)
-        <div style="margin-top:10px;">
-            <h4 style="font-weight:700; font-family:'Poppins',sans-serif; margin-bottom:24px; text-align:center; font-size:1.1rem;">
-                <i class="bi bi-chat-quote-fill" style="color:var(--accent); margin-right:8px;"></i> Testimoni Pengguna Layanan
-            </h4>
-            <div id="testimonialTrack" style="display:flex; gap:24px; overflow-x:auto; scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch; padding-bottom:16px; scrollbar-width:thin; scrollbar-color:rgba(255,255,255,0.15) transparent;">
-                @foreach($testimonials as $t)
-                <div style="min-width:340px; max-width:380px; flex-shrink:0; scroll-snap-align:start; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:16px; padding:28px; position:relative; transition:all 0.3s;">
-                    {{-- Quote icon --}}
-                    <div style="position:absolute; top:16px; right:20px; font-size:2rem; color:rgba(99,102,241,0.15);">
-                        <i class="bi bi-quote"></i>
-                    </div>
-                    {{-- Stars --}}
-                    <div style="display:flex; gap:3px; margin-bottom:14px;">
-                        @for($s = 1; $s <= 5; $s++)
-                            <i class="bi bi-star-fill" style="font-size:0.9rem; color:{{ $s <= $t->rating ? '#f59e0b' : 'rgba(255,255,255,0.1)' }};"></i>
-                        @endfor
-                    </div>
-                    {{-- Feedback --}}
-                    <p style="color:rgba(255,255,255,0.7); font-size:0.92rem; line-height:1.65; margin-bottom:18px; font-style:italic;">"{{ Str::limit($t->feedback, 150) }}"</p>
-                    {{-- Author --}}
-                    <div style="display:flex; align-items:center; gap:12px; border-top:1px solid rgba(255,255,255,0.06); padding-top:16px;">
-                        <div style="width:40px; height:40px; border-radius:50%; background:linear-gradient(135deg, #6366f1, #8b5cf6); display:flex; align-items:center; justify-content:center; font-weight:700; color:#fff; font-size:0.9rem;">
-                            {{ strtoupper(substr($t->nama_pemohon, 0, 1)) }}
-                        </div>
-                        <div>
-                            <div style="font-weight:600; font-size:0.9rem; color:rgba(255,255,255,0.85);">{{ $t->nama_pemohon }}</div>
-                            <div style="font-size:0.78rem; color:rgba(255,255,255,0.4);">{{ $t->jenis_layanan }} &bull; {{ $t->updated_at->diffForHumans() }}</div>
-                        </div>
-                    </div>
-                </div>
-                @endforeach
-            </div>
-            {{-- Scroll indicators --}}
-            @if($testimonials->count() > 2)
-            <div style="display:flex; justify-content:center; gap:8px; margin-top:16px;">
-                <button onclick="document.getElementById('testimonialTrack').scrollBy({left:-380,behavior:'smooth'})" style="background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.1); color:rgba(255,255,255,0.5); width:36px; height:36px; border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all 0.3s;" onmouseover="this.style.background='rgba(99,102,241,0.3)'; this.style.color='#fff';" onmouseout="this.style.background='rgba(255,255,255,0.08)'; this.style.color='rgba(255,255,255,0.5)';">
-                    <i class="bi bi-chevron-left"></i>
-                </button>
-                <button onclick="document.getElementById('testimonialTrack').scrollBy({left:380,behavior:'smooth'})" style="background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.1); color:rgba(255,255,255,0.5); width:36px; height:36px; border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all 0.3s;" onmouseover="this.style.background='rgba(99,102,241,0.3)'; this.style.color='#fff';" onmouseout="this.style.background='rgba(255,255,255,0.08)'; this.style.color='rgba(255,255,255,0.5)';">
-                    <i class="bi bi-chevron-right"></i>
-                </button>
-            </div>
-            @endif
-        </div>
-        @else
-        <div style="text-align:center; padding:30px; color:rgba(255,255,255,0.4);">
-            <i class="bi bi-chat-dots" style="font-size:2.5rem; margin-bottom:12px; display:block; opacity:0.3;"></i>
-            <p>Belum ada testimoni dari pengguna layanan.</p>
-        </div>
-        @endif
-
-        {{-- CTA to submit --}}
-        <div style="text-align:center; margin-top:30px;">
-            <a href="{{ route('layanan.form') }}" class="btn btn-primary">
-                Ajukan Layanan TIK <i class="fas fa-arrow-right"></i>
-            </a>
-        </div>
-    </div>
-</section>
-
-{{-- KEGIATAN TERBARU --}}
+{{-- BERITA TERBARU --}}
+@if($showBerita)
 <section class="section section-gray">
     <div class="container">
         <div class="section-header">
-            <div class="section-badge">&#9679; Berita & Kegiatan</div>
+            <div class="section-badge">&#9679; Berita</div>
             <h2 class="section-title">Berita Terbaru</h2>
         </div>
         <div class="kegiatan-grid" style="margin-bottom:60px;">
@@ -271,8 +127,16 @@
             </div>
             @endforelse
         </div>
+    </div>
+</section>
+@endif
 
+{{-- KEGIATAN TERBARU --}}
+@if($showKegiatan)
+<section class="section section-gray">
+    <div class="container">
         <div class="section-header">
+            <div class="section-badge">&#9679; Kegiatan</div>
             <h2 class="section-title">Kegiatan Terbaru</h2>
         </div>
         <div class="kegiatan-grid">
@@ -307,6 +171,7 @@
         </div>
     </div>
 </section>
+@endif
 
 {{-- CTA --}}
 <section class="cta-section">

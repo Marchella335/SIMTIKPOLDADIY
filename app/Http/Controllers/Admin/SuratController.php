@@ -40,6 +40,54 @@ class SuratController extends Controller
         return view('admin.persuratan.index', compact('surats', 'bidang'));
     }
 
+    public function export(Request $request)
+    {
+        $query = Surat::query();
+        
+        if ($request->tipe) {
+            $query->where('tipe', $request->tipe);
+        }
+        if ($request->bidang) {
+            $query->where('bidang', $request->bidang);
+        }
+        
+        $surats = $query->orderBy('tanggal', 'desc')->get();
+        $bidang = $request->bidang ?? 'Semua Bidang';
+        
+        $csvFileName = 'Rekap_Surat_' . str_replace(' ', '_', $bidang) . '_' . date('Ymd_His') . '.csv';
+        $headers = [
+            "Content-type"        => "text/csv",
+            "Content-Disposition" => "attachment; filename=$csvFileName",
+            "Pragma"              => "no-cache",
+            "Cache-Control"       => "must-revalidate, post-check=0, pre-check=0",
+            "Expires"             => "0"
+        ];
+        
+        $callback = function() use($surats) {
+            $file = fopen('php://output', 'w');
+            fputcsv($file, ['No', 'Nomor Surat', 'Agenda Surat', 'Nomor Agenda', 'Tipe', 'Jenis', 'Tanggal', 'Perihal', 'Dari', 'Kepada', 'Disposisi']);
+            
+            foreach ($surats as $i => $s) {
+                fputcsv($file, [
+                    $i + 1,
+                    $s->nomor_surat,
+                    $s->agenda_surat,
+                    $s->nomor_agenda,
+                    $s->tipe,
+                    $s->jenis_surat,
+                    $s->tanggal->format('Y-m-d'),
+                    $s->perihal,
+                    $s->dari,
+                    $s->kepada,
+                    $s->disposisi
+                ]);
+            }
+            fclose($file);
+        };
+        
+        return response()->stream($callback, 200, $headers);
+    }
+
     public function create()
     {
         return view('admin.persuratan.create', ['bidang' => request('bidang', 'Renmin')]);
@@ -49,6 +97,8 @@ class SuratController extends Controller
     {
         $request->validate([
             'nomor_surat' => 'required|string|max:255',
+            'agenda_surat' => 'nullable|string|max:255',
+            'nomor_agenda' => 'nullable|string|max:255',
             'tipe' => 'required|in:masuk,keluar',
             'bidang' => 'required|in:Renmin,Tekkom,Tekinfo',
             'jenis_surat' => 'required|string|max:255',
@@ -56,6 +106,7 @@ class SuratController extends Controller
             'dari' => 'nullable|string|max:255',
             'kepada' => 'nullable|string|max:255',
             'keterangan' => 'nullable|string',
+            'disposisi' => 'nullable|string',
             'file_pdf' => 'nullable|mimes:pdf|max:10240',
             'tanggal' => 'required|date',
         ]);
@@ -84,6 +135,8 @@ class SuratController extends Controller
     {
         $request->validate([
             'nomor_surat' => 'required|string|max:255',
+            'agenda_surat' => 'nullable|string|max:255',
+            'nomor_agenda' => 'nullable|string|max:255',
             'tipe' => 'required|in:masuk,keluar',
             'bidang' => 'required|in:Renmin,Tekkom,Tekinfo',
             'jenis_surat' => 'required|string|max:255',
@@ -91,6 +144,7 @@ class SuratController extends Controller
             'dari' => 'nullable|string|max:255',
             'kepada' => 'nullable|string|max:255',
             'keterangan' => 'nullable|string',
+            'disposisi' => 'nullable|string',
             'file_pdf' => 'nullable|mimes:pdf|max:10240',
             'tanggal' => 'required|date',
         ]);

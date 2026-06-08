@@ -28,6 +28,15 @@
                 <input type="text" name="nomor_surat" class="form-control" value="{{ old('nomor_surat', $surat->nomor_surat) }}" required>
             </div>
 
+            <div class="form-row">
+                <div class="form-group"><label>Agenda Surat</label>
+                    <input type="text" name="agenda_surat" class="form-control" value="{{ old('agenda_surat', $surat->agenda_surat) }}">
+                </div>
+                <div class="form-group"><label>Nomor Agenda</label>
+                    <input type="text" name="nomor_agenda" class="form-control" value="{{ old('nomor_agenda', $surat->nomor_agenda) }}">
+                </div>
+            </div>
+
             <div class="form-group"><label>Tanggal Surat *</label>
                 <input type="date" name="tanggal" class="form-control" value="{{ old('tanggal', $surat->tanggal->format('Y-m-d')) }}" required>
             </div>
@@ -59,6 +68,10 @@
 
             <div class="form-group"><label>Keterangan Tambahan</label>
                 <textarea name="keterangan" class="form-control">{{ old('keterangan', $surat->keterangan) }}</textarea>
+            </div>
+
+            <div class="form-group"><label>Isi Disposisi</label>
+                <textarea name="disposisi" class="form-control" readonly placeholder="Isi disposisi dikunci (locked)">{{ old('disposisi', $surat->disposisi) }}</textarea>
             </div>
 
             <div class="form-group"><label>File PDF</label>

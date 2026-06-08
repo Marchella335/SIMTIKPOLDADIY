@@ -18,18 +18,32 @@
         </div>
     </div>
     <div class="card-body">
+        @if(isset($jabatanCounts) && $jabatanCounts->count() > 0)
+        <div style="margin-bottom: 20px; display: flex; gap: 10px; flex-wrap: wrap;">
+            @foreach($jabatanCounts as $jc)
+                <div class="badge" style="padding: 8px 12px; font-size: 0.9rem; background: var(--gray-100); border: 1px solid var(--gray-300); color: var(--gray-700);">
+                    {{ $jc->jabatan }}: <strong>{{ $jc->total }}</strong>
+                </div>
+            @endforeach
+        </div>
+        @endif
+
         <div class="table-container">
             <table>
-                <thead><tr><th>No</th><th>Foto</th><th>Nama Lengkap</th><th>Pangkat</th><th>Bidang</th><th>Jabatan</th><th>Aksi</th></tr></thead>
+                <thead><tr><th>No</th><th>Nama Lengkap</th><th>Pangkat</th><th>Jabatan</th><th>NRP</th><th>Aksi</th></tr></thead>
                 <tbody>
                     @forelse($anggotas as $i => $a)
                     <tr>
                         <td>{{ $i + 1 }}</td>
-                        <td>@if($a->foto)<img src="{{ asset($a->foto) }}" style="width:40px;height:40px;border-radius:50%;object-fit:cover;">@else <div style="width:40px;height:40px;border-radius:50%;background:#e2e4e8;display:flex;align-items:center;justify-content:center;color:#999;"><i class="fas fa-user"></i></div> @endif</td>
-                        <td>{{ $a->nama_lengkap }}<br><small style="color:#666;">NRP: {{ $a->nrp ?? '-' }}</small></td>
+                        <td>
+                            <div style="display:flex; align-items:center; gap:10px;">
+                                @if($a->foto)<img src="{{ asset($a->foto) }}" style="width:30px;height:30px;border-radius:50%;object-fit:cover;">@else <div style="width:30px;height:30px;border-radius:50%;background:#e2e4e8;display:flex;align-items:center;justify-content:center;color:#999;font-size:12px;"><i class="fas fa-user"></i></div> @endif
+                                {{ $a->nama_lengkap }}
+                            </div>
+                        </td>
                         <td>{{ $a->pangkat }}</td>
-                        <td><span class="badge badge-info">{{ $a->bidang }}</span></td>
                         <td>{{ $a->jabatan }}</td>
+                        <td>{{ $a->nrp ?? '-' }}</td>
                         <td class="actions">
                             <a href="{{ route('admin.anggota.show', $a) }}" class="btn btn-sm btn-info"><i class="fas fa-id-card"></i></a>
                             <a href="{{ route('admin.anggota.edit', $a) }}" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>
@@ -37,7 +51,7 @@
                         </td>
                     </tr>
                     @empty
-                    <tr><td colspan="7" style="text-align:center;color:#6b7280;">Belum ada data anggota.</td></tr>
+                    <tr><td colspan="6" style="text-align:center;color:#6b7280;">Belum ada data anggota.</td></tr>
                     @endforelse
                 </tbody>
             </table>

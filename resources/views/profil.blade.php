@@ -53,7 +53,6 @@
                     <div class="jabatan">{{ $a->jabatan }}</div>
                     <div class="pangkat">{{ $a->pangkat }}</div>
                     <h4>{{ $a->nama_lengkap }}</h4>
-                    <div style="font-size:0.8rem; color:var(--gray-500); margin-top:4px;">NRP: {{ $a->nrp ?? '-' }}</div>
                 </div>
                 @endforeach
             </div>
@@ -76,7 +75,6 @@
                     <div class="jabatan">{{ $a->jabatan }}</div>
                     <div class="pangkat">{{ $a->pangkat }}</div>
                     <h4>{{ $a->nama_lengkap }}</h4>
-                    <div style="font-size:0.8rem; color:var(--gray-500); margin-top:4px;">NRP: {{ $a->nrp ?? '-' }}</div>
                 </div>
                 @endforeach
             </div>

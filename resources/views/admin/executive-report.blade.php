@@ -169,32 +169,6 @@
     </div>
 </div>
 
-{{-- ROW 3: CRM & Satisfaction --}}
-<div class="card" style="margin-bottom:30px;">
-    <div class="card-header">
-        <h3><i class="bi bi-heart" style="color:var(--accent); margin-right:8px;"></i> Indeks Kepuasan Layanan TIK (IKL)</h3>
-    </div>
-    <div class="card-body">
-        <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:20px;">
-            <div style="text-align:center; padding:20px; background:var(--gray-50); border-radius:12px;">
-                <h3 style="font-size:2rem; color:var(--accent);">{{ $layananTotal }}</h3>
-                <p style="color:var(--gray-500); font-size:0.85rem;">Total Permintaan</p>
-            </div>
-            <div style="text-align:center; padding:20px; background:var(--gray-50); border-radius:12px;">
-                <h3 style="font-size:2rem; color:var(--success);">{{ $completionRate }}%</h3>
-                <p style="color:var(--gray-500); font-size:0.85rem;">Completion Rate</p>
-            </div>
-            <div style="text-align:center; padding:20px; background:var(--gray-50); border-radius:12px;">
-                <h3 style="font-size:2rem; color:var(--warning);">{{ number_format($avgRating, 1) }}/5</h3>
-                <p style="color:var(--gray-500); font-size:0.85rem;">Avg. Rating</p>
-            </div>
-            <div style="text-align:center; padding:20px; background:var(--gray-50); border-radius:12px;">
-                <h3 style="font-size:2rem;">{{ $layananCompleted }}</h3>
-                <p style="color:var(--gray-500); font-size:0.85rem;">Tiket Selesai</p>
-            </div>
-        </div>
-    </div>
-</div>
 
 <div style="text-align:center; padding:20px; color:var(--gray-500); font-size:0.8rem;">
     <i class="bi bi-shield-check"></i> Data diproses melalui Data Warehouse SIMTIK — Terakhir diperbarui: {{ now()->format('d M Y H:i') }} WIB

@@ -1,0 +1,91 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans);font-size:14px;color:var(--color-text-primary)}
+.wrap{padding:1.5rem 0}
+.section{margin-bottom:2rem}
+.section-title{font-size:16px;font-weight:500;color:var(--color-text-primary);margin-bottom:12px;padding-bottom:8px;border-bottom:0.5px solid var(--color-border-tertiary);display:flex;align-items:center;gap:8px}
+.badge{font-size:11px;font-weight:500;padding:2px 8px;border-radius:var(--border-radius-md);background:var(--color-background-info);color:var(--color-text-info)}
+.badge-warn{background:var(--color-background-warning);color:var(--color-text-warning)}
+.badge-success{background:var(--color-background-success);color:var(--color-text-success)}
+.badge-danger{background:var(--color-background-danger);color:var(--color-text-danger)}
+.item{display:flex;gap:10px;padding:8px 12px;border-radius:var(--border-radius-md);margin-bottom:6px;background:var(--color-background-secondary);align-items:flex-start}
+.item i{font-size:16px;margin-top:1px;flex-shrink:0;color:var(--color-text-secondary)}
+.item p{font-size:13px;color:var(--color-text-primary);line-height:1.5}
+.item p span{color:var(--color-text-secondary);font-size:12px}
+.sub{margin-left:28px;margin-top:4px}
+.sub .item{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);padding:6px 10px}
+.tag{display:inline-block;font-size:11px;padding:1px 7px;border-radius:999px;margin-right:4px;margin-bottom:2px}
+.tag-new{background:#E1F5EE;color:#0F6E56}
+.tag-edit{background:#E6F1FB;color:#185FA5}
+.tag-del{background:#FCEBEB;color:#A32D2D}
+.tag-fix{background:#FAEEDA;color:#854F0B}
+</style>
+<div class="wrap">
+
+<div class="section">
+  <div class="section-title"><i class="ti ti-layout-dashboard" aria-hidden="true"></i> Homepage <span class="badge">UI</span></div>
+  <div class="item"><i class="ti ti-user-circle"></i><p>Profil menampilkan nama dan pangkat — <b>tanpa</b> info tambahan lainnya <span class="tag tag-edit">edit</span></p></div>
+  <div class="item"><i class="ti ti-sitemap"></i><p>Struktur organisasi: tampilkan <b>bagan saja</b> (untuk admin: nama GPPA) <span class="tag tag-edit">edit</span></p></div>
+  <div class="item"><i class="ti ti-toggle-left"></i><p>Tambah opsi <b>tampilkan/sembunyikan</b> bagian Berita dan Kegiatan <span class="tag tag-new">baru</span></p></div>
+</div>
+
+<div class="section">
+  <div class="section-title"><i class="ti ti-users"></i> Anggota &amp; Jabatan <span class="badge">Data</span></div>
+  <div class="item"><i class="ti ti-link"></i><p>Jabatan dan Anggota <b>dijadikan satu paket</b> (saling terhubung/link) <span class="tag tag-edit">edit</span></p></div>
+  <div class="item"><i class="ti ti-hash"></i><p>Rekap anggota: <b>Nomor · Nama · Pangkat · Jabatan · NRP</b> <span class="tag tag-edit">edit</span></p></div>
+  <div class="item"><i class="ti ti-replace"></i><p>Kolom yang diganti adalah <b>Pangkat</b>, bukan Jabatan <span class="tag tag-fix">koreksi</span></p></div>
+  <div class="item"><i class="ti ti-briefcase"></i><p>Tambah kolom <b>Jobdesk</b> pada data anggota <span class="tag tag-new">baru</span></p></div>
+  <div class="item"><i class="ti ti-chart-bar"></i><p>Rekapan jumlah anggota per jabatan (summary count) <span class="tag tag-new">baru</span></p></div>
+  <div class="item"><i class="ti ti-lock"></i><p>Akses bersifat <b>internal</b> — bukan user publik <span class="tag tag-edit">edit</span></p></div>
+</div>
+
+<div class="section">
+  <div class="section-title"><i class="ti ti-mail"></i> Surat <span class="badge">Modul</span></div>
+  <div class="item"><i class="ti ti-inbox"></i><p>Semua surat <b>masuk ke Renmin</b> <span class="tag tag-edit">edit</span></p></div>
+  <div class="item"><i class="ti ti-list-details"></i><p>Tambah kolom: <b>Agenda Surat · Tanggal · Nomor Agenda</b> <span class="tag tag-new">baru</span></p></div>
+  <div class="item"><i class="ti ti-lock"></i><p>Isi disposisi <b>dikunci (locked)</b>; perihal tetap bisa diisi <span class="tag tag-fix">koreksi</span></p></div>
+  <div class="item"><i class="ti ti-file-export"></i><p>Fitur <b>ekspor surat masuk &amp; keluar</b> <span class="tag tag-new">baru</span></p></div>
+  <div class="item"><i class="ti ti-table"></i><p>Rekap surat (format seperti rekap keuangan) <span class="tag tag-new">baru</span></p></div>
+</div>
+
+<div class="section">
+  <div class="section-title"><i class="ti ti-calendar-event"></i> Kegiatan <span class="badge">Modul</span></div>
+  <div class="item"><i class="ti ti-file-description"></i><p>Tambah <b>hasil rapat</b> di detail kegiatan <span class="tag tag-new">baru</span></p></div>
+  <div class="item"><i class="ti ti-table"></i><p>Format rekap kegiatan: <b>No · Hari · Nama Kegiatan · Keterangan · Hasil</b> <span class="tag tag-new">baru</span></p></div>
+  <div class="item"><i class="ti ti-photo"></i><p>Tambah <b>foto kegiatan</b> di rekap kegiatan <span class="tag tag-new">baru</span></p></div>
+  <div class="item"><i class="ti ti-chart-line"></i><p>Trend kegiatan: berapa kegiatan per tanggal/periode <span class="tag tag-new">baru</span></p></div>
+  <div class="item"><i class="ti ti-calendar-stats"></i><p>Rencana kegiatan ke depan <span class="tag tag-new">baru</span></p></div>
+  <div class="item"><i class="ti ti-report-analytics"></i><p>Rekap kegiatan (format seperti rekap keuangan) <span class="tag tag-new">baru</span></p></div>
+</div>
+
+<div class="section">
+  <div class="section-title"><i class="ti ti-cash"></i> Keuangan <span class="badge badge-warn">Revisi besar</span></div>
+  <div class="item"><i class="ti ti-table"></i><p>Tampilan <b>tabel saja</b> — hapus grafik <span class="tag tag-edit">edit</span></p></div>
+  <div class="item"><i class="ti ti-building-bank"></i><p>Tampilkan: <b>Anggaran · Divisi · Bulan</b> (lihat referensi di SEMAR) <span class="tag tag-edit">edit</span></p></div>
+  <div class="item"><i class="ti ti-calendar-week"></i><p>Rekap <b>mingguan</b> <span class="tag tag-new">baru</span></p></div>
+  <div class="item"><i class="ti ti-calendar-month"></i><p>Rekap <b>bulanan</b> <span class="tag tag-new">baru</span></p></div>
+  <div class="item"><i class="ti ti-calendar"></i><p>Rekap <b>tahunan</b> <span class="tag tag-new">baru</span></p></div>
+</div>
+
+<div class="section">
+  <div class="section-title"><i class="ti ti-phone"></i> Kontak <span class="badge">Cek</span></div>
+  <div class="item"><i class="ti ti-alert-circle"></i><p>Cek dan verifikasi <b>nomor bagian</b> pada halaman kontak <span class="tag tag-fix">cek</span></p></div>
+</div>
+
+<div class="section">
+  <div class="section-title"><i class="ti ti-trash"></i> Hapus <span class="badge badge-danger">Dihapus</span></div>
+  <div class="item"><i class="ti ti-x"></i><p>Hapus menu/fitur <b>Layanan TIK</b> <span class="tag tag-del">hapus</span></p></div>
+</div>
+
+<div style="margin-top:2rem;padding:12px 16px;border-radius:var(--border-radius-lg);background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary)">
+  <p style="font-size:12px;color:var(--color-text-secondary);margin-bottom:8px;font-weight:500">LEGENDA</p>
+  <div style="display:flex;flex-wrap:wrap;gap:8px">
+    <span class="tag tag-new" style="font-size:12px;padding:3px 10px">baru — fitur baru</span>
+    <span class="tag tag-edit" style="font-size:12px;padding:3px 10px">edit — perubahan</span>
+    <span class="tag tag-fix" style="font-size:12px;padding:3px 10px">koreksi — perbaikan</span>
+    <span class="tag tag-del" style="font-size:12px;padding:3px 10px">hapus — dihilangkan</span>
+  </div>
+</div>
+
+</div>

@@ -9,24 +9,48 @@
         <a href="{{ route('admin.kegiatan.create') }}" class="btn btn-primary btn-sm"><i class="fas fa-plus"></i> Tambah</a>
     </div>
     <div class="card-body">
+        
+        <div style="margin-bottom: 30px;">
+            <h4 style="font-size: 1rem; margin-bottom: 10px; color: var(--gray-700);">Trend Kegiatan / Bulan</h4>
+            <div style="display:flex; gap:10px; align-items:flex-end; height:120px; padding:10px; background:var(--gray-50); border:1px solid var(--gray-200); border-radius:8px; overflow-x:auto;">
+                @if(isset($trendData) && count($trendData) > 0)
+                    @php $maxCount = max($trendData->toArray()); @endphp
+                    @foreach($trendData as $month => $count)
+                    <div style="display:flex; flex-direction:column; align-items:center; min-width:60px;">
+                        <div style="font-size:0.75rem; font-weight:700; margin-bottom:4px;">{{ $count }}</div>
+                        <div style="width:30px; background:var(--accent); border-radius:4px 4px 0 0; height:{{ $maxCount > 0 ? ($count / $maxCount * 70) : 0 }}px;"></div>
+                        <div style="font-size:0.65rem; color:var(--gray-500); margin-top:4px;">{{ $month }}</div>
+                    </div>
+                    @endforeach
+                @else
+                    <div style="color:var(--gray-500); font-size:0.8rem; margin:auto;">Belum ada data kegiatan untuk menampilkan trend.</div>
+                @endif
+            </div>
+        </div>
+
         <div class="table-container">
             <table>
-                <thead><tr><th>No</th><th>Gambar</th><th>Nama Kegiatan</th><th>Tanggal</th><th>Deskripsi</th><th>Aksi</th></tr></thead>
+                <thead><tr><th>No</th><th>Hari</th><th>Nama Kegiatan</th><th>Keterangan</th><th>Hasil Kegiatan</th><th>Foto</th><th>Aksi</th></tr></thead>
                 <tbody>
                     @forelse($kegiatans as $i => $k)
                     <tr>
                         <td>{{ $kegiatans->firstItem() + $i }}</td>
-                        <td>@if($k->gambar)<img src="{{ asset($k->gambar) }}" style="width:60px;height:40px;object-fit:cover;border-radius:6px;">@else - @endif</td>
+                        <td>{{ \Carbon\Carbon::parse($k->tanggal)->locale('id')->translatedFormat('l, d/m/Y') }}</td>
                         <td style="font-weight:500;">{{ $k->nama_kegiatan }}</td>
-                        <td>{{ $k->tanggal->format('d/m/Y') }}</td>
                         <td>{{ Str::limit($k->deskripsi, 50) }}</td>
+                        <td>{{ Str::limit($k->hasil_rapat, 50) ?? '-' }}</td>
+                        <td>
+                            @if($k->foto) <img src="{{ asset($k->foto) }}" style="width:60px;height:40px;object-fit:cover;border-radius:6px; margin-bottom:4px;"> @endif
+                            @if($k->gambar) <img src="{{ asset($k->gambar) }}" style="width:60px;height:40px;object-fit:cover;border-radius:6px;"> @endif
+                            @if(!$k->foto && !$k->gambar) - @endif
+                        </td>
                         <td class="actions">
                             <a href="{{ route('admin.kegiatan.edit', $k) }}" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>
                             <form action="{{ route('admin.kegiatan.destroy', $k) }}" method="POST" onsubmit="return confirm('Hapus kegiatan?')">@csrf @method('DELETE')<button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button></form>
                         </td>
                     </tr>
                     @empty
-                    <tr><td colspan="6" style="text-align:center;color:#6b7280;">Belum ada kegiatan.</td></tr>
+                    <tr><td colspan="7" style="text-align:center;color:#6b7280;">Belum ada kegiatan.</td></tr>
                     @endforelse
                 </tbody>
             </table>

@@ -21,7 +21,10 @@
 <div class="card">
     <div class="card-header">
         <h3>Daftar Surat {{ $bidang }}</h3>
-        <a href="{{ route('admin.persuratan.create', ['bidang' => $bidang]) }}" class="btn btn-primary btn-sm"><i class="fas fa-plus"></i> Tambah</a>
+        <div>
+            <a href="{{ route('admin.persuratan.export', ['bidang' => $bidang, 'tipe' => request('tipe')]) }}" class="btn btn-success btn-sm"><i class="fas fa-file-excel"></i> Export Rekap</a>
+            <a href="{{ route('admin.persuratan.create', ['bidang' => $bidang]) }}" class="btn btn-primary btn-sm"><i class="fas fa-plus"></i> Tambah</a>
+        </div>
     </div>
     <div class="card-body">
         <form method="GET" class="search-bar">
