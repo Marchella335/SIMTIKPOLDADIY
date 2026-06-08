@@ -8,15 +8,21 @@ class ProfilController extends Controller
 {
     public function index()
     {
-        $kabid = Anggota::where('bidang', 'TIK')->get();
+        $kabid = Anggota::whereRaw('LOWER(bidang) = ?', ['tik'])->get();
         
-        $kasubbid = Anggota::where(function($q) {
-            $q->where('jabatan', 'like', 'Kasubbid%');
-        })->get();
+        $kasubbid = Anggota::whereRaw('LOWER(jabatan) LIKE ?', ['kasubbid%'])->get();
 
-        $renmin = Anggota::where('bidang', 'RENMIN')->where('jabatan', 'not like', 'Kasubbid%')->get();
-        $tekkom = Anggota::where('bidang', 'TEKKOM')->where('jabatan', 'not like', 'Kasubbid%')->get();
-        $tekinfo = Anggota::where('bidang', 'TEKINFO')->where('jabatan', 'not like', 'Kasubbid%')->get();
+        $renmin = Anggota::whereRaw('LOWER(bidang) = ?', ['renmin'])
+            ->whereRaw('LOWER(jabatan) NOT LIKE ?', ['kasubbid%'])
+            ->get();
+            
+        $tekkom = Anggota::whereRaw('LOWER(bidang) = ?', ['tekkom'])
+            ->whereRaw('LOWER(jabatan) NOT LIKE ?', ['kasubbid%'])
+            ->get();
+            
+        $tekinfo = Anggota::whereRaw('LOWER(bidang) = ?', ['tekinfo'])
+            ->whereRaw('LOWER(jabatan) NOT LIKE ?', ['kasubbid%'])
+            ->get();
 
         $struktur = [];
         foreach (\App\Models\StrukturOrganisasi::all() as $s) {

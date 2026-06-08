@@ -87,6 +87,12 @@
                 <input type="file" name="foto" class="form-control" accept="image/*">
             </div>
 
+            <div class="form-group">
+                <label>Jobdesk (Uraian Tugas)</label>
+                <textarea name="jobdesk" class="form-control" rows="4" placeholder="Detail deskripsi tugas atau jobdesk anggota...">{{ old('jobdesk', $anggota->jobdesk) }}</textarea>
+                @error('jobdesk')<div class="form-error">{{ $message }}</div>@enderror
+            </div>
+
             <div style="display:flex;gap:10px;margin-top:25px;">
                 <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Update</button>
                 <a href="{{ route('admin.anggota.index', ['bidang' => $anggota->bidang]) }}" class="btn btn-outline">Batal</a>

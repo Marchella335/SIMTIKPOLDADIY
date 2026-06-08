@@ -48,6 +48,7 @@ class AnggotaController extends Controller
             'awal_jabatan' => 'nullable|date',
             'akhir_jabatan' => 'nullable|date',
             'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'jobdesk' => 'nullable|string',
         ]);
 
         $data = $request->except('foto');
@@ -102,6 +103,7 @@ class AnggotaController extends Controller
             'awal_jabatan' => 'nullable|date',
             'akhir_jabatan' => 'nullable|date',
             'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'jobdesk' => 'nullable|string',
         ]);
 
         $data = $request->except('foto');

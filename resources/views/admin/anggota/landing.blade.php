@@ -33,6 +33,16 @@
         <p>Subbid Teknologi Informasi</p>
         <div class="btn-select tekinfo">Pilih Bidang</div>
     </div>
+
+    <!-- JABATAN -->
+    <div class="card landing-card" onclick="location.href='{{ route('admin.jabatan.index') }}'">
+        <div class="icon-wrapper global">
+            <i class="bi bi-briefcase"></i>
+        </div>
+        <h3>KELOLA JABATAN</h3>
+        <p>Manajemen Jabatan untuk Semua Subbid</p>
+        <div class="btn-select global">Kelola Jabatan</div>
+    </div>
 </div>
 
 <style>
@@ -61,6 +71,7 @@
     .icon-wrapper.renmin { background: rgba(220, 38, 38, 0.1); color: var(--accent); }
     .icon-wrapper.tekkom { background: rgba(59, 130, 246, 0.1); color: #3b82f6; }
     .icon-wrapper.tekinfo { background: rgba(16, 185, 129, 0.1); color: #10b981; }
+    .icon-wrapper.global { background: rgba(107, 114, 128, 0.1); color: #6b7280; }
     
     .landing-card h3 { margin-bottom: 10px; font-family: 'Poppins', sans-serif; font-weight: 700; }
     .landing-card p { color: var(--gray-500); font-size: 0.9rem; margin-bottom: 20px; }
@@ -76,5 +87,6 @@
     .btn-select.renmin { background: var(--accent); }
     .btn-select.tekkom { background: #3b82f6; }
     .btn-select.tekinfo { background: #10b981; }
+    .btn-select.global { background: #6b7280; }
 </style>
 @endsection

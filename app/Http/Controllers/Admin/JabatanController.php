@@ -28,7 +28,8 @@ class JabatanController extends Controller
     {
         $request->validate([
             'nama_jabatan' => 'required|string|max:100',
-            'bidang' => 'required|string|in:Renmin,Tekkom,Tekinfo'
+            'bidang' => 'required|string|in:Renmin,Tekkom,Tekinfo',
+            'kuota' => 'required|integer|min:0'
         ]);
         
         $data = $request->all();
@@ -37,6 +38,46 @@ class JabatanController extends Controller
         
         return redirect()->route('admin.jabatan.index', ['bidang' => $request->bidang])
             ->with('success', 'Jabatan berhasil ditambahkan.');
+    }
+
+    public function update(Request $request, Jabatan $jabatan)
+    {
+        $request->validate([
+            'nama_jabatan' => 'required|string|max:100',
+            'kuota' => 'required|integer|min:0'
+        ]);
+
+        $jabatan->update($request->only('nama_jabatan', 'kuota'));
+
+        return redirect()->route('admin.jabatan.index', ['bidang' => $jabatan->bidang])
+            ->with('success', 'Jabatan berhasil diperbarui.');
+    }
+
+    public function sendAlert(Request $request)
+    {
+        $jabatans = Jabatan::all();
+        $alertData = [];
+
+        foreach ($jabatans as $j) {
+            $count = \App\Models\Anggota::where('jabatan', $j->nama_jabatan)->count();
+            if ($count < $j->kuota) {
+                $alertData[] = [
+                    'bidang' => $j->bidang ?? 'Global',
+                    'nama_jabatan' => $j->nama_jabatan,
+                    'kuota' => $j->kuota,
+                    'jumlah_sekarang' => $count,
+                    'selisih' => $j->kuota - $count
+                ];
+            }
+        }
+
+        if (count($alertData) > 0) {
+            $email = env('MAIL_FROM_ADDRESS', 'admin@simtikpoldadiy.com');
+            \Illuminate\Support\Facades\Mail::to($email)->send(new \App\Mail\KuotaJabatanAlert($alertData));
+            return redirect()->back()->with('success', 'Email notifikasi kekurangan kuota berhasil dikirim ke ' . $email);
+        }
+
+        return redirect()->back()->with('info', 'Semua jabatan telah memenuhi kuota. Tidak ada email yang dikirim.');
     }
 
     public function destroy(Jabatan $jabatan)

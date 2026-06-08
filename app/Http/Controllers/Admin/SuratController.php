@@ -13,6 +13,49 @@ class SuratController extends Controller
         return view('admin.persuratan.landing');
     }
 
+    public function exportPdf(Request $request)
+    {
+        $bidang = $request->query('bidang'); // Renmin, Tekkom, Tekinfo, or All
+        $startDate = $request->query('start_date');
+        $endDate = $request->query('end_date');
+
+        $query = Surat::query();
+
+        if ($bidang && $bidang !== 'All') {
+            $query->where(function($q) use ($bidang) {
+                $q->where('bidang', $bidang);
+                if (in_array($bidang, ['Tekkom', 'Tekinfo'])) {
+                    $q->orWhere('status_terusan', $bidang);
+                }
+            });
+        }
+
+        if ($startDate) {
+            $query->where('tanggal', '>=', $startDate);
+        }
+        if ($endDate) {
+            $query->where('tanggal', '<=', $endDate);
+        }
+
+        $surats = $query->orderBy('tanggal', 'desc')->get();
+
+        return view('admin.persuratan.pdf', compact('surats', 'bidang', 'startDate', 'endDate'));
+    }
+
+    public function teruskan(Request $request, Surat $persuratan)
+    {
+        $request->validate([
+            'status_terusan' => 'required|in:Tekkom,Tekinfo',
+        ]);
+
+        $persuratan->update([
+            'status_terusan' => $request->status_terusan,
+        ]);
+
+        return redirect()->route('admin.persuratan.index', ['bidang' => $persuratan->bidang])
+            ->with('success', 'Surat berhasil diteruskan ke ' . $request->status_terusan . '.');
+    }
+
     public function index()
     {
         $query = Surat::query();
@@ -30,12 +73,17 @@ class SuratController extends Controller
             $query->where('tipe', request('tipe'));
         }
 
-        if (request('bidang')) {
-            $query->where('bidang', request('bidang'));
+        $bidang = request('bidang', 'Renmin');
+        if ($bidang) {
+            $query->where(function($q) use ($bidang) {
+                $q->where('bidang', $bidang);
+                if (in_array($bidang, ['Tekkom', 'Tekinfo'])) {
+                    $q->orWhere('status_terusan', $bidang);
+                }
+            });
         }
 
         $surats = $query->orderBy('tanggal', 'desc')->paginate(15);
-        $bidang = request('bidang', 'Renmin');
 
         return view('admin.persuratan.index', compact('surats', 'bidang'));
     }
@@ -58,6 +106,10 @@ class SuratController extends Controller
             'keterangan' => 'nullable|string',
             'file_pdf' => 'nullable|mimes:pdf|max:10240',
             'tanggal' => 'required|date',
+            'nomor_agenda' => 'nullable|string|max:255',
+            'tanggal_agenda' => 'nullable|date',
+            'disposisi' => 'nullable|string',
+            'status_terusan' => 'nullable|in:Tekkom,Tekinfo',
         ]);
 
         $data = $request->except('file_pdf');
@@ -93,9 +145,13 @@ class SuratController extends Controller
             'keterangan' => 'nullable|string',
             'file_pdf' => 'nullable|mimes:pdf|max:10240',
             'tanggal' => 'required|date',
+            'nomor_agenda' => 'nullable|string|max:255',
+            'tanggal_agenda' => 'nullable|date',
+            'status_terusan' => 'nullable|in:Tekkom,Tekinfo',
         ]);
 
-        $data = $request->except('file_pdf');
+        // disposisi is explicitly excluded from update so it cannot be modified
+        $data = $request->except(['file_pdf', 'disposisi']);
 
         if ($request->hasFile('file_pdf')) {
             if ($persuratan->file_pdf && file_exists(public_path($persuratan->file_pdf))) {

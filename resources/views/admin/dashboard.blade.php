@@ -89,6 +89,63 @@
     </div>
 </div>
 
+{{-- Rencana Mendatang --}}
+<div class="card" style="margin-top:28px; margin-bottom:28px;">
+    <div class="card-header" style="display:flex; justify-content:space-between; align-items:center;">
+        <h3 style="margin:0; font-size:1.1rem;"><i class="bi bi-calendar-plus" style="color:var(--accent); margin-right:8px;"></i>Rencana Mendatang (30 Hari Ke Depan)</h3>
+        <a href="{{ route('admin.rencana-kegiatan.index') }}" class="btn btn-sm btn-outline" style="font-size:0.8rem; padding:6px 14px; border:1px solid var(--accent); color:var(--accent); border-radius:8px; text-decoration:none;">Lihat Semua <i class="bi bi-arrow-right"></i></a>
+    </div>
+    <div class="card-body" style="padding:0;">
+        @if($upcomingKegiatan->count() > 0)
+        <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap:16px; padding:20px;">
+            @foreach($upcomingKegiatan as $rk)
+            <div style="background:var(--card-bg, rgba(255,255,255,0.03)); border:1px solid rgba(255,255,255,0.06); border-radius:12px; padding:18px; transition:var(--transition); position:relative; overflow:hidden;">
+                <div style="position:absolute; top:0; left:0; width:4px; height:100%; background:{{ $rk->tipe == 'berita' ? '#7c3aed' : 'var(--accent)' }}; border-radius:4px 0 0 4px;"></div>
+                <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px; gap: 10px;">
+                    <div>
+                        <div style="margin-bottom: 6px;">
+                            @if($rk->tipe == 'berita')
+                                <span style="font-size:0.65rem; background:rgba(124,58,237,0.15); color:#7c3aed; padding:2px 8px; border-radius:12px; font-weight:800; text-transform:uppercase; letter-spacing:0.5px;">Berita</span>
+                            @else
+                                <span style="font-size:0.65rem; background:rgba(2,132,199,0.15); color:#0284c7; padding:2px 8px; border-radius:12px; font-weight:800; text-transform:uppercase; letter-spacing:0.5px;">Kegiatan</span>
+                            @endif
+                        </div>
+                        <h4 style="margin:0; font-size:0.95rem; font-weight:700; color:var(--text-primary); line-height:1.35;">{{ $rk->nama_kegiatan }}</h4>
+                    </div>
+                    @php
+                        $daysLeft = now()->diffInDays($rk->tanggal_rencana, false);
+                    @endphp
+                    <span style="font-size:0.72rem; padding:3px 10px; border-radius:20px; font-weight:700; white-space:nowrap;
+                        {{ $daysLeft <= 3 ? 'background:rgba(239,68,68,0.15); color:#ef4444;' : ($daysLeft <= 7 ? 'background:rgba(245,158,11,0.15); color:#f59e0b;' : 'background:rgba(34,197,94,0.15); color:#22c55e;') }}">
+                        {{ $daysLeft == 0 ? 'Hari Ini!' : ($daysLeft == 1 ? 'Besok' : $daysLeft . ' hari lagi') }}
+                    </span>
+                </div>
+                <div style="display:flex; flex-wrap:wrap; gap:12px; font-size:0.82rem; color:var(--gray-500); margin-top:8px;">
+                    <span><i class="bi bi-calendar3" style="margin-right:4px;"></i>{{ $rk->tanggal_rencana->format('d M Y') }}</span>
+                    @if($rk->tipe == 'berita' && $rk->kategori)
+                        <span><i class="bi bi-tag" style="margin-right:4px;"></i>{{ $rk->kategori }}</span>
+                    @elseif($rk->tempat)
+                        <span><i class="bi bi-geo-alt" style="margin-right:4px;"></i>{{ $rk->tempat }}</span>
+                    @endif
+                </div>
+                @if($rk->keterangan)
+                <p style="margin:10px 0 0 0; font-size:0.82rem; color:var(--gray-500); line-height:1.5;">{{ Str::limit($rk->keterangan, 100) }}</p>
+                @endif
+            </div>
+            @endforeach
+        </div>
+        @else
+        <div style="padding:40px 20px; text-align:center; color:var(--gray-500);">
+            <i class="bi bi-calendar-x" style="font-size:2.5rem; opacity:0.3; display:block; margin-bottom:10px;"></i>
+            <p style="margin:0; font-size:0.9rem;">Tidak ada rencana kegiatan atau berita dalam 30 hari ke depan.</p>
+            <a href="{{ route('admin.rencana-kegiatan.create') }}" class="btn btn-sm btn-primary" style="margin-top:12px; font-size:0.8rem; padding:8px 18px; border-radius:8px; text-decoration:none;">
+                <i class="bi bi-plus-lg"></i> Tambah Rencana
+            </a>
+        </div>
+        @endif
+    </div>
+</div>
+
 <div class="chart-container">
     <h3>Grafik Keuangan {{ date('Y') }}</h3>
     <canvas id="dashChart" height="80"></canvas>

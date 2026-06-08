@@ -17,9 +17,14 @@ class Surat extends Model
         'keterangan',
         'file_pdf',
         'tanggal',
+        'nomor_agenda',
+        'tanggal_agenda',
+        'disposisi',
+        'status_terusan',
     ];
 
     protected $casts = [
         'tanggal' => 'date',
+        'tanggal_agenda' => 'date',
     ];
 }

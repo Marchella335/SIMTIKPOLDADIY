@@ -91,6 +91,12 @@
                 @error('foto')<div class="form-error">{{ $message }}</div>@enderror
             </div>
 
+            <div class="form-group">
+                <label>Jobdesk (Uraian Tugas)</label>
+                <textarea name="jobdesk" class="form-control" rows="4" placeholder="Detail deskripsi tugas atau jobdesk anggota...">{{ old('jobdesk') }}</textarea>
+                @error('jobdesk')<div class="form-error">{{ $message }}</div>@enderror
+            </div>
+
             <div style="display:flex;gap:10px;margin-top:25px;">
                 <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Simpan</button>
                 <a href="{{ route('admin.anggota.index', ['bidang' => $bidang]) }}" class="btn btn-outline">Batal</a>

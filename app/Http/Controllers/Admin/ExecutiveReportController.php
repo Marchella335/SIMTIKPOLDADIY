@@ -8,7 +8,6 @@ use App\Models\Surat;
 use App\Models\SumberDana;
 use App\Models\KeuanganAcaraItem;
 use App\Models\Kegiatan;
-use App\Models\Layanan;
 
 class ExecutiveReportController extends Controller
 {
@@ -68,12 +67,6 @@ class ExecutiveReportController extends Controller
         $kegiatanThisYear = Kegiatan::whereYear('created_at', $currentYear)->count();
         $kegiatanLastYear = Kegiatan::whereYear('created_at', $lastYear)->count();
 
-        // === MODUL CRM (Customer Relationship) ===
-        $layananTotal = Layanan::count();
-        $layananCompleted = Layanan::where('status', 'Completed')->count();
-        $avgRating = Layanan::whereNotNull('rating')->avg('rating') ?? 0;
-        $completionRate = $layananTotal > 0 ? round(($layananCompleted / $layananTotal) * 100, 1) : 0;
-
         // === DATA WAREHOUSE: Cross-Module KPI ===
         $kpiData = [
             'produktivitas' => $kegiatanThisYear > 0 && $totalPagu > 0
@@ -93,7 +86,6 @@ class ExecutiveReportController extends Controller
             'suratTrend',
             'sumberDanas', 'totalPagu', 'totalRealisasi', 'efisiensiAnggaran',
             'kegiatanThisYear', 'kegiatanLastYear',
-            'layananTotal', 'layananCompleted', 'avgRating', 'completionRate',
             'kpiData'
         ));
     }

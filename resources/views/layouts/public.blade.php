@@ -26,7 +26,6 @@
                 <a href="{{ route('kegiatan') }}" class="{{ request()->routeIs('kegiatan*') ? 'active' : '' }}">Kegiatan</a>
                 <a href="{{ route('kontak') }}" class="{{ request()->routeIs('kontak') ? 'active' : '' }}">Kontak</a>
                 <a href="{{ route('administrasi') }}" class="{{ request()->routeIs('administrasi*') ? 'active' : '' }}">Administrasi</a>
-                <a href="{{ route('layanan.form') }}" class="{{ request()->routeIs('layanan*') ? 'active' : '' }}">Layanan TIK</a>
                 @auth
                     <a href="{{ route('admin.dashboard') }}" class="btn-login">Dashboard</a>
                 @else

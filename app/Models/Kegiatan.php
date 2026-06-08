@@ -11,9 +11,12 @@ class Kegiatan extends Model
         'tanggal',
         'deskripsi',
         'gambar',
+        'tampilkan',
+        'hasil',
     ];
 
     protected $casts = [
         'tanggal' => 'date',
+        'tampilkan' => 'boolean',
     ];
 }

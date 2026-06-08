@@ -19,6 +19,12 @@ class BeritaController extends Controller
         return view('admin.berita.create');
     }
 
+    public function exportPdf(Request $request)
+    {
+        $beritas = Berita::orderBy('tanggal', 'desc')->get();
+        return view('admin.berita.pdf', compact('beritas'));
+    }
+
     public function store(Request $request)
     {
         $request->validate([
@@ -26,6 +32,7 @@ class BeritaController extends Controller
             'konten' => 'required|string',
             'tanggal' => 'required|date',
             'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:5120',
+            'tampilkan' => 'required|boolean',
         ]);
 
         $data = $request->except('foto');
@@ -54,6 +61,7 @@ class BeritaController extends Controller
             'konten' => 'required|string',
             'tanggal' => 'required|date',
             'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:5120',
+            'tampilkan' => 'required|boolean',
         ]);
 
         $data = $request->except('foto');

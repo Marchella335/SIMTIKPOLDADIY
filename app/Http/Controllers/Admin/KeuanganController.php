@@ -239,4 +239,77 @@ class KeuanganController extends Controller
         return redirect()->route('admin.keuangan.index')
             ->with('success', 'Pagu anggaran berhasil diperbarui.');
     }
+
+    public function rekap(Request $request)
+    {
+        $periode = $request->query('periode', 'bulanan');
+        $tahun = $request->query('tahun', date('Y'));
+
+        $query = KeuanganAcaraItem::query();
+
+        $dbDriver = \Illuminate\Support\Facades\DB::connection()->getDriverName();
+
+        if ($periode === 'mingguan') {
+            if ($dbDriver === 'sqlite') {
+                $data = $query->selectRaw("strftime('%Y-W%W', tanggal) as periode, SUM(CASE WHEN tipe='Pemasukan' THEN nilai ELSE 0 END) as pemasukan, SUM(CASE WHEN tipe='Pengeluaran' THEN nilai ELSE 0 END) as pengeluaran")
+                    ->whereRaw("strftime('%Y', tanggal) = ?", [$tahun])
+                    ->groupByRaw("strftime('%Y-W%W', tanggal)")
+                    ->orderByRaw("strftime('%Y-W%W', tanggal)")
+                    ->get();
+            } else {
+                $data = $query->selectRaw('YEARWEEK(tanggal, 1) as periode, SUM(CASE WHEN tipe="Pemasukan" THEN nilai ELSE 0 END) as pemasukan, SUM(CASE WHEN tipe="Pengeluaran" THEN nilai ELSE 0 END) as pengeluaran')
+                    ->whereYear('tanggal', $tahun)
+                    ->groupByRaw('YEARWEEK(tanggal, 1)')
+                    ->orderByRaw('YEARWEEK(tanggal, 1)')
+                    ->get();
+            }
+        } elseif ($periode === 'tahunan') {
+            if ($dbDriver === 'sqlite') {
+                $data = $query->selectRaw("strftime('%Y', tanggal) as periode, SUM(CASE WHEN tipe='Pemasukan' THEN nilai ELSE 0 END) as pemasukan, SUM(CASE WHEN tipe='Pengeluaran' THEN nilai ELSE 0 END) as pengeluaran")
+                    ->groupByRaw("strftime('%Y', tanggal)")
+                    ->orderByRaw("strftime('%Y', tanggal)")
+                    ->get();
+            } else {
+                $data = $query->selectRaw('YEAR(tanggal) as periode, SUM(CASE WHEN tipe="Pemasukan" THEN nilai ELSE 0 END) as pemasukan, SUM(CASE WHEN tipe="Pengeluaran" THEN nilai ELSE 0 END) as pengeluaran')
+                    ->groupByRaw('YEAR(tanggal)')
+                    ->orderByRaw('YEAR(tanggal)')
+                    ->get();
+            }
+        } else { // bulanan
+            if ($dbDriver === 'sqlite') {
+                $data = $query->selectRaw("strftime('%Y-%m', tanggal) as periode, SUM(CASE WHEN tipe='Pemasukan' THEN nilai ELSE 0 END) as pemasukan, SUM(CASE WHEN tipe='Pengeluaran' THEN nilai ELSE 0 END) as pengeluaran")
+                    ->whereRaw("strftime('%Y', tanggal) = ?", [$tahun])
+                    ->groupByRaw("strftime('%Y-%m', tanggal)")
+                    ->orderByRaw("strftime('%Y-%m', tanggal)")
+                    ->get();
+            } else {
+                $data = $query->selectRaw('DATE_FORMAT(tanggal, "%Y-%m") as periode, SUM(CASE WHEN tipe="Pemasukan" THEN nilai ELSE 0 END) as pemasukan, SUM(CASE WHEN tipe="Pengeluaran" THEN nilai ELSE 0 END) as pengeluaran')
+                    ->whereYear('tanggal', $tahun)
+                    ->groupByRaw('DATE_FORMAT(tanggal, "%Y-%m")')
+                    ->orderByRaw('DATE_FORMAT(tanggal, "%Y-%m")')
+                    ->get();
+            }
+        }
+
+        $totalPemasukan = $data->sum('pemasukan');
+        $totalPengeluaran = $data->sum('pengeluaran');
+
+        return view('admin.keuangan.rekap', compact('data', 'periode', 'tahun', 'totalPemasukan', 'totalPengeluaran'));
+    }
+
+    public function exportPdf(Request $request)
+    {
+        $startDate = $request->query('start_date');
+        $endDate = $request->query('end_date');
+
+        $query = KeuanganAcaraItem::with('acara.source');
+        if ($startDate) $query->where('tanggal', '>=', $startDate);
+        if ($endDate) $query->where('tanggal', '<=', $endDate);
+
+        $items = $query->orderBy('tanggal', 'desc')->get();
+        $totalPemasukan = $items->where('tipe', 'Pemasukan')->sum('nilai');
+        $totalPengeluaran = $items->where('tipe', 'Pengeluaran')->sum('nilai');
+
+        return view('admin.keuangan.pdf', compact('items', 'startDate', 'endDate', 'totalPemasukan', 'totalPengeluaran'));
+    }
 }

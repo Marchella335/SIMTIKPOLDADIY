@@ -328,11 +328,13 @@ table .actions { display: flex; gap: 6px; }
 }
 .notification-bell:hover { background: var(--gray-50); color: var(--accent); }
 .notification-dot { 
-    position: absolute; top: 8px; right: 8px; width: 10px; height: 10px; 
-    background: var(--danger); border: 2px solid var(--white); border-radius: 50%; 
+    position: absolute; top: 4px; right: 4px; min-width: 18px; height: 18px; 
+    background: var(--danger); border: 2px solid var(--white); border-radius: 10px; 
+    font-size: 0.65rem; font-weight: 800; color: #fff; display: flex; align-items: center; justify-content: center;
+    padding: 0 4px; line-height: 1;
 }
 .notification-menu { 
-    position: absolute; top: calc(100% + 15px); right: -10px; width: 350px; 
+    position: absolute; top: calc(100% + 15px); right: -10px; width: 400px; 
     background: var(--white); border-radius: var(--radius); box-shadow: 0 10px 40px rgba(0,0,0,0.15); 
     z-index: 1000; display: none; overflow: hidden; border: 1px solid var(--gray-100);
 }

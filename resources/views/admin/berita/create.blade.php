@@ -27,6 +27,14 @@
             </div>
 
             <div class="form-group">
+                <label>Tampilkan di Website *</label>
+                <select name="tampilkan" class="form-control" required>
+                    <option value="1" {{ old('tampilkan', '1') == '1' ? 'selected' : '' }}>Ya (Tampilkan di Homepage & Berita)</option>
+                    <option value="0" {{ old('tampilkan') == '0' ? 'selected' : '' }}>Tidak (Hanya Simpan di Admin)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
                 <label>Konten Berita *</label>
                 <textarea name="konten" class="form-control" rows="8" required>{{ old('konten') }}</textarea>
             </div>

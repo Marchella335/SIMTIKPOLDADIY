@@ -6,5 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Berita extends Model
 {
-    protected $fillable = ['judul', 'konten', 'foto', 'tanggal'];
+    protected $fillable = ['judul', 'konten', 'foto', 'tanggal', 'tampilkan'];
+
+    protected $casts = [
+        'tampilkan' => 'boolean',
+    ];
 }

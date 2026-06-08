@@ -29,7 +29,13 @@ class AppServiceProvider extends ServiceProvider
                 ->where('akhir_jabatan', '<=', now()->addMonths(3))
                 ->orderBy('akhir_jabatan', 'asc')
                 ->get();
+            $upcomingRencana = \App\Models\RencanaKegiatan::where('status', 'dijadwalkan')
+                ->where('tanggal_rencana', '>=', now())
+                ->where('tanggal_rencana', '<=', now()->addDays(14))
+                ->orderBy('tanggal_rencana', 'asc')
+                ->get();
             $view->with('expiringAnggotas', $expiringAnggotas);
+            $view->with('upcomingRencana', $upcomingRencana);
         });
     }
 }

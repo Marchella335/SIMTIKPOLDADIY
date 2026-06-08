@@ -33,6 +33,14 @@
             </div>
 
             <div class="form-group">
+                <label>Tampilkan di Website *</label>
+                <select name="tampilkan" class="form-control" required>
+                    <option value="1" {{ old('tampilkan', $beritum->tampilkan ? '1' : '0') == '1' ? 'selected' : '' }}>Ya (Tampilkan di Homepage & Berita)</option>
+                    <option value="0" {{ old('tampilkan', $beritum->tampilkan ? '1' : '0') == '0' ? 'selected' : '' }}>Tidak (Hanya Simpan di Admin)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
                 <label>Konten Berita *</label>
                 <textarea name="konten" class="form-control" rows="8" required>{{ old('konten', $beritum->konten) }}</textarea>
             </div>

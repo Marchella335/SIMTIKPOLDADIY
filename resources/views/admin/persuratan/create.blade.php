@@ -31,6 +31,29 @@
                 <input type="date" name="tanggal" class="form-control" value="{{ old('tanggal', date('Y-m-d')) }}" required>
             </div>
 
+            <div class="form-group"><label>Nomor Agenda</label>
+                <input type="text" name="nomor_agenda" class="form-control" value="{{ old('nomor_agenda') }}">
+            </div>
+
+            <div class="form-group"><label>Tanggal Agenda</label>
+                <input type="date" name="tanggal_agenda" class="form-control" value="{{ old('tanggal_agenda') }}">
+            </div>
+
+            <div class="form-group"><label>Disposisi (Catatan/Instruksi)</label>
+                <textarea name="disposisi" class="form-control" rows="3">{{ old('disposisi') }}</textarea>
+                <small style="color:var(--danger); font-weight:600; display:block; margin-top:5px;">⚠️ Input data disposisi DENGAN BENAR, dikarenakan data disposisi TIDAK BISA diedit.</small>
+            </div>
+
+            @if($bidang == 'Renmin')
+            <div class="form-group"><label>Teruskan ke Bidang (Opsional)</label>
+                <select name="status_terusan" class="form-control">
+                    <option value="">-- Tidak Diteruskan --</option>
+                    <option value="Tekkom" {{ old('status_terusan') == 'Tekkom' ? 'selected' : '' }}>Tekkom</option>
+                    <option value="Tekinfo" {{ old('status_terusan') == 'Tekinfo' ? 'selected' : '' }}>Tekinfo</option>
+                </select>
+            </div>
+            @endif
+
             <div class="form-group"><label>Jenis Surat *</label>
                 <select name="jenis_surat" class="form-control" required>
                     <option value="">-- Pilih Jenis --</option>

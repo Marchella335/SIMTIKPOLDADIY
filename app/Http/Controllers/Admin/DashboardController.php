@@ -8,6 +8,7 @@ use App\Models\Surat;
 use App\Models\Keuangan;
 use App\Models\PaguAnggaran;
 use App\Models\Kegiatan;
+use App\Models\RencanaKegiatan;
 
 class DashboardController extends Controller
 {
@@ -33,10 +34,18 @@ class DashboardController extends Controller
             ->orderBy('akhir_jabatan', 'asc')
             ->get();
 
+        // Upcoming Rencana Kegiatan (next 30 days)
+        $upcomingKegiatan = RencanaKegiatan::where('status', 'dijadwalkan')
+            ->where('tanggal_rencana', '>=', now())
+            ->where('tanggal_rencana', '<=', now()->addDays(30))
+            ->orderBy('tanggal_rencana', 'asc')
+            ->get();
+
         return view('admin.dashboard', compact(
             'jumlahAnggota', 'suratMasuk', 'suratKeluar',
             'jumlahKegiatan', 'paguTotal', 'totalRealisasi', 'acaraComparison',
-            'expiringAnggotas'
+            'expiringAnggotas', 'upcomingKegiatan'
         ));
     }
 }
+

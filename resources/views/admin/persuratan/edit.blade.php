@@ -32,6 +32,29 @@
                 <input type="date" name="tanggal" class="form-control" value="{{ old('tanggal', $surat->tanggal->format('Y-m-d')) }}" required>
             </div>
 
+            <div class="form-group"><label>Nomor Agenda</label>
+                <input type="text" name="nomor_agenda" class="form-control" value="{{ old('nomor_agenda', $surat->nomor_agenda) }}">
+            </div>
+
+            <div class="form-group"><label>Tanggal Agenda</label>
+                <input type="date" name="tanggal_agenda" class="form-control" value="{{ old('tanggal_agenda', $surat->tanggal_agenda ? $surat->tanggal_agenda->format('Y-m-d') : '') }}">
+            </div>
+
+            <div class="form-group"><label>Disposisi (Tidak dapat diedit)</label>
+                <textarea class="form-control" rows="3" readonly style="background:#f1f5f9; cursor:not-allowed;" placeholder="Tidak ada disposisi">{{ $surat->disposisi }}</textarea>
+                <small style="color:var(--gray-500); display:block; margin-top:5px;">Data disposisi bersifat permanen dan tidak dapat diubah setelah disimpan.</small>
+            </div>
+
+            @if($surat->bidang == 'Renmin')
+            <div class="form-group"><label>Teruskan ke Bidang (Opsional)</label>
+                <select name="status_terusan" class="form-control">
+                    <option value="">-- Tidak Diteruskan --</option>
+                    <option value="Tekkom" {{ old('status_terusan', $surat->status_terusan) == 'Tekkom' ? 'selected' : '' }}>Tekkom</option>
+                    <option value="Tekinfo" {{ old('status_terusan', $surat->status_terusan) == 'Tekinfo' ? 'selected' : '' }}>Tekinfo</option>
+                </select>
+            </div>
+            @endif
+
             <div class="form-group"><label>Jenis Surat *</label>
                 <select name="jenis_surat" class="form-control" required>
                     <option value="">-- Pilih Jenis --</option>

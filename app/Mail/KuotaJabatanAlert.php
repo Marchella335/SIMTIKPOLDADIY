@@ -2,32 +2,39 @@
 
 namespace App\Mail;
 
-use App\Models\Layanan;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class LayananNotification extends Mailable
+class KuotaJabatanAlert extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public function __construct(public Layanan $layanan)
+    public $alertData;
+
+    public function __construct($alertData)
     {
+        $this->alertData = $alertData;
     }
 
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: '[SIMTIK] Permintaan Layanan Baru: ' . $this->layanan->jenis_layanan,
+            subject: 'Peringatan: Kekurangan Anggota pada Jabatan',
         );
     }
 
     public function content(): Content
     {
         return new Content(
-            view: 'emails.layanan-notification',
+            markdown: 'emails.kuota-jabatan-alert',
         );
+    }
+
+    public function attachments(): array
+    {
+        return [];
     }
 }

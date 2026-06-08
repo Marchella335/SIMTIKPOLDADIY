@@ -26,19 +26,19 @@
         </ul>
         <div class="sidebar-section">Data</div>
         <ul class="sidebar-nav">
-            <li><a href="{{ route('admin.anggota.landing') }}" class="{{ request()->routeIs('admin.anggota.*') ? 'active' : '' }}"><span class="icon"><i class="bi bi-people"></i></span> Anggota</a></li>
-            <li><a href="{{ route('admin.jabatan.index') }}" class="{{ request()->routeIs('admin.jabatan.*') ? 'active' : '' }}"><span class="icon"><i class="bi bi-briefcase"></i></span> Jabatan</a></li>
+            <li><a href="{{ route('admin.anggota.landing') }}" class="{{ (request()->routeIs('admin.anggota.*') || request()->routeIs('admin.jabatan.*')) ? 'active' : '' }}"><span class="icon"><i class="bi bi-people"></i></span> Anggota & Jabatan</a></li>
             <li><a href="{{ route('admin.struktur.index') }}" class="{{ request()->routeIs('admin.struktur.*') ? 'active' : '' }}"><span class="icon"><i class="bi bi-diagram-3"></i></span> Struktur</a></li>
             <li><a href="{{ route('admin.persuratan.landing') }}" class="{{ request()->routeIs('admin.persuratan.*') ? 'active' : '' }}"><span class="icon"><i class="bi bi-mailbox"></i></span> Persuratan</a></li>
             <li><a href="{{ route('admin.keuangan.index') }}" class="{{ request()->routeIs('admin.keuangan.*') ? 'active' : '' }}"><span class="icon"><i class="bi bi-cash-stack"></i></span> Keuangan</a></li>
-            <li><a href="{{ route('admin.kegiatan.index') }}" class="{{ request()->routeIs('admin.kegiatan.*') ? 'active' : '' }}"><span class="icon"><i class="bi bi-calendar-event"></i></span> Kegiatan</a></li>
+            <li><a href="{{ route('admin.kegiatan.index') }}" class="{{ request()->routeIs('admin.kegiatan.index') || request()->routeIs('admin.kegiatan.create') || request()->routeIs('admin.kegiatan.edit') ? 'active' : '' }}"><span class="icon"><i class="bi bi-calendar-event"></i></span> Kegiatan</a></li>
+            <li><a href="{{ route('admin.rencana-kegiatan.index') }}" class="{{ request()->routeIs('admin.rencana-kegiatan.*') ? 'active' : '' }}"><span class="icon"><i class="bi bi-calendar-plus"></i></span> Rencana Kegiatan</a></li>
             <li><a href="{{ route('admin.berita.index') }}" class="{{ request()->routeIs('admin.berita.*') ? 'active' : '' }}"><span class="icon"><i class="bi bi-newspaper"></i></span> Berita</a></li>
             <li><a href="{{ route('admin.carousel.index') }}" class="{{ request()->routeIs('admin.carousel.*') ? 'active' : '' }}"><span class="icon"><i class="bi bi-images"></i></span> Carousel</a></li>
         </ul>
         <div class="sidebar-section">Monitoring & Pelayanan</div>
         <ul class="sidebar-nav">
             <li><a href="{{ route('admin.executive-report') }}" class="{{ request()->routeIs('admin.executive-report') ? 'active' : '' }}"><span class="icon"><i class="bi bi-bar-chart-line"></i></span> Rekapitulasi</a></li>
-            <li><a href="{{ route('admin.layanan.index') }}" class="{{ request()->routeIs('admin.layanan.*') ? 'active' : '' }}"><span class="icon"><i class="bi bi-headset"></i></span> Layanan TIK</a></li>
+            <li><a href="{{ route('admin.rekap.index') }}" class="{{ request()->routeIs('admin.rekap.index') ? 'active' : '' }}"><span class="icon"><i class="bi bi-collection"></i></span> Rekap Universal</a></li>
             <li><a href="{{ route('admin.activity-log') }}" class="{{ request()->routeIs('admin.activity-log') ? 'active' : '' }}"><span class="icon"><i class="bi bi-shield-lock"></i></span> Activity Log</a></li>
         </ul>
         <div class="sidebar-section" style="margin-top: 40px;">Sistem & Akses</div>
@@ -73,15 +73,23 @@
                 <div class="notification-dropdown">
                     <div class="notification-bell" id="notifBell">
                         <i class="bi bi-bell-fill"></i>
-                        @if($expiringAnggotas->count() > 0)
-                            <span class="notification-dot"></span>
+                        @if($expiringAnggotas->count() > 0 || $upcomingRencana->count() > 0)
+                            <span class="notification-dot">{{ $expiringAnggotas->count() + $upcomingRencana->count() }}</span>
                         @endif
                     </div>
                     <div class="notification-menu" id="notifMenu">
-                        <div class="notification-header">
-                            Pemberitahuan Masa Jabatan ({{ $expiringAnggotas->count() }})
+                        {{-- Tabs --}}
+                        <div style="display:flex; border-bottom:1px solid rgba(255,255,255,0.08);">
+                            <button class="notif-tab active" data-tab="tab-jabatan" style="flex:1; padding:12px 10px; background:none; border:none; cursor:pointer; font-size:0.82rem; font-weight:700; color:var(--accent); border-bottom:2px solid var(--accent); transition:var(--transition);">
+                                <i class="bi bi-person-exclamation"></i> Jabatan ({{ $expiringAnggotas->count() }})
+                            </button>
+                            <button class="notif-tab" data-tab="tab-rencana" style="flex:1; padding:12px 10px; background:none; border:none; cursor:pointer; font-size:0.82rem; font-weight:700; color:var(--gray-500); border-bottom:2px solid transparent; transition:var(--transition);">
+                                <i class="bi bi-calendar-check"></i> Rencana ({{ $upcomingRencana->count() }})
+                            </button>
                         </div>
-                        <div class="notification-list">
+
+                        {{-- Tab Jabatan --}}
+                        <div class="notification-list notif-tab-content" id="tab-jabatan" style="display:block;">
                             @forelse($expiringAnggotas as $agt)
                                 <div class="notification-item">
                                     <div class="notif-icon">
@@ -104,6 +112,45 @@
                                 <div class="notification-empty">
                                     <i class="bi bi-check-circle-fill"></i>
                                     <p>Tidak ada pemberitahuan masa jabatan.</p>
+                                </div>
+                            @endforelse
+                        </div>
+
+                        {{-- Tab Rencana --}}
+                        <div class="notification-list notif-tab-content" id="tab-rencana" style="display:none;">
+                            @forelse($upcomingRencana as $ur)
+                                <div class="notification-item">
+                                    <div class="notif-icon" style="background:rgba(2,132,199,0.15); color:#0284c7;">
+                                        @if($ur->tipe == 'berita')
+                                            <i class="bi bi-newspaper" style="color:#7c3aed;"></i>
+                                        @else
+                                            <i class="bi bi-calendar-check"></i>
+                                        @endif
+                                    </div>
+                                    <div class="notif-content">
+                                        <div class="notif-title">{{ $ur->nama_kegiatan }}</div>
+                                        <div class="notif-text">
+                                            Tgl: {{ $ur->tanggal_rencana->format('d M Y') }}
+                                            @if($ur->tipe == 'berita')
+                                                &middot; <span style="color:#7c3aed; font-weight:700;">Berita</span>
+                                            @else
+                                                &middot; <span style="color:#0284c7; font-weight:700;">Kegiatan</span>
+                                            @endif
+                                        </div>
+                                        <div class="notif-actions">
+                                            <a href="{{ route('admin.rencana-kegiatan.edit', $ur) }}" class="notif-action-btn edit">
+                                                <i class="bi bi-pencil-square"></i> Edit
+                                            </a>
+                                            <a href="{{ route('admin.rencana-kegiatan.index') }}" class="notif-action-btn view">
+                                                <i class="bi bi-list-ul"></i> Lihat Semua
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            @empty
+                                <div class="notification-empty">
+                                    <i class="bi bi-check-circle-fill"></i>
+                                    <p>Tidak ada rencana mendatang.</p>
                                 </div>
                             @endforelse
                         </div>
@@ -157,6 +204,26 @@
                     if (!menu.contains(e.target) && !bell.contains(e.target)) {
                         menu.classList.remove('show');
                     }
+                });
+
+                // Tab switching
+                document.querySelectorAll('.notif-tab').forEach(tab => {
+                    tab.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        // Reset all tabs
+                        document.querySelectorAll('.notif-tab').forEach(t => {
+                            t.classList.remove('active');
+                            t.style.color = 'var(--gray-500)';
+                            t.style.borderBottomColor = 'transparent';
+                        });
+                        // Activate clicked tab
+                        this.classList.add('active');
+                        this.style.color = 'var(--accent)';
+                        this.style.borderBottomColor = 'var(--accent)';
+                        // Show corresponding content
+                        document.querySelectorAll('.notif-tab-content').forEach(c => c.style.display = 'none');
+                        document.getElementById(this.dataset.tab).style.display = 'block';
+                    });
                 });
             }
 

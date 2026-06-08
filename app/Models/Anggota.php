@@ -16,6 +16,7 @@ class Anggota extends Model
         'akhir_jabatan',
         'akhir_jabatan_notif',
         'foto',
+        'jobdesk',
     ];
 
     /**

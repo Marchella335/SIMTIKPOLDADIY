@@ -4,9 +4,12 @@
 
 @section('content')
 <div class="card">
-    <div class="card-header">
+    <div class="card-header" style="display:flex; justify-content:space-between; align-items:center;">
         <h3>Daftar Berita</h3>
-        <a href="{{ route('admin.berita.create') }}" class="btn btn-primary"><i class="fas fa-plus"></i> Tambah Berita</a>
+        <div style="display:flex; gap:10px;">
+            <a href="{{ route('admin.berita.export-pdf') }}" target="_blank" class="btn btn-outline"><i class="fas fa-file-pdf"></i> Export PDF</a>
+            <a href="{{ route('admin.berita.create') }}" class="btn btn-primary"><i class="fas fa-plus"></i> Tambah Berita</a>
+        </div>
     </div>
     <div class="card-body">
         <div class="table-container">
@@ -16,6 +19,7 @@
                         <th style="width: 50px;">No</th>
                         <th style="width: 150px;">Tanggal</th>
                         <th>Judul Berita</th>
+                        <th style="width: 120px; text-align:center;">Tampilkan</th>
                         <th style="width: 120px;">Aksi</th>
                     </tr>
                 </thead>
@@ -32,9 +36,16 @@
                             </div>
                             @endif
                         </td>
+                        <td style="text-align:center;">
+                            @if($b->tampilkan)
+                                <span style="background:#10b981; color:white; padding:4px 8px; border-radius:4px; font-size:0.75rem; font-weight:600; display:inline-block;">Ya</span>
+                            @else
+                                <span style="background:#ef4444; color:white; padding:4px 8px; border-radius:4px; font-size:0.75rem; font-weight:600; display:inline-block;">Tidak</span>
+                            @endif
+                        </td>
                         <td>
                             <div class="actions">
-                                <a href="{{ route('admin.berita.edit', $b) }}" class="btn btn-sm btn-info"><i class="fas fa-edit"></i></a>
+                                <a href="{{ route('admin.berita.edit', $b) }}" class="btn btn-sm btn-warning" style="color:#fff;"><i class="fas fa-edit"></i></a>
                                 <form action="{{ route('admin.berita.destroy', $b) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus berita ini?');">
                                     @csrf
                                     @method('DELETE')
@@ -45,7 +56,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="4" style="text-align:center; padding:20px; color:var(--gray-500);">Belum ada data berita.</td>
+                        <td colspan="5" style="text-align:center; padding:20px; color:var(--gray-500);">Belum ada data berita.</td>
                     </tr>
                     @endforelse
                 </tbody>

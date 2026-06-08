@@ -121,7 +121,10 @@
                 <i class="fas fa-trash-alt"></i> Hapus
             </button>
         </div>
-        <div class="fund-actions">
+        <div class="fund-actions" style="display:flex; gap:10px;">
+            <a href="{{ route('admin.keuangan.rekap') }}" class="btn btn-info" style="text-decoration:none; display:inline-flex; align-items:center; gap:8px;">
+                <i class="fas fa-chart-bar"></i> Rekap Keuangan
+            </a>
             <button class="btn btn-outline" onclick="openNewSheet()">
                 <i class="fas fa-file-invoice"></i> Buat Sheet Acara Baru
             </button>
