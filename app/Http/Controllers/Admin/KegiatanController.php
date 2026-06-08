@@ -11,7 +11,15 @@ class KegiatanController extends Controller
     public function index()
     {
         $kegiatans = Kegiatan::orderBy('tanggal', 'desc')->paginate(10);
-        return view('admin.kegiatan.index', compact('kegiatans'));
+        
+        $kegiatansAll = Kegiatan::orderBy('tanggal', 'asc')->get();
+        $trendData = $kegiatansAll->groupBy(function($d) {
+            return \Carbon\Carbon::parse($d->tanggal)->format('M Y');
+        })->map(function($row) {
+            return $row->count();
+        });
+        
+        return view('admin.kegiatan.index', compact('kegiatans', 'trendData'));
     }
 
     public function create()
@@ -76,18 +84,30 @@ class KegiatanController extends Controller
             'nama_kegiatan' => 'required|string|max:255',
             'tanggal' => 'required|date',
             'deskripsi' => 'required|string',
+            'hasil_rapat' => 'nullable|string',
             'gambar' => 'nullable|image|mimes:jpeg,png,jpg|max:5120',
+<<<<<<< HEAD
             'tampilkan' => 'required|boolean',
             'hasil' => 'nullable|string',
+=======
+            'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:5120',
+>>>>>>> de99b69c751d845bd6236f9de158f1c6c0f00c94
         ]);
 
-        $data = $request->except('gambar');
+        $data = $request->except(['gambar', 'foto']);
 
         if ($request->hasFile('gambar')) {
             $file = $request->file('gambar');
-            $filename = time() . '_' . $file->getClientOriginalName();
+            $filename = time() . '_g_' . $file->getClientOriginalName();
             $file->move(public_path('uploads/kegiatan'), $filename);
             $data['gambar'] = 'uploads/kegiatan/' . $filename;
+        }
+
+        if ($request->hasFile('foto')) {
+            $file = $request->file('foto');
+            $filename = time() . '_f_' . $file->getClientOriginalName();
+            $file->move(public_path('uploads/kegiatan'), $filename);
+            $data['foto'] = 'uploads/kegiatan/' . $filename;
         }
 
         Kegiatan::create($data);
@@ -107,21 +127,36 @@ class KegiatanController extends Controller
             'nama_kegiatan' => 'required|string|max:255',
             'tanggal' => 'required|date',
             'deskripsi' => 'required|string',
+            'hasil_rapat' => 'nullable|string',
             'gambar' => 'nullable|image|mimes:jpeg,png,jpg|max:5120',
+<<<<<<< HEAD
             'tampilkan' => 'required|boolean',
             'hasil' => 'nullable|string',
+=======
+            'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:5120',
+>>>>>>> de99b69c751d845bd6236f9de158f1c6c0f00c94
         ]);
 
-        $data = $request->except('gambar');
+        $data = $request->except(['gambar', 'foto']);
 
         if ($request->hasFile('gambar')) {
             if ($kegiatan->gambar && file_exists(public_path($kegiatan->gambar))) {
                 unlink(public_path($kegiatan->gambar));
             }
             $file = $request->file('gambar');
-            $filename = time() . '_' . $file->getClientOriginalName();
+            $filename = time() . '_g_' . $file->getClientOriginalName();
             $file->move(public_path('uploads/kegiatan'), $filename);
             $data['gambar'] = 'uploads/kegiatan/' . $filename;
+        }
+
+        if ($request->hasFile('foto')) {
+            if ($kegiatan->foto && file_exists(public_path($kegiatan->foto))) {
+                unlink(public_path($kegiatan->foto));
+            }
+            $file = $request->file('foto');
+            $filename = time() . '_f_' . $file->getClientOriginalName();
+            $file->move(public_path('uploads/kegiatan'), $filename);
+            $data['foto'] = 'uploads/kegiatan/' . $filename;
         }
 
         $kegiatan->update($data);
@@ -134,6 +169,9 @@ class KegiatanController extends Controller
     {
         if ($kegiatan->gambar && file_exists(public_path($kegiatan->gambar))) {
             unlink(public_path($kegiatan->gambar));
+        }
+        if ($kegiatan->foto && file_exists(public_path($kegiatan->foto))) {
+            unlink(public_path($kegiatan->foto));
         }
         $kegiatan->delete();
 

@@ -24,8 +24,9 @@
                 <tr><td>Nama</td><td>: {{ $anggota->nama_lengkap }}</td></tr>
                 <tr><td>NRP</td><td>: {{ $anggota->nrp ?? '-' }}</td></tr>
                 <tr><td>Pangkat</td><td>: {{ $anggota->pangkat }}</td></tr>
+                <tr><td>Bidang</td><td>: {{ $anggota->bidang }}</td></tr>
                 <tr><td>Jabatan</td><td>: {{ $anggota->jabatan }}</td></tr>
-                <tr><td>Awal Jabatan</td><td>: {{ $anggota->awal_jabatan ?? '-' }}</td></tr>
+                <tr><td>Jobdesk</td><td>: {{ $anggota->jobdesk ?? '-' }}</td></tr>
                 <tr><td>Akhir Jabatan</td><td>: {{ $anggota->akhir_jabatan ?? '-' }}</td></tr>
             </table>
         </div>

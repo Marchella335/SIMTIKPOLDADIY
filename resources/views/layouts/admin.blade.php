@@ -26,7 +26,11 @@
         </ul>
         <div class="sidebar-section">Data</div>
         <ul class="sidebar-nav">
+<<<<<<< HEAD
             <li><a href="{{ route('admin.anggota.landing') }}" class="{{ (request()->routeIs('admin.anggota.*') || request()->routeIs('admin.jabatan.*')) ? 'active' : '' }}"><span class="icon"><i class="bi bi-people"></i></span> Anggota & Jabatan</a></li>
+=======
+            <li><a href="{{ route('admin.anggota.landing') }}" class="{{ request()->routeIs('admin.anggota.*') || request()->routeIs('admin.jabatan.*') ? 'active' : '' }}"><span class="icon"><i class="bi bi-people"></i></span> Anggota & Jabatan</a></li>
+>>>>>>> de99b69c751d845bd6236f9de158f1c6c0f00c94
             <li><a href="{{ route('admin.struktur.index') }}" class="{{ request()->routeIs('admin.struktur.*') ? 'active' : '' }}"><span class="icon"><i class="bi bi-diagram-3"></i></span> Struktur</a></li>
             <li><a href="{{ route('admin.persuratan.landing') }}" class="{{ request()->routeIs('admin.persuratan.*') ? 'active' : '' }}"><span class="icon"><i class="bi bi-mailbox"></i></span> Persuratan</a></li>
             <li><a href="{{ route('admin.keuangan.index') }}" class="{{ request()->routeIs('admin.keuangan.*') ? 'active' : '' }}"><span class="icon"><i class="bi bi-cash-stack"></i></span> Keuangan</a></li>
@@ -35,13 +39,19 @@
             <li><a href="{{ route('admin.berita.index') }}" class="{{ request()->routeIs('admin.berita.*') ? 'active' : '' }}"><span class="icon"><i class="bi bi-newspaper"></i></span> Berita</a></li>
             <li><a href="{{ route('admin.carousel.index') }}" class="{{ request()->routeIs('admin.carousel.*') ? 'active' : '' }}"><span class="icon"><i class="bi bi-images"></i></span> Carousel</a></li>
         </ul>
-        <div class="sidebar-section">Monitoring & Pelayanan</div>
+        <div class="sidebar-section">Monitoring &amp; Pelaporan</div>
         <ul class="sidebar-nav">
             <li><a href="{{ route('admin.executive-report') }}" class="{{ request()->routeIs('admin.executive-report') ? 'active' : '' }}"><span class="icon"><i class="bi bi-bar-chart-line"></i></span> Rekapitulasi</a></li>
+<<<<<<< HEAD
             <li><a href="{{ route('admin.rekap.index') }}" class="{{ request()->routeIs('admin.rekap.index') ? 'active' : '' }}"><span class="icon"><i class="bi bi-collection"></i></span> Rekap Universal</a></li>
+=======
+        </ul>
+        <div class="sidebar-section" style="margin-top: 20px;">Sistem &amp; Akses</div>
+        <ul class="sidebar-nav">
+            <li><a href="{{ route('admin.settings') }}" class="{{ request()->routeIs('admin.settings') ? 'active' : '' }}"><span class="icon"><i class="bi bi-gear"></i></span> Pengaturan</a></li>
+>>>>>>> de99b69c751d845bd6236f9de158f1c6c0f00c94
             <li><a href="{{ route('admin.activity-log') }}" class="{{ request()->routeIs('admin.activity-log') ? 'active' : '' }}"><span class="icon"><i class="bi bi-shield-lock"></i></span> Activity Log</a></li>
         </ul>
-        <div class="sidebar-section" style="margin-top: 40px;">Sistem & Akses</div>
         <div class="sidebar-bottom" style="position: static; border-top: none; background: transparent; padding-top: 0;">
             <a href="{{ route('home') }}" style="display:flex; align-items:center; gap:12px; padding:12px 18px; color:var(--gray-500); border-radius:var(--radius-sm); font-size:0.95rem; font-weight:500; transition:var(--transition); text-decoration:none;">
                 <i class="bi bi-globe" style="font-size:1.2rem; width:24px; text-align:center;"></i> Lihat Website

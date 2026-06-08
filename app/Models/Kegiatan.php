@@ -10,9 +10,14 @@ class Kegiatan extends Model
         'nama_kegiatan',
         'tanggal',
         'deskripsi',
+        'hasil_rapat',
         'gambar',
+<<<<<<< HEAD
         'tampilkan',
         'hasil',
+=======
+        'foto',
+>>>>>>> de99b69c751d845bd6236f9de158f1c6c0f00c94
     ];
 
     protected $casts = [

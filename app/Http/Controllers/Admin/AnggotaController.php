@@ -27,7 +27,12 @@ class AnggotaController extends Controller
         $anggotas = $query->orderBy('jabatan')->get();
         $bidang = request('bidang');
         
-        return view('admin.anggota.index', compact('anggotas', 'bidang'));
+        $jabatanCounts = Anggota::when($bidang, fn($q, $b) => $q->where('bidang', $b))
+            ->select('jabatan', \Illuminate\Support\Facades\DB::raw('count(*) as total'))
+            ->groupBy('jabatan')
+            ->get();
+        
+        return view('admin.anggota.index', compact('anggotas', 'bidang', 'jabatanCounts'));
     }
 
     public function create()

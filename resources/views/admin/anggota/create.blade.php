@@ -72,6 +72,12 @@
                 @error('jabatan')<div class="form-error">{{ $message }}</div>@enderror
             </div>
             
+            <div class="form-group">
+                <label>Jobdesk</label>
+                <textarea name="jobdesk" class="form-control" rows="3" placeholder="Deskripsi tugas dan tanggung jawab">{{ old('jobdesk') }}</textarea>
+                @error('jobdesk')<div class="form-error">{{ $message }}</div>@enderror
+            </div>
+            
             <div class="form-row">
                 <div class="form-group">
                     <label>Awal Jabatan</label>

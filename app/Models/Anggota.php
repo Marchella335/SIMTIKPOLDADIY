@@ -12,6 +12,7 @@ class Anggota extends Model
         'pangkat',
         'bidang',
         'jabatan',
+        'jobdesk',
         'awal_jabatan',
         'akhir_jabatan',
         'akhir_jabatan_notif',

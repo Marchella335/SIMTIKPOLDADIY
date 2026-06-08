@@ -121,10 +121,15 @@
                 <i class="fas fa-trash-alt"></i> Hapus
             </button>
         </div>
+<<<<<<< HEAD
         <div class="fund-actions" style="display:flex; gap:10px;">
             <a href="{{ route('admin.keuangan.rekap') }}" class="btn btn-info" style="text-decoration:none; display:inline-flex; align-items:center; gap:8px;">
                 <i class="fas fa-chart-bar"></i> Rekap Keuangan
             </a>
+=======
+        <div class="fund-actions">
+            <button class="btn btn-info" onclick="showRekapGlobal()"><i class="fas fa-table"></i> Lihat Rekapitulasi</button>
+>>>>>>> de99b69c751d845bd6236f9de158f1c6c0f00c94
             <button class="btn btn-outline" onclick="openNewSheet()">
                 <i class="fas fa-file-invoice"></i> Buat Sheet Acara Baru
             </button>
@@ -221,12 +226,49 @@
                                 <span id="sheetRemaining">Rp 0</span>
                             </div>
                         </div>
-                        <div style="flex: 1; min-width: 300px; height: 150px; position: relative;">
-                            <canvas id="sheetChart"></canvas>
+                        <div style="flex: 1; min-width: 300px;">
+                            <!-- Removed Graphic, replaced with text -->
+                            <div style="color:var(--gray-500); font-weight:400; font-size:12px; margin-top:10px;">
+                                * Tampilan grafik telah dihapus sesuai permintaan.<br>
+                                * Untuk melihat tabel rekapitulasi Mingguan, Bulanan, dan Tahunan, silakan klik tombol "Lihat Rekapitulasi" di bagian atas.
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+    </div>
+    
+    {{-- GLOBAL REKAP CONTAINER --}}
+    <div class="sheet-container" id="rekapContainer" style="display:none; margin-top:20px; padding:20px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+            <h3 style="margin:0; color:var(--primary); font-size:16px;">Rekapitulasi Total (Anggaran / Divisi / Bulan)</h3>
+            <button class="btn btn-outline btn-sm" onclick="hideRekapGlobal()">Tutup Rekap</button>
+        </div>
+        
+        <div class="tbl-container" style="margin-bottom: 20px;">
+            <h4 style="font-size:14px; margin-bottom:10px; color:var(--gray-700);">Rekap Mingguan</h4>
+            <table class="sheet-table" id="tblRekapMingguan">
+                <thead><tr><th>Minggu Ke</th><th>Anggaran</th><th>Divisi (Acara)</th><th>Pemasukan</th><th>Pengeluaran</th><th>Saldo</th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </div>
+        
+        <div class="tbl-container" style="margin-bottom: 20px;">
+            <h4 style="font-size:14px; margin-bottom:10px; color:var(--gray-700);">Rekap Bulanan</h4>
+            <table class="sheet-table" id="tblRekapBulanan">
+                <thead><tr><th>Bulan</th><th>Anggaran</th><th>Divisi (Acara)</th><th>Pemasukan</th><th>Pengeluaran</th><th>Saldo</th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </div>
+        
+        <div class="tbl-container">
+            <h4 style="font-size:14px; margin-bottom:10px; color:var(--gray-700);">Rekap Tahunan</h4>
+            <table class="sheet-table" id="tblRekapTahunan">
+                <thead><tr><th>Tahun</th><th>Anggaran</th><th>Pemasukan</th><th>Pengeluaran</th><th>Saldo</th></tr></thead>
+                <tbody></tbody>
+            </table>
         </div>
     </div>
 </div>
@@ -332,7 +374,6 @@
 @endsection
 
 @section('scripts')
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 const CSRF_TOKEN = '{{ csrf_token() }}';
 let allSheets = [];
@@ -546,46 +587,102 @@ function renderRows() {
     const remaining = totalPemasukan - totalPengeluaran;
     document.getElementById('sheetRemaining').textContent = fmt(remaining);
     document.getElementById('sheetRemaining').style.color = remaining < 0 ? 'var(--danger)' : 'var(--primary)';
-
-    updateSheetChart(totalPemasukan, totalPengeluaran);
 }
 
-function updateSheetChart(pagu, pengeluaran) {
-    const ctx = document.getElementById('sheetChart');
-    if (!ctx) return;
+function showRekapGlobal() {
+    if (!currentSourceId) return showToast('Pilih sumber dana terlebih dahulu', true);
+    document.getElementById('sheetContent').style.display = 'none';
+    document.getElementById('rekapContainer').style.display = 'block';
     
-    if (sheetChartInstance) {
-        sheetChartInstance.destroy();
-    }
-    
-    const saldo = Math.max(0, pagu - pengeluaran);
+    generateRekap();
+}
 
-    sheetChartInstance = new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-            labels: ['Pengeluaran', 'Sisa Pagu'],
-            datasets: [{
-                data: [pengeluaran, saldo],
-                backgroundColor: ['#ef4444', '#10b981'],
-                borderWidth: 0
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: { 
-                    position: 'right', 
-                    labels: { 
-                        boxWidth: 12, 
-                        color: document.documentElement.getAttribute('data-theme') === 'dark' ? '#f8fafc' : '#374151',
-                        font: { size: 11, family: "'Inter', sans-serif" } 
-                    } 
-                }
-            },
-            cutout: '60%'
-        }
+function hideRekapGlobal() {
+    document.getElementById('sheetContent').style.display = 'block';
+    document.getElementById('rekapContainer').style.display = 'none';
+}
+
+function getWeekNumber(d) {
+    d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+    d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay()||7));
+    var yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1));
+    var weekNo = Math.ceil(( ( (d - yearStart) / 86400000) + 1)/7);
+    return d.getUTCFullYear() + "-W" + weekNo;
+}
+
+function generateRekap() {
+    let rekapMingguan = {};
+    let rekapBulanan = {};
+    let rekapTahunan = {};
+    
+    const anggaran = document.getElementById('lblFundName').textContent;
+    
+    allSheets.forEach(s => {
+        const divisi = s.nama_acara;
+        (s.items || []).forEach(item => {
+            if (!item.tanggal) return;
+            const date = new Date(item.tanggal);
+            const weekStr = getWeekNumber(date);
+            const monthStr = date.getFullYear() + '-' + String(date.getMonth()+1).padStart(2, '0');
+            const yearStr = String(date.getFullYear());
+            
+            const val = parseFloat(item.nilai || 0);
+            const isPemasukan = item.tipe === 'Pemasukan';
+            
+            // Mingguan
+            const keyM = weekStr + '_' + divisi;
+            if (!rekapMingguan[keyM]) rekapMingguan[keyM] = {w: weekStr, a: anggaran, d: divisi, in:0, out:0};
+            if (isPemasukan) rekapMingguan[keyM].in += val; else rekapMingguan[keyM].out += val;
+            
+            // Bulanan
+            const keyB = monthStr + '_' + divisi;
+            if (!rekapBulanan[keyB]) rekapBulanan[keyB] = {m: monthStr, a: anggaran, d: divisi, in:0, out:0};
+            if (isPemasukan) rekapBulanan[keyB].in += val; else rekapBulanan[keyB].out += val;
+            
+            // Tahunan
+            const keyT = yearStr;
+            if (!rekapTahunan[keyT]) rekapTahunan[keyT] = {y: yearStr, a: anggaran, in:0, out:0};
+            if (isPemasukan) rekapTahunan[keyT].in += val; else rekapTahunan[keyT].out += val;
+        });
     });
+    
+    // Render Mingguan
+    const tbM = document.querySelector('#tblRekapMingguan tbody');
+    tbM.innerHTML = Object.values(rekapMingguan).sort((a,b)=>a.w.localeCompare(b.w)).map(r => `
+        <tr>
+            <td>${r.w}</td>
+            <td>${esc(r.a)}</td>
+            <td>${esc(r.d)}</td>
+            <td style="color:var(--success); font-weight:600;">${fmt(r.in)}</td>
+            <td style="color:var(--danger); font-weight:600;">${fmt(r.out)}</td>
+            <td style="font-weight:700;">${fmt(r.in - r.out)}</td>
+        </tr>
+    `).join('') || '<tr><td colspan="6" style="text-align:center;">Data tidak tersedia</td></tr>';
+    
+    // Render Bulanan
+    const tbB = document.querySelector('#tblRekapBulanan tbody');
+    tbB.innerHTML = Object.values(rekapBulanan).sort((a,b)=>a.m.localeCompare(b.m)).map(r => `
+        <tr>
+            <td>${r.m}</td>
+            <td>${esc(r.a)}</td>
+            <td>${esc(r.d)}</td>
+            <td style="color:var(--success); font-weight:600;">${fmt(r.in)}</td>
+            <td style="color:var(--danger); font-weight:600;">${fmt(r.out)}</td>
+            <td style="font-weight:700;">${fmt(r.in - r.out)}</td>
+        </tr>
+    `).join('') || '<tr><td colspan="6" style="text-align:center;">Data tidak tersedia</td></tr>';
+    
+    // Render Tahunan
+    const tbT = document.querySelector('#tblRekapTahunan tbody');
+    tbT.innerHTML = Object.values(rekapTahunan).sort((a,b)=>a.y.localeCompare(b.y)).map(r => `
+        <tr>
+            <td>${r.y}</td>
+            <td>${esc(r.a)}</td>
+            <td style="color:var(--success); font-weight:600;">${fmt(r.in)}</td>
+            <td style="color:var(--danger); font-weight:600;">${fmt(r.out)}</td>
+            <td style="font-weight:700;">${fmt(r.in - r.out)}</td>
+        </tr>
+    `).join('') || '<tr><td colspan="5" style="text-align:center;">Data tidak tersedia</td></tr>';
 }
 
 function addRow() {

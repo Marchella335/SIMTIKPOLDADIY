@@ -53,10 +53,13 @@
                     <div class="jabatan">{{ $a->jabatan }}</div>
                     <div class="pangkat">{{ $a->pangkat }}</div>
                     <h4>{{ $a->nama_lengkap }}</h4>
+<<<<<<< HEAD
                     <div style="font-size:0.8rem; color:var(--gray-500); margin-top:4px;">NRP: {{ $a->nrp ?? '-' }}</div>
                     @if($a->jobdesk)
                         <div style="font-size:0.78rem; color:var(--gray-500); margin-top:4px; font-style:italic;">{{ $a->jobdesk }}</div>
                     @endif
+=======
+>>>>>>> de99b69c751d845bd6236f9de158f1c6c0f00c94
                 </div>
                 @endforeach
             </div>
@@ -79,10 +82,13 @@
                     <div class="jabatan">{{ $a->jabatan }}</div>
                     <div class="pangkat">{{ $a->pangkat }}</div>
                     <h4>{{ $a->nama_lengkap }}</h4>
+<<<<<<< HEAD
                     <div style="font-size:0.8rem; color:var(--gray-500); margin-top:4px;">NRP: {{ $a->nrp ?? '-' }}</div>
                     @if($a->jobdesk)
                         <div style="font-size:0.78rem; color:var(--gray-500); margin-top:4px; font-style:italic;">{{ $a->jobdesk }}</div>
                     @endif
+=======
+>>>>>>> de99b69c751d845bd6236f9de158f1c6c0f00c94
                 </div>
                 @endforeach
             </div>

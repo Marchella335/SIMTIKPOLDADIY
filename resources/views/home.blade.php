@@ -24,10 +24,7 @@
 <section class="stats-section">
     <div class="container">
         <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-number" id="statAnggota">{{ $jumlahAnggota }}</div>
-                <div class="stat-label">Anggota Bid TIK</div>
-            </div>
+
             <div class="stat-card">
                 <div class="stat-number">{{ $jumlahKegiatan }}</div>
                 <div class="stat-label">Kegiatan Terlaksana</div>
@@ -95,11 +92,16 @@
 </section>
 
 
+<<<<<<< HEAD
 {{-- KEGIATAN TERBARU --}}
+=======
+{{-- BERITA TERBARU --}}
+@if($showBerita)
+>>>>>>> de99b69c751d845bd6236f9de158f1c6c0f00c94
 <section class="section section-gray">
     <div class="container">
         <div class="section-header">
-            <div class="section-badge">&#9679; Berita & Kegiatan</div>
+            <div class="section-badge">&#9679; Berita</div>
             <h2 class="section-title">Berita Terbaru</h2>
         </div>
         <div class="kegiatan-grid" style="margin-bottom:60px;">
@@ -129,8 +131,16 @@
             </div>
             @endforelse
         </div>
+    </div>
+</section>
+@endif
 
+{{-- KEGIATAN TERBARU --}}
+@if($showKegiatan)
+<section class="section section-gray">
+    <div class="container">
         <div class="section-header">
+            <div class="section-badge">&#9679; Kegiatan</div>
             <h2 class="section-title">Kegiatan Terbaru</h2>
         </div>
         <div class="kegiatan-grid">
@@ -165,6 +175,7 @@
         </div>
     </div>
 </section>
+@endif
 
 {{-- CTA --}}
 <section class="cta-section">
