@@ -76,6 +76,49 @@ class JabatanController extends Controller
             ->with('success', 'Jabatan berhasil diperbarui.');
     }
 
+    public function exportPdf()
+    {
+        $bidangs = ['Renmin', 'Tekkom', 'Tekinfo'];
+
+        // Anggota per bidang (semua bidang, termasuk TIK/Kabid)
+        $anggotaPerBidang = [];
+        foreach ($bidangs as $b) {
+            $anggotaPerBidang[$b] = \App\Models\Anggota::whereRaw('LOWER(bidang) = ?', [strtolower($b)])
+                ->orderByRaw("FIELD(LOWER(jabatan), 'kasubbid " . strtolower($b) . "') DESC")
+                ->orderBy('nama_lengkap')
+                ->get();
+        }
+
+        // Kabid TIK (bidang tik)
+        $kabidList = \App\Models\Anggota::whereRaw('LOWER(bidang) = ?', ['tik'])
+            ->orderBy('nama_lengkap')
+            ->get();
+
+        // Rekap kuota per bidang
+        $rekapKuota = [];
+        foreach ($bidangs as $b) {
+            $jabatanList = Jabatan::where('bidang', $b)->orderBy('nama_jabatan')->get();
+            foreach ($jabatanList as $j) {
+                $jumlah = \App\Models\Anggota::where('jabatan', $j->nama_jabatan)->count();
+                $rekapKuota[$b][] = [
+                    'nama_jabatan' => $j->nama_jabatan,
+                    'kuota'        => $j->kuota,
+                    'jumlah'       => $jumlah,
+                    'selisih'      => $j->kuota - $jumlah,
+                    'status'       => $jumlah === 0
+                        ? 'Kosong'
+                        : ($jumlah < $j->kuota ? 'Kurang ' . ($j->kuota - $jumlah) : 'Terpenuhi'),
+                ];
+            }
+        }
+
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('admin.jabatan.pdf', compact(
+            'anggotaPerBidang', 'kabidList', 'rekapKuota', 'bidangs'
+        ))->setPaper('a4', 'portrait');
+
+        return $pdf->download('rekap-anggota-bid-tik-' . date('Ymd') . '.pdf');
+    }
+
     public function sendAlert(Request $request)
     {
         $jabatans = Jabatan::all();

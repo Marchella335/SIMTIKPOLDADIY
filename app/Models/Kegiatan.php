@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Kegiatan extends Model
 {
     protected $fillable = [
+        'rencana_kegiatan_id',
         'nama_kegiatan',
         'tanggal',
         'deskripsi',
@@ -16,6 +17,11 @@ class Kegiatan extends Model
         'tampilkan',
         'hasil',
     ];
+
+    public function rencanaKegiatan()
+    {
+        return $this->belongsTo(RencanaKegiatan::class, 'rencana_kegiatan_id');
+    }
 
     protected $casts = [
         'tanggal' => 'date',

@@ -37,7 +37,24 @@
                     @forelse($rencanaKegiatans as $i => $rk)
                     <tr>
                         <td>{{ $rencanaKegiatans->firstItem() + $i }}</td>
-                        <td style="font-weight: 600; color:var(--text-primary);">{{ $rk->nama_kegiatan }}</td>
+                        <td style="font-weight: 600; color:var(--text-primary);">
+                            {{ $rk->nama_kegiatan }}
+                            @if($rk->tipe == 'kegiatan')
+                                <div style="margin-top: 5px;">
+                                    @if($rk->kegiatan)
+                                        <a href="{{ route('admin.kegiatan.edit', $rk->kegiatan->id) }}" style="text-decoration:none;">
+                                            <span style="background:rgba(16,185,129,0.15); color:#10b981; padding:2px 8px; border-radius:12px; font-size:0.7rem; font-weight:700; display:inline-flex; align-items:center; gap:4px; transition: all 0.2s;">
+                                                <i class="fas fa-check-circle"></i> Sudah Diisi (Edit Kegiatan)
+                                            </span>
+                                        </a>
+                                    @else
+                                        <span style="background:rgba(107,114,128,0.15); color:#6b7280; padding:2px 8px; border-radius:12px; font-size:0.7rem; font-weight:700; display:inline-flex; align-items:center; gap:4px;">
+                                            <i class="far fa-circle"></i> Belum Diisi
+                                        </span>
+                                    @endif
+                                </div>
+                            @endif
+                        </td>
                         <td>
                             @if($rk->tipe == 'berita')
                                 <span style="background:rgba(124,58,237,0.15); color:#7c3aed; padding:4px 10px; border-radius:20px; font-size:0.75rem; font-weight:700;">Berita</span>

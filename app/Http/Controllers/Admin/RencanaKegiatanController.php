@@ -10,7 +10,7 @@ class RencanaKegiatanController extends Controller
 {
     public function index(Request $request)
     {
-        $query = RencanaKegiatan::query();
+        $query = RencanaKegiatan::with('kegiatan');
 
         if ($request->filled('tipe')) {
             $query->where('tipe', $request->tipe);

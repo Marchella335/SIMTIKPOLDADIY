@@ -42,6 +42,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::get('anggota/landing', [AnggotaController::class, 'landing'])->name('anggota.landing');
     Route::resource('anggota', AnggotaController::class);
     Route::post('jabatan/send-alert', [\App\Http\Controllers\Admin\JabatanController::class, 'sendAlert'])->name('jabatan.send-alert');
+    Route::get('jabatan/export-pdf', [\App\Http\Controllers\Admin\JabatanController::class, 'exportPdf'])->name('jabatan.export-pdf');
     Route::resource('jabatan', \App\Http\Controllers\Admin\JabatanController::class)->except(['create', 'show', 'edit']);
     Route::resource('struktur', \App\Http\Controllers\Admin\StrukturOrganisasiController::class)->only(['index', 'store', 'destroy']);
     Route::get('persuratan/landing', [SuratController::class, 'landing'])->name('persuratan.landing');

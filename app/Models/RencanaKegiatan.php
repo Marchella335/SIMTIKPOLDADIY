@@ -18,6 +18,11 @@ class RencanaKegiatan extends Model
         'tipe',
     ];
 
+    public function kegiatan()
+    {
+        return $this->hasOne(\App\Models\Kegiatan::class, 'rencana_kegiatan_id');
+    }
+
     protected $casts = [
         'tanggal_rencana' => 'date',
     ];

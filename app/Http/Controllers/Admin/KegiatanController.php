@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Kegiatan;
+use App\Models\RencanaKegiatan;
 use Illuminate\Http\Request;
 
 class KegiatanController extends Controller
@@ -11,20 +12,28 @@ class KegiatanController extends Controller
     public function index()
     {
         $kegiatans = Kegiatan::orderBy('tanggal', 'desc')->paginate(10);
-        
+
         $kegiatansAll = Kegiatan::orderBy('tanggal', 'asc')->get();
-        $trendData = $kegiatansAll->groupBy(function($d) {
+        $trendData = $kegiatansAll->groupBy(function ($d) {
             return \Carbon\Carbon::parse($d->tanggal)->format('M Y');
-        })->map(function($row) {
+        })->map(function ($row) {
             return $row->count();
         });
-        
+
         return view('admin.kegiatan.index', compact('kegiatans', 'trendData'));
     }
 
     public function create()
     {
-        return view('admin.kegiatan.create');
+        // Ambil rencana kegiatan (tipe=kegiatan) yang statusnya dijadwalkan
+        // dan belum punya kegiatan yang terhubung
+        $rencanaList = RencanaKegiatan::where('tipe', 'kegiatan')
+            ->where('status', 'dijadwalkan')
+            ->whereDoesntHave('kegiatan')
+            ->orderBy('tanggal_rencana', 'asc')
+            ->get();
+
+        return view('admin.kegiatan.create', compact('rencanaList'));
     }
 
     public function exportPdf(Request $request)
@@ -35,41 +44,34 @@ class KegiatanController extends Controller
 
     public function trend(Request $request)
     {
-        $by = $request->query('by', 'month'); // default to month
+        $by = $request->query('by', 'month');
         $kegiatans = Kegiatan::orderBy('tanggal', 'asc')->get();
 
-        // Calculate total counter
         $totalKegiatan = $kegiatans->count();
 
-        // Group data
         $trendData = [];
         foreach ($kegiatans as $k) {
             $date = \Carbon\Carbon::parse($k->tanggal);
             if ($by === 'date') {
-                $key = $date->format('Y-m-d');
+                $key   = $date->format('Y-m-d');
                 $label = $date->translatedFormat('d M Y');
             } elseif ($by === 'week') {
-                // Formatting to get week number and year
-                $key = $date->format('o-\Ww');
+                $key   = $date->format('o-\Ww');
                 $label = 'Minggu Ke-' . $date->format('W') . ' (' . $date->format('Y') . ')';
             } elseif ($by === 'year') {
-                $key = $date->format('Y');
+                $key   = $date->format('Y');
                 $label = $date->format('Y');
-            } else { // month
-                $key = $date->format('Y-m');
+            } else {
+                $key   = $date->format('Y-m');
                 $label = $date->translatedFormat('F Y');
             }
 
             if (!isset($trendData[$key])) {
-                $trendData[$key] = [
-                    'label' => $label,
-                    'count' => 0
-                ];
+                $trendData[$key] = ['label' => $label, 'count' => 0];
             }
             $trendData[$key]['count']++;
         }
 
-        // Sort keys
         ksort($trendData);
 
         $labels = array_column($trendData, 'label');
@@ -81,27 +83,31 @@ class KegiatanController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nama_kegiatan' => 'required|string|max:255',
-            'tanggal' => 'required|date',
-            'deskripsi' => 'required|string',
-            'hasil_rapat' => 'nullable|string',
-            'gambar' => 'nullable|image|mimes:jpeg,png,jpg|max:5120',
-            'tampilkan' => 'required|boolean',
-            'hasil' => 'nullable|string',
-            'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:5120',
+            'rencana_kegiatan_id' => 'required|exists:rencana_kegiatans,id',
+            'tanggal'             => 'required|date',
+            'deskripsi'           => 'required|string',
+            'hasil_rapat'         => 'nullable|string',
+            'gambar'              => 'nullable|image|mimes:jpeg,png,jpg|max:5120',
+            'tampilkan'           => 'required|boolean',
+            'hasil'               => 'nullable|string',
+            'foto'                => 'nullable|image|mimes:jpeg,png,jpg|max:5120',
         ]);
 
+        // Ambil nama kegiatan dari rencana
+        $rencana = RencanaKegiatan::findOrFail($request->rencana_kegiatan_id);
+
         $data = $request->except(['gambar', 'foto']);
+        $data['nama_kegiatan'] = $rencana->nama_kegiatan;
 
         if ($request->hasFile('gambar')) {
-            $file = $request->file('gambar');
+            $file     = $request->file('gambar');
             $filename = time() . '_g_' . $file->getClientOriginalName();
             $file->move(public_path('uploads/kegiatan'), $filename);
             $data['gambar'] = 'uploads/kegiatan/' . $filename;
         }
 
         if ($request->hasFile('foto')) {
-            $file = $request->file('foto');
+            $file     = $request->file('foto');
             $filename = time() . '_f_' . $file->getClientOriginalName();
             $file->move(public_path('uploads/kegiatan'), $filename);
             $data['foto'] = 'uploads/kegiatan/' . $filename;
@@ -109,35 +115,67 @@ class KegiatanController extends Controller
 
         Kegiatan::create($data);
 
+        // Otomatis tandai rencana kegiatan sebagai selesai
+        $rencana->update(['status' => 'selesai']);
+
         return redirect()->route('admin.kegiatan.index')
-            ->with('success', 'Kegiatan berhasil ditambahkan.');
+            ->with('success', 'Kegiatan berhasil ditambahkan dan rencana "' . $rencana->nama_kegiatan . '" otomatis ditandai Selesai.');
     }
 
     public function edit(Kegiatan $kegiatan)
     {
-        return view('admin.kegiatan.edit', compact('kegiatan'));
+        // Daftar rencana yang dijadwalkan & belum punya kegiatan (kecuali yang sedang diedit)
+        $rencanaList = RencanaKegiatan::where('tipe', 'kegiatan')
+            ->where('status', 'dijadwalkan')
+            ->whereDoesntHave('kegiatan')
+            ->orderBy('tanggal_rencana', 'asc')
+            ->get();
+
+        // Sertakan rencana yang saat ini terhubung (meski sudah selesai)
+        if ($kegiatan->rencana_kegiatan_id) {
+            $current = RencanaKegiatan::find($kegiatan->rencana_kegiatan_id);
+            if ($current && !$rencanaList->contains('id', $current->id)) {
+                $rencanaList = $rencanaList->prepend($current);
+            }
+        }
+
+        return view('admin.kegiatan.edit', compact('kegiatan', 'rencanaList'));
     }
 
     public function update(Request $request, Kegiatan $kegiatan)
     {
         $request->validate([
-            'nama_kegiatan' => 'required|string|max:255',
-            'tanggal' => 'required|date',
-            'deskripsi' => 'required|string',
-            'hasil_rapat' => 'nullable|string',
-            'gambar' => 'nullable|image|mimes:jpeg,png,jpg|max:5120',
-            'tampilkan' => 'required|boolean',
-            'hasil' => 'nullable|string',
-            'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:5120',
+            'rencana_kegiatan_id' => 'required|exists:rencana_kegiatans,id',
+            'tanggal'             => 'required|date',
+            'deskripsi'           => 'required|string',
+            'hasil_rapat'         => 'nullable|string',
+            'gambar'              => 'nullable|image|mimes:jpeg,png,jpg|max:5120',
+            'tampilkan'           => 'required|boolean',
+            'hasil'               => 'nullable|string',
+            'foto'                => 'nullable|image|mimes:jpeg,png,jpg|max:5120',
         ]);
 
+        $oldRencanaId = $kegiatan->rencana_kegiatan_id;
+        $newRencanaId = $request->rencana_kegiatan_id;
+
+        // Jika rencana berubah, kembalikan status rencana lama ke dijadwalkan
+        if ($oldRencanaId && $oldRencanaId != $newRencanaId) {
+            $oldRencana = RencanaKegiatan::find($oldRencanaId);
+            if ($oldRencana) {
+                $oldRencana->update(['status' => 'dijadwalkan']);
+            }
+        }
+
+        $newRencana  = RencanaKegiatan::findOrFail($newRencanaId);
+
         $data = $request->except(['gambar', 'foto']);
+        $data['nama_kegiatan'] = $newRencana->nama_kegiatan;
 
         if ($request->hasFile('gambar')) {
             if ($kegiatan->gambar && file_exists(public_path($kegiatan->gambar))) {
                 unlink(public_path($kegiatan->gambar));
             }
-            $file = $request->file('gambar');
+            $file     = $request->file('gambar');
             $filename = time() . '_g_' . $file->getClientOriginalName();
             $file->move(public_path('uploads/kegiatan'), $filename);
             $data['gambar'] = 'uploads/kegiatan/' . $filename;
@@ -147,7 +185,7 @@ class KegiatanController extends Controller
             if ($kegiatan->foto && file_exists(public_path($kegiatan->foto))) {
                 unlink(public_path($kegiatan->foto));
             }
-            $file = $request->file('foto');
+            $file     = $request->file('foto');
             $filename = time() . '_f_' . $file->getClientOriginalName();
             $file->move(public_path('uploads/kegiatan'), $filename);
             $data['foto'] = 'uploads/kegiatan/' . $filename;
@@ -155,12 +193,23 @@ class KegiatanController extends Controller
 
         $kegiatan->update($data);
 
+        // Tandai rencana baru sebagai selesai
+        $newRencana->update(['status' => 'selesai']);
+
         return redirect()->route('admin.kegiatan.index')
             ->with('success', 'Kegiatan berhasil diperbarui.');
     }
 
     public function destroy(Kegiatan $kegiatan)
     {
+        // Kembalikan status rencana ke dijadwalkan saat kegiatan dihapus
+        if ($kegiatan->rencana_kegiatan_id) {
+            $rencana = RencanaKegiatan::find($kegiatan->rencana_kegiatan_id);
+            if ($rencana) {
+                $rencana->update(['status' => 'dijadwalkan']);
+            }
+        }
+
         if ($kegiatan->gambar && file_exists(public_path($kegiatan->gambar))) {
             unlink(public_path($kegiatan->gambar));
         }
@@ -170,6 +219,6 @@ class KegiatanController extends Controller
         $kegiatan->delete();
 
         return redirect()->route('admin.kegiatan.index')
-            ->with('success', 'Kegiatan berhasil dihapus.');
+            ->with('success', 'Kegiatan berhasil dihapus dan rencana terkait dikembalikan ke status Dijadwalkan.');
     }
 }

@@ -7,6 +7,9 @@
     <div class="card-header" style="display:flex; justify-content:space-between; align-items:center;">
         <h3>Daftar Jabatan ({{ strtoupper($bidang) }})</h3>
         <div style="display:flex; gap:10px; align-items:center;">
+            <a href="{{ route('admin.jabatan.export-pdf') }}" target="_blank" class="btn btn-danger btn-sm">
+                <i class="fas fa-file-pdf"></i> Export PDF
+            </a>
             <form action="{{ route('admin.jabatan.send-alert') }}" method="POST" style="margin:0;">
                 @csrf
                 <button type="submit" class="btn btn-warning btn-sm"><i class="fas fa-envelope"></i> Cek & Kirim Notif Kuota</button>

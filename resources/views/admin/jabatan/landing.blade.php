@@ -3,7 +3,14 @@
 @section('page-title', 'Pilih Bidang Jabatan')
 
 @section('content')
-<div class="landing-grid" style="margin-top: 20px;">
+<div style="display:flex; justify-content:flex-end; margin-bottom:16px;">
+    <a href="{{ route('admin.jabatan.export-pdf') }}" target="_blank"
+       class="btn btn-danger btn-sm"
+       style="display:inline-flex; align-items:center; gap:6px; font-weight:600;">
+        <i class="fas fa-file-pdf"></i> Export PDF Rekap Anggota
+    </a>
+</div>
+<div class="landing-grid" style="margin-top: 0;">
     <!-- RENMIN -->
     @php $r = $summary['Renmin']; @endphp
     <div class="card landing-card" onclick="location.href='{{ route('admin.jabatan.index', ['bidang' => 'Renmin']) }}'">
