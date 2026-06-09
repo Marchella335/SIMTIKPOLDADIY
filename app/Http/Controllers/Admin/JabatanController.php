@@ -11,17 +11,40 @@ class JabatanController extends Controller
     public function index(Request $request)
     {
         $bidang = $request->query('bidang');
-        
+
         if ($bidang !== null) {
             if ($bidang === 'Global') {
                 $jabatans = Jabatan::whereNull('bidang')->orderBy('nama_jabatan')->get();
             } else {
                 $jabatans = Jabatan::where('bidang', $bidang)->orderBy('nama_jabatan')->get();
             }
-            return view('admin.jabatan.index', compact('jabatans', 'bidang'));
+
+            // Hitung total anggota & kuota untuk bidang ini
+            $totalKuota   = $jabatans->sum('kuota');
+            $totalAnggota = $jabatans->sum(function ($j) {
+                return \App\Models\Anggota::where('jabatan', $j->nama_jabatan)->count();
+            });
+
+            return view('admin.jabatan.index', compact('jabatans', 'bidang', 'totalKuota', 'totalAnggota'));
         }
-        
-        return view('admin.jabatan.landing');
+
+        // Hitung ringkasan per bidang untuk landing page
+        $bidangs = ['Renmin', 'Tekkom', 'Tekinfo'];
+        $summary = [];
+        foreach ($bidangs as $b) {
+            $jabatanList = Jabatan::where('bidang', $b)->get();
+            $kuota   = $jabatanList->sum('kuota');
+            $anggota = $jabatanList->sum(function ($j) {
+                return \App\Models\Anggota::where('jabatan', $j->nama_jabatan)->count();
+            });
+            $summary[$b] = [
+                'total_jabatan' => $jabatanList->count(),
+                'total_kuota'   => $kuota,
+                'total_anggota' => $anggota,
+            ];
+        }
+
+        return view('admin.jabatan.landing', compact('summary'));
     }
 
     public function store(Request $request)

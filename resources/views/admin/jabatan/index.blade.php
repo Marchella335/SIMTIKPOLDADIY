@@ -15,6 +15,30 @@
         </div>
     </div>
     <div class="card-body">
+        {{-- Ringkasan total --}}
+        <div style="display:flex; gap:16px; margin-bottom:20px; flex-wrap:wrap;">
+            <div style="flex:1; min-width:140px; background:var(--gray-50); border:1px solid var(--gray-200); border-radius:12px; padding:16px 20px; text-align:center;">
+                <div style="font-size:0.72rem; text-transform:uppercase; letter-spacing:0.5px; color:var(--gray-500); font-weight:600; margin-bottom:4px;">Total Jabatan</div>
+                <div style="font-size:1.8rem; font-weight:700; color:var(--gray-800);">{{ $jabatans->count() }}</div>
+            </div>
+            <div style="flex:1; min-width:140px; background:var(--gray-50); border:1px solid var(--gray-200); border-radius:12px; padding:16px 20px; text-align:center;">
+                <div style="font-size:0.72rem; text-transform:uppercase; letter-spacing:0.5px; color:var(--gray-500); font-weight:600; margin-bottom:4px;">Total Anggota Terisi</div>
+                <div style="font-size:1.8rem; font-weight:700; color:var(--primary);">{{ $totalAnggota }}</div>
+            </div>
+            <div style="flex:1; min-width:140px; background:var(--gray-50); border:1px solid var(--gray-200); border-radius:12px; padding:16px 20px; text-align:center;">
+                <div style="font-size:0.72rem; text-transform:uppercase; letter-spacing:0.5px; color:var(--gray-500); font-weight:600; margin-bottom:4px;">Total Kuota</div>
+                <div style="font-size:1.8rem; font-weight:700; color:var(--gray-800);">{{ $totalKuota }}</div>
+            </div>
+            <div style="flex:2; min-width:200px; background:var(--gray-50); border:1px solid var(--gray-200); border-radius:12px; padding:16px 20px;">
+                <div style="font-size:0.72rem; text-transform:uppercase; letter-spacing:0.5px; color:var(--gray-500); font-weight:600; margin-bottom:8px;">Pengisian Kuota</div>
+                @php $pct = $totalKuota > 0 ? min(100, round($totalAnggota / $totalKuota * 100)) : 0; @endphp
+                <div style="height:10px; background:var(--gray-200); border-radius:99px; overflow:hidden; margin-bottom:6px;">
+                    <div style="height:100%; width:{{ $pct }}%; background:{{ $pct >= 100 ? '#10b981' : ($pct >= 70 ? 'var(--primary)' : '#f59e0b') }}; border-radius:99px; transition:width 0.5s;"></div>
+                </div>
+                <div style="font-size:0.8rem; color:var(--gray-600); font-weight:500;">{{ $totalAnggota }} / {{ $totalKuota }} orang &mdash; {{ $pct }}% terisi</div>
+            </div>
+        </div>
+
         <form action="{{ route('admin.jabatan.store') }}" method="POST" class="form-inline" style="margin-bottom:20px; display:flex; flex-wrap:wrap; gap:10px; width:100%;">
             @csrf
             <input type="hidden" name="bidang" value="{{ $bidang }}">
@@ -80,6 +104,28 @@
                     </tr>
                     @endforelse
                 </tbody>
+                @if($jabatans->count() > 0)
+                <tfoot>
+                    <tr style="background:var(--gray-50); font-weight:700; border-top:2px solid var(--gray-300);">
+                        <td colspan="2" style="padding:12px 16px; color:var(--gray-700);">TOTAL ({{ $jabatans->count() }} jabatan)</td>
+                        <td></td>
+                        <td style="padding:12px 16px; color:var(--gray-800);">{{ $totalKuota }}</td>
+                        <td style="padding:12px 16px; color:var(--primary);">{{ $totalAnggota }}</td>
+                        <td style="padding:12px 16px;">
+                            @if($totalKuota > 0)
+                                @if($totalAnggota >= $totalKuota)
+                                    <span class="badge" style="background:#10b981; color:#fff; padding:3px 10px; border-radius:12px; font-size:0.75rem; font-weight:600;">Terpenuhi</span>
+                                @else
+                                    <span class="badge" style="background:#ef4444; color:#fff; padding:3px 10px; border-radius:12px; font-size:0.75rem; font-weight:600;">Kurang {{ $totalKuota - $totalAnggota }}</span>
+                                @endif
+                            @else
+                                <span class="badge" style="background:#6b7280; color:#fff; padding:3px 10px; border-radius:12px; font-size:0.75rem; font-weight:600;">Belum Diatur</span>
+                            @endif
+                        </td>
+                        <td></td>
+                    </tr>
+                </tfoot>
+                @endif
             </table>
         </div>
     </div>
