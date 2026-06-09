@@ -12,12 +12,9 @@ class Kegiatan extends Model
         'deskripsi',
         'hasil_rapat',
         'gambar',
-<<<<<<< HEAD
+        'foto',
         'tampilkan',
         'hasil',
-=======
-        'foto',
->>>>>>> de99b69c751d845bd6236f9de158f1c6c0f00c94
     ];
 
     protected $casts = [

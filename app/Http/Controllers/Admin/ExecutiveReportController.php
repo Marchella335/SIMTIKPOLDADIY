@@ -67,12 +67,6 @@ class ExecutiveReportController extends Controller
         $kegiatanThisYear = Kegiatan::whereYear('created_at', $currentYear)->count();
         $kegiatanLastYear = Kegiatan::whereYear('created_at', $lastYear)->count();
 
-<<<<<<< HEAD
-=======
-        // === MODUL CRM (Customer Relationship) ===
-        // Removed as per request
-
->>>>>>> de99b69c751d845bd6236f9de158f1c6c0f00c94
         // === DATA WAREHOUSE: Cross-Module KPI ===
         $kpiData = [
             'produktivitas' => $kegiatanThisYear > 0 && $totalPagu > 0

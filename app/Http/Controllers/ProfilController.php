@@ -3,32 +3,23 @@
 namespace App\Http\Controllers;
 
 use App\Models\Anggota;
+use App\Models\StrukturOrganisasi;
 
 class ProfilController extends Controller
 {
     public function index()
     {
-        $kabid = Anggota::whereRaw('LOWER(bidang) = ?', ['tik'])->get();
-        
-        $kasubbid = Anggota::whereRaw('LOWER(jabatan) LIKE ?', ['kasubbid%'])->get();
+        // Hanya ambil Kabid TIK (bidang tik, jabatan mengandung 'kabid')
+        $kabidTik = Anggota::whereRaw('LOWER(bidang) = ?', ['tik'])
+            ->whereRaw('LOWER(jabatan) LIKE ?', ['kabid%'])
+            ->first();
 
-        $renmin = Anggota::whereRaw('LOWER(bidang) = ?', ['renmin'])
-            ->whereRaw('LOWER(jabatan) NOT LIKE ?', ['kasubbid%'])
-            ->get();
-            
-        $tekkom = Anggota::whereRaw('LOWER(bidang) = ?', ['tekkom'])
-            ->whereRaw('LOWER(jabatan) NOT LIKE ?', ['kasubbid%'])
-            ->get();
-            
-        $tekinfo = Anggota::whereRaw('LOWER(bidang) = ?', ['tekinfo'])
-            ->whereRaw('LOWER(jabatan) NOT LIKE ?', ['kasubbid%'])
-            ->get();
-
+        // Ambil gambar struktur per bidang yang diupload admin
         $struktur = [];
-        foreach (\App\Models\StrukturOrganisasi::all() as $s) {
-            $struktur[$s->bidang] = $s->foto;
+        foreach (StrukturOrganisasi::all() as $s) {
+            $struktur[strtolower($s->bidang)] = $s->foto;
         }
 
-        return view('profil', compact('kabid', 'kasubbid', 'renmin', 'tekkom', 'tekinfo', 'struktur'));
+        return view('profil', compact('kabidTik', 'struktur'));
     }
 }

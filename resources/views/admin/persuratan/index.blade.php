@@ -29,15 +29,11 @@
 <div class="card">
     <div class="card-header" style="display:flex; justify-content:space-between; align-items:center;">
         <h3>Daftar Surat {{ $bidang }}</h3>
-<<<<<<< HEAD
         <div style="display:flex; gap:10px;">
             <a href="{{ route('admin.persuratan.export-pdf', ['bidang' => $bidang, 'start_date' => request('start_date'), 'end_date' => request('end_date'), 'search' => request('search'), 'tipe' => request('tipe')]) }}" target="_blank" class="btn btn-outline btn-sm"><i class="fas fa-file-pdf"></i> Export PDF</a>
-            <a href="{{ route('admin.persuratan.create', ['bidang' => $bidang]) }}" class="btn btn-primary btn-sm"><i class="fas fa-plus"></i> Tambah Surat</a>
-=======
-        <div>
             <a href="{{ route('admin.persuratan.export', ['bidang' => $bidang, 'tipe' => request('tipe')]) }}" class="btn btn-success btn-sm"><i class="fas fa-file-excel"></i> Export Rekap</a>
-            <a href="{{ route('admin.persuratan.create', ['bidang' => $bidang]) }}" class="btn btn-primary btn-sm"><i class="fas fa-plus"></i> Tambah</a>
->>>>>>> de99b69c751d845bd6236f9de158f1c6c0f00c94
+            <a href="{{ route('admin.persuratan.create', ['bidang' => $bidang]) }}" class="btn btn-primary btn-sm"><i class="fas fa-plus"></i> Tambah Surat</a>
+        </div>
         </div>
     </div>
     <div class="card-body">

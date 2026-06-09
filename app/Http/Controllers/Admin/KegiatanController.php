@@ -86,12 +86,9 @@ class KegiatanController extends Controller
             'deskripsi' => 'required|string',
             'hasil_rapat' => 'nullable|string',
             'gambar' => 'nullable|image|mimes:jpeg,png,jpg|max:5120',
-<<<<<<< HEAD
             'tampilkan' => 'required|boolean',
             'hasil' => 'nullable|string',
-=======
             'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:5120',
->>>>>>> de99b69c751d845bd6236f9de158f1c6c0f00c94
         ]);
 
         $data = $request->except(['gambar', 'foto']);
@@ -129,12 +126,9 @@ class KegiatanController extends Controller
             'deskripsi' => 'required|string',
             'hasil_rapat' => 'nullable|string',
             'gambar' => 'nullable|image|mimes:jpeg,png,jpg|max:5120',
-<<<<<<< HEAD
             'tampilkan' => 'required|boolean',
             'hasil' => 'nullable|string',
-=======
             'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:5120',
->>>>>>> de99b69c751d845bd6236f9de158f1c6c0f00c94
         ]);
 
         $data = $request->except(['gambar', 'foto']);

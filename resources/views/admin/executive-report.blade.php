@@ -169,11 +169,6 @@
     </div>
 </div>
 
-<<<<<<< HEAD
-
-=======
->>>>>>> de99b69c751d845bd6236f9de158f1c6c0f00c94
-
 <div style="text-align:center; padding:20px; color:var(--gray-500); font-size:0.8rem;">
     <i class="bi bi-shield-check"></i> Data diproses melalui Data Warehouse SIMTIK — Terakhir diperbarui: {{ now()->format('d M Y H:i') }} WIB
 </div>

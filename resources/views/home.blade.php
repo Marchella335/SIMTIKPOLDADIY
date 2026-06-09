@@ -92,12 +92,8 @@
 </section>
 
 
-<<<<<<< HEAD
-{{-- KEGIATAN TERBARU --}}
-=======
 {{-- BERITA TERBARU --}}
 @if($showBerita)
->>>>>>> de99b69c751d845bd6236f9de158f1c6c0f00c94
 <section class="section section-gray">
     <div class="container">
         <div class="section-header">

@@ -34,11 +34,7 @@
 
         <div class="table-container">
             <table>
-<<<<<<< HEAD
-                <thead><tr><th>No</th><th>Gambar</th><th>Nama Kegiatan</th><th>Tanggal</th><th>Deskripsi</th><th style="text-align:center;">Tampilkan</th><th>Aksi</th></tr></thead>
-=======
-                <thead><tr><th>No</th><th>Hari</th><th>Nama Kegiatan</th><th>Keterangan</th><th>Hasil Kegiatan</th><th>Foto</th><th>Aksi</th></tr></thead>
->>>>>>> de99b69c751d845bd6236f9de158f1c6c0f00c94
+                <thead><tr><th>No</th><th>Tanggal</th><th>Nama Kegiatan</th><th>Deskripsi</th><th>Hasil Rapat</th><th>Foto / Brosur</th><th style="text-align:center;">Tampilkan</th><th>Aksi</th></tr></thead>
                 <tbody>
                     @forelse($kegiatans as $i => $k)
                     <tr>
@@ -46,20 +42,18 @@
                         <td>{{ \Carbon\Carbon::parse($k->tanggal)->locale('id')->translatedFormat('l, d/m/Y') }}</td>
                         <td style="font-weight:500;">{{ $k->nama_kegiatan }}</td>
                         <td>{{ Str::limit($k->deskripsi, 50) }}</td>
-<<<<<<< HEAD
+                        <td>{{ Str::limit($k->hasil_rapat, 50) ?? '-' }}</td>
+                        <td>
+                            @if($k->foto) <img src="{{ asset($k->foto) }}" style="width:60px;height:40px;object-fit:cover;border-radius:6px; margin-bottom:4px;" title="Foto Dokumentasi"> @endif
+                            @if($k->gambar) <img src="{{ asset($k->gambar) }}" style="width:60px;height:40px;object-fit:cover;border-radius:6px;" title="Gambar / Brosur"> @endif
+                            @if(!$k->foto && !$k->gambar) - @endif
+                        </td>
                         <td style="text-align:center;">
                             @if($k->tampilkan)
                                 <span style="background:#10b981; color:white; padding:4px 8px; border-radius:4px; font-size:0.75rem; font-weight:600; display:inline-block;">Ya</span>
                             @else
                                 <span style="background:#ef4444; color:white; padding:4px 8px; border-radius:4px; font-size:0.75rem; font-weight:600; display:inline-block;">Tidak</span>
                             @endif
-=======
-                        <td>{{ Str::limit($k->hasil_rapat, 50) ?? '-' }}</td>
-                        <td>
-                            @if($k->foto) <img src="{{ asset($k->foto) }}" style="width:60px;height:40px;object-fit:cover;border-radius:6px; margin-bottom:4px;"> @endif
-                            @if($k->gambar) <img src="{{ asset($k->gambar) }}" style="width:60px;height:40px;object-fit:cover;border-radius:6px;"> @endif
-                            @if(!$k->foto && !$k->gambar) - @endif
->>>>>>> de99b69c751d845bd6236f9de158f1c6c0f00c94
                         </td>
                         <td class="actions">
                             <a href="{{ route('admin.kegiatan.edit', $k) }}" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>
@@ -67,7 +61,7 @@
                         </td>
                     </tr>
                     @empty
-                    <tr><td colspan="7" style="text-align:center;color:#6b7280;">Belum ada kegiatan.</td></tr>
+                    <tr><td colspan="8" style="text-align:center;color:#6b7280;">Belum ada kegiatan.</td></tr>
                     @endforelse
                 </tbody>
             </table>

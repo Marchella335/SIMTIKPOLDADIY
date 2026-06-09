@@ -39,149 +39,147 @@
             <h2 class="section-title">Struktur Organisasi Bid TIK Polda DIY</h2>
         </div>
 
-        <div class="org-chart">
-            {{-- KABID TIK --}}
-            @if($kabid->count())
-            <div class="org-level">
-                @foreach($kabid as $a)
-                <div class="org-card" style="border-color:var(--accent);min-width:220px;">
-                    @if($a->foto)
-                        <img src="{{ asset($a->foto) }}" alt="{{ $a->nama_lengkap }}">
-                    @else
-                        <div class="no-photo"><i class="fas fa-user"></i></div>
-                    @endif
-                    <div class="jabatan">{{ $a->jabatan }}</div>
-                    <div class="pangkat">{{ $a->pangkat }}</div>
-                    <h4>{{ $a->nama_lengkap }}</h4>
-<<<<<<< HEAD
-                    <div style="font-size:0.8rem; color:var(--gray-500); margin-top:4px;">NRP: {{ $a->nrp ?? '-' }}</div>
-                    @if($a->jobdesk)
-                        <div style="font-size:0.78rem; color:var(--gray-500); margin-top:4px; font-style:italic;">{{ $a->jobdesk }}</div>
-                    @endif
-=======
->>>>>>> de99b69c751d845bd6236f9de158f1c6c0f00c94
+        {{-- KABID TIK: hanya nama dan jabatan --}}
+        @if($kabidTik)
+        <div style="display:flex; justify-content:center; margin-bottom:50px;">
+            <div style="
+                background:#fff;
+                border:2px solid var(--accent);
+                border-radius:16px;
+                padding:28px 48px;
+                text-align:center;
+                box-shadow:0 4px 20px rgba(0,0,0,0.08);
+                min-width:260px;
+            ">
+                <div style="
+                    display:inline-flex;
+                    align-items:center;
+                    justify-content:center;
+                    width:64px; height:64px;
+                    border-radius:50%;
+                    background:var(--accent);
+                    margin-bottom:16px;
+                ">
+                    <i class="fas fa-user-tie" style="font-size:1.8rem; color:#fff;"></i>
                 </div>
-                @endforeach
+                <div style="font-size:0.85rem; font-weight:700; color:var(--accent); text-transform:uppercase; letter-spacing:1px; margin-bottom:8px;">
+                    {{ $kabidTik->jabatan }}
+                </div>
+                <h3 style="font-size:1.25rem; font-weight:700; color:var(--gray-800); margin:0;">
+                    {{ $kabidTik->nama_lengkap }}
+                </h3>
             </div>
-            @endif
+        </div>
+        @endif
 
-            {{-- KASUBBID --}}
-            @if($kasubbid->count())
-            <div class="org-level">
-                @php
-                    $order = ['Kasubbid Renmin', 'Kasubbid Tekkom', 'Kasubbid Tekinfo'];
-                    $sorted = $kasubbid->sortBy(function($a) use ($order) { return array_search($a->jabatan, $order); });
-                @endphp
-                @foreach($sorted as $a)
-                <div class="org-card" style="border-color:var(--primary);">
-                    @if($a->foto)
-                        <img src="{{ asset($a->foto) }}" alt="{{ $a->nama_lengkap }}">
-                    @else
-                        <div class="no-photo"><i class="fas fa-user"></i></div>
-                    @endif
-                    <div class="jabatan">{{ $a->jabatan }}</div>
-                    <div class="pangkat">{{ $a->pangkat }}</div>
-                    <h4>{{ $a->nama_lengkap }}</h4>
-<<<<<<< HEAD
-                    <div style="font-size:0.8rem; color:var(--gray-500); margin-top:4px;">NRP: {{ $a->nrp ?? '-' }}</div>
-                    @if($a->jobdesk)
-                        <div style="font-size:0.78rem; color:var(--gray-500); margin-top:4px; font-style:italic;">{{ $a->jobdesk }}</div>
-                    @endif
-=======
->>>>>>> de99b69c751d845bd6236f9de158f1c6c0f00c94
-                </div>
-                @endforeach
-            </div>
-            @endif
+        {{-- STRUKTUR PER SUBBIDANG --}}
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:32px; margin-top:20px;">
 
-            {{-- MEMBERS PER SUBBID --}}
-            <div class="subbid-container">
-                <div class="subbid-group">
-                    <div class="org-section-title" @if(isset($struktur['Renmin'])) onclick="showStruktur('{{ asset($struktur['Renmin']) }}')" style="cursor:pointer;" title="Klik untuk melihat struktur" @endif>Subbid Renmin</div>
-                    <div class="org-members">
-                        @forelse($renmin as $a)
-                        <div class="org-card">
-                            @if($a->foto)
-                                <img src="{{ asset($a->foto) }}" alt="{{ $a->nama_lengkap }}">
-                            @else
-                                <div class="no-photo"><i class="fas fa-user"></i></div>
-                            @endif
-                            <div class="jabatan">{{ $a->jabatan }}</div>
-                            <div class="pangkat">{{ $a->pangkat }}</div>
-                            <h4>{{ $a->nama_lengkap }}</h4>
-                            @if($a->jobdesk)
-                                <div style="font-size:0.78rem; color:var(--gray-500); margin-top:4px; font-style:italic;">{{ $a->jobdesk }}</div>
-                            @endif
-                        </div>
-                        @empty
-                        <p style="color:var(--gray-500);text-align:center;grid-column:1/-1;">Belum ada anggota</p>
-                        @endforelse
-                    </div>
+            {{-- Subbid Renmin --}}
+            <div style="background:#fff; border-radius:16px; overflow:hidden; box-shadow:0 4px 16px rgba(0,0,0,0.08); border:1px solid var(--gray-200);">
+                <div style="background:var(--primary); padding:16px 24px;">
+                    <h4 style="color:#fff; margin:0; font-size:1rem; font-weight:700; text-align:center;">Subbid Renmin</h4>
                 </div>
-                <div class="subbid-group">
-                    <div class="org-section-title" @if(isset($struktur['Tekkom'])) onclick="showStruktur('{{ asset($struktur['Tekkom']) }}')" style="cursor:pointer;" title="Klik untuk melihat struktur" @endif>Subbid Tekkom</div>
-                    <div class="org-members">
-                        @forelse($tekkom as $a)
-                        <div class="org-card">
-                            @if($a->foto)
-                                <img src="{{ asset($a->foto) }}" alt="{{ $a->nama_lengkap }}">
-                            @else
-                                <div class="no-photo"><i class="fas fa-user"></i></div>
-                            @endif
-                            <div class="jabatan">{{ $a->jabatan }}</div>
-                            <div class="pangkat">{{ $a->pangkat }}</div>
-                            <h4>{{ $a->nama_lengkap }}</h4>
-                            @if($a->jobdesk)
-                                <div style="font-size:0.78rem; color:var(--gray-500); margin-top:4px; font-style:italic;">{{ $a->jobdesk }}</div>
-                            @endif
+                <div style="padding:24px; text-align:center;">
+                    @if(isset($struktur['renmin']) && $struktur['renmin'])
+                        <img 
+                            src="{{ asset($struktur['renmin']) }}" 
+                            alt="Struktur Subbid Renmin"
+                            style="width:100%; border-radius:8px; cursor:pointer;"
+                            onclick="showStruktur('{{ asset($struktur['renmin']) }}', 'Struktur Subbid Renmin')"
+                            title="Klik untuk memperbesar"
+                        >
+                        <p style="font-size:0.8rem; color:var(--gray-400); margin-top:10px; margin-bottom:0;">
+                            <i class="fas fa-search-plus"></i> Klik gambar untuk memperbesar
+                        </p>
+                    @else
+                        <div style="padding:40px 20px; color:var(--gray-400);">
+                            <i class="fas fa-image" style="font-size:3rem; display:block; margin-bottom:12px;"></i>
+                            <p style="margin:0; font-size:0.9rem;">Gambar struktur belum diunggah</p>
                         </div>
-                        @empty
-                        <p style="color:var(--gray-500);text-align:center;grid-column:1/-1;">Belum ada anggota</p>
-                        @endforelse
-                    </div>
-                </div>
-                <div class="subbid-group">
-                    <div class="org-section-title" @if(isset($struktur['Tekinfo'])) onclick="showStruktur('{{ asset($struktur['Tekinfo']) }}')" style="cursor:pointer;" title="Klik untuk melihat struktur" @endif>Subbid Tekinfo</div>
-                    <div class="org-members">
-                        @forelse($tekinfo as $a)
-                        <div class="org-card">
-                            @if($a->foto)
-                                <img src="{{ asset($a->foto) }}" alt="{{ $a->nama_lengkap }}">
-                            @else
-                                <div class="no-photo"><i class="fas fa-user"></i></div>
-                            @endif
-                            <div class="jabatan">{{ $a->jabatan }}</div>
-                            <div class="pangkat">{{ $a->pangkat }}</div>
-                            <h4>{{ $a->nama_lengkap }}</h4>
-                            @if($a->jobdesk)
-                                <div style="font-size:0.78rem; color:var(--gray-500); margin-top:4px; font-style:italic;">{{ $a->jobdesk }}</div>
-                            @endif
-                        </div>
-                        @empty
-                        <p style="color:var(--gray-500);text-align:center;grid-column:1/-1;">Belum ada anggota</p>
-                        @endforelse
-                    </div>
+                    @endif
                 </div>
             </div>
+
+            {{-- Subbid Tekkom --}}
+            <div style="background:#fff; border-radius:16px; overflow:hidden; box-shadow:0 4px 16px rgba(0,0,0,0.08); border:1px solid var(--gray-200);">
+                <div style="background:var(--primary); padding:16px 24px;">
+                    <h4 style="color:#fff; margin:0; font-size:1rem; font-weight:700; text-align:center;">Subbid Tekkom</h4>
+                </div>
+                <div style="padding:24px; text-align:center;">
+                    @if(isset($struktur['tekkom']) && $struktur['tekkom'])
+                        <img 
+                            src="{{ asset($struktur['tekkom']) }}" 
+                            alt="Struktur Subbid Tekkom"
+                            style="width:100%; border-radius:8px; cursor:pointer;"
+                            onclick="showStruktur('{{ asset($struktur['tekkom']) }}', 'Struktur Subbid Tekkom')"
+                            title="Klik untuk memperbesar"
+                        >
+                        <p style="font-size:0.8rem; color:var(--gray-400); margin-top:10px; margin-bottom:0;">
+                            <i class="fas fa-search-plus"></i> Klik gambar untuk memperbesar
+                        </p>
+                    @else
+                        <div style="padding:40px 20px; color:var(--gray-400);">
+                            <i class="fas fa-image" style="font-size:3rem; display:block; margin-bottom:12px;"></i>
+                            <p style="margin:0; font-size:0.9rem;">Gambar struktur belum diunggah</p>
+                        </div>
+                    @endif
+                </div>
+            </div>
+
+            {{-- Subbid Tekinfo --}}
+            <div style="background:#fff; border-radius:16px; overflow:hidden; box-shadow:0 4px 16px rgba(0,0,0,0.08); border:1px solid var(--gray-200);">
+                <div style="background:var(--primary); padding:16px 24px;">
+                    <h4 style="color:#fff; margin:0; font-size:1rem; font-weight:700; text-align:center;">Subbid Tekinfo</h4>
+                </div>
+                <div style="padding:24px; text-align:center;">
+                    @if(isset($struktur['tekinfo']) && $struktur['tekinfo'])
+                        <img 
+                            src="{{ asset($struktur['tekinfo']) }}" 
+                            alt="Struktur Subbid Tekinfo"
+                            style="width:100%; border-radius:8px; cursor:pointer;"
+                            onclick="showStruktur('{{ asset($struktur['tekinfo']) }}', 'Struktur Subbid Tekinfo')"
+                            title="Klik untuk memperbesar"
+                        >
+                        <p style="font-size:0.8rem; color:var(--gray-400); margin-top:10px; margin-bottom:0;">
+                            <i class="fas fa-search-plus"></i> Klik gambar untuk memperbesar
+                        </p>
+                    @else
+                        <div style="padding:40px 20px; color:var(--gray-400);">
+                            <i class="fas fa-image" style="font-size:3rem; display:block; margin-bottom:12px;"></i>
+                            <p style="margin:0; font-size:0.9rem;">Gambar struktur belum diunggah</p>
+                        </div>
+                    @endif
+                </div>
+            </div>
+
         </div>
     </div>
 </section>
 
-<!-- Modal Struktur -->
-<div id="strukturModal" class="modal-bg" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:9999; align-items:center; justify-content:center;">
-    <div style="position:relative; max-width:90%; max-height:90%;">
-        <span onclick="closeStruktur()" style="position:absolute; top:-40px; right:0; color:#fff; font-size:30px; cursor:pointer; font-weight:bold;">&times;</span>
-        <img id="strukturImg" src="" style="max-width:100%; max-height:85vh; border-radius:8px; border:3px solid var(--accent);">
+<!-- Modal Gambar Struktur -->
+<div id="strukturModal" class="modal-bg" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:9999; align-items:center; justify-content:center; flex-direction:column;">
+    <div style="position:relative; max-width:92%; max-height:90%;">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;">
+            <span id="strukturModalTitle" style="color:#fff; font-size:1.1rem; font-weight:600;"></span>
+            <span onclick="closeStruktur()" style="color:#fff; font-size:32px; cursor:pointer; font-weight:bold; line-height:1; margin-left:20px;">&times;</span>
+        </div>
+        <img id="strukturImg" src="" style="max-width:100%; max-height:80vh; border-radius:10px; border:3px solid var(--accent); display:block;">
     </div>
 </div>
 
 <script>
-function showStruktur(url) {
+function showStruktur(url, title) {
     document.getElementById('strukturImg').src = url;
+    document.getElementById('strukturModalTitle').textContent = title || '';
     document.getElementById('strukturModal').style.display = 'flex';
 }
 function closeStruktur() {
     document.getElementById('strukturModal').style.display = 'none';
 }
+// Tutup modal jika klik di luar gambar
+document.getElementById('strukturModal').addEventListener('click', function(e) {
+    if (e.target === this) closeStruktur();
+});
 </script>
 @endsection

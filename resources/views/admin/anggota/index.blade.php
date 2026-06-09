@@ -31,11 +31,7 @@
 
         <div class="table-container">
             <table>
-<<<<<<< HEAD
-                <thead><tr><th>No</th><th>Foto</th><th>Nama Lengkap</th><th>Pangkat</th><th>Bidang</th><th>Jabatan</th><th>Jobdesk</th><th>Aksi</th></tr></thead>
-=======
-                <thead><tr><th>No</th><th>Nama Lengkap</th><th>Pangkat</th><th>Jabatan</th><th>NRP</th><th>Aksi</th></tr></thead>
->>>>>>> de99b69c751d845bd6236f9de158f1c6c0f00c94
+                <thead><tr><th>No</th><th>Nama Lengkap</th><th>Pangkat</th><th>Jabatan</th><th>NRP</th><th>Jobdesk</th><th>Aksi</th></tr></thead>
                 <tbody>
                     @forelse($anggotas as $i => $a)
                     <tr>
@@ -48,11 +44,8 @@
                         </td>
                         <td>{{ $a->pangkat }}</td>
                         <td>{{ $a->jabatan }}</td>
-<<<<<<< HEAD
-                        <td>{{ Str::limit($a->jobdesk ?? '-', 30) }}</td>
-=======
                         <td>{{ $a->nrp ?? '-' }}</td>
->>>>>>> de99b69c751d845bd6236f9de158f1c6c0f00c94
+                        <td>{{ Str::limit($a->jobdesk ?? '-', 30) }}</td>
                         <td class="actions">
                             <a href="{{ route('admin.anggota.show', $a) }}" class="btn btn-sm btn-info"><i class="fas fa-id-card"></i></a>
                             <a href="{{ route('admin.anggota.edit', $a) }}" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>
@@ -60,11 +53,7 @@
                         </td>
                     </tr>
                     @empty
-<<<<<<< HEAD
-                    <tr><td colspan="8" style="text-align:center;color:#6b7280;">Belum ada data anggota.</td></tr>
-=======
-                    <tr><td colspan="6" style="text-align:center;color:#6b7280;">Belum ada data anggota.</td></tr>
->>>>>>> de99b69c751d845bd6236f9de158f1c6c0f00c94
+                    <tr><td colspan="7" style="text-align:center;color:#6b7280;">Belum ada data anggota.</td></tr>
                     @endforelse
                 </tbody>
             </table>

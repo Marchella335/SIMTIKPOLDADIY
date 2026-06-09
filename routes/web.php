@@ -7,10 +7,6 @@ use App\Http\Controllers\KegiatanPublicController;
 use App\Http\Controllers\KontakController;
 use App\Http\Controllers\AdministrasiController;
 use App\Http\Controllers\AuthController;
-<<<<<<< HEAD
-=======
-use App\Http\Controllers\LayananPublicController; // kept for BC — routes removed
->>>>>>> de99b69c751d845bd6236f9de158f1c6c0f00c94
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\AnggotaController;
 use App\Http\Controllers\Admin\SuratController;
@@ -35,11 +31,6 @@ Route::get('/administrasi/persuratan', [AdministrasiController::class, 'persurat
 Route::get('/administrasi/persuratan/data', [AdministrasiController::class, 'persuratan'])->name('administrasi.persuratan');
 Route::get('/administrasi/keuangan', [AdministrasiController::class, 'keuangan'])->name('administrasi.keuangan');
 
-<<<<<<< HEAD
-=======
-// Layanan TIK (Public CRM) removed
-
->>>>>>> de99b69c751d845bd6236f9de158f1c6c0f00c94
 // Auth Routes
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
@@ -54,12 +45,9 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::resource('jabatan', \App\Http\Controllers\Admin\JabatanController::class)->except(['create', 'show', 'edit']);
     Route::resource('struktur', \App\Http\Controllers\Admin\StrukturOrganisasiController::class)->only(['index', 'store', 'destroy']);
     Route::get('persuratan/landing', [SuratController::class, 'landing'])->name('persuratan.landing');
-<<<<<<< HEAD
     Route::get('persuratan/export-pdf', [SuratController::class, 'exportPdf'])->name('persuratan.export-pdf');
-    Route::post('persuratan/{persuratan}/teruskan', [SuratController::class, 'teruskan'])->name('persuratan.teruskan');
-=======
     Route::get('persuratan/export', [SuratController::class, 'export'])->name('persuratan.export');
->>>>>>> de99b69c751d845bd6236f9de158f1c6c0f00c94
+    Route::post('persuratan/{persuratan}/teruskan', [SuratController::class, 'teruskan'])->name('persuratan.teruskan');
     Route::resource('persuratan', SuratController::class);
     // Keuangan Baru (Multi Sumber Dana)
     Route::get('keuangan/sumber-dana', [KeuanganController::class, 'getSumberDana'])->name('keuangan.sumber_dana.index');
@@ -88,12 +76,8 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     // === CPMK Features ===
     // Executive Intelligence Hub (Data Warehouse & ERP)
     Route::get('/executive-report', [ExecutiveReportController::class, 'index'])->name('executive-report');
-<<<<<<< HEAD
     Route::get('/rekap', [\App\Http\Controllers\Admin\RekapController::class, 'index'])->name('rekap.index');
     Route::get('/rekap/export-pdf', [\App\Http\Controllers\Admin\RekapController::class, 'exportPdf'])->name('rekap.export-pdf');
-
-=======
->>>>>>> de99b69c751d845bd6236f9de158f1c6c0f00c94
     // Security & Activity Log
     Route::get('/activity-log', [ActivityLogController::class, 'index'])->name('activity-log');
     // Settings
