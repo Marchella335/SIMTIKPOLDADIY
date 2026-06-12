@@ -13,7 +13,6 @@ use App\Http\Controllers\Admin\SuratController;
 use App\Http\Controllers\Admin\KeuanganController;
 use App\Http\Controllers\Admin\KegiatanController;
 use App\Http\Controllers\Admin\ProfileController;
-use App\Http\Controllers\Admin\ExecutiveReportController;
 use App\Http\Controllers\Admin\ActivityLogController;
 use App\Http\Controllers\Admin\SettingsController;
 
@@ -74,9 +73,6 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
 
-    // === CPMK Features ===
-    // Executive Intelligence Hub (Data Warehouse & ERP)
-    Route::get('/executive-report', [ExecutiveReportController::class, 'index'])->name('executive-report');
     Route::get('/rekap', [\App\Http\Controllers\Admin\RekapController::class, 'index'])->name('rekap.index');
     Route::get('/rekap/export-pdf', [\App\Http\Controllers\Admin\RekapController::class, 'exportPdf'])->name('rekap.export-pdf');
     // Security & Activity Log

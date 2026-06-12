@@ -221,13 +221,6 @@
                                 <span id="sheetRemaining">Rp 0</span>
                             </div>
                         </div>
-                        <div style="flex: 1; min-width: 300px;">
-                            <!-- Removed Graphic, replaced with text -->
-                            <div style="color:var(--gray-500); font-weight:400; font-size:12px; margin-top:10px;">
-                                * Tampilan grafik telah dihapus sesuai permintaan.<br>
-                                * Untuk melihat tabel rekapitulasi Mingguan, Bulanan, dan Tahunan, silakan klik tombol "Lihat Rekapitulasi" di bagian atas.
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>

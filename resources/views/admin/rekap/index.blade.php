@@ -1,6 +1,6 @@
 @extends('layouts.admin')
-@section('title', 'Rekap Universal - Admin SIMTIK')
-@section('page-title', 'Rekap Universal Data SIMTIK')
+@section('title', 'Rekapitulasi Universal - Admin SIMTIK')
+@section('page-title', 'Rekapitulasi Universal Data SIMTIK')
 
 @section('content')
 <!-- Filter Card -->

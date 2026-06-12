@@ -5,7 +5,7 @@
 <section class="section" style="padding-top:120px;">
     <div class="container">
         <div class="section-header">
-            <div class="section-badge">&#9679; Berita & Kegiatan</div>
+            <div class="section-badge">&#9679; Kegiatan</div>
             <h2 class="section-title">Kegiatan Bid TIK Polda DIY</h2>
             <p class="section-subtitle">Informasi kegiatan terbaru dari Bidang TIK Polda DIY</p>
         </div>

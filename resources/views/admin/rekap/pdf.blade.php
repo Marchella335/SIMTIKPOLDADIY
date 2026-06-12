@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Rekap Universal - SIMTIK POLDA DIY</title>
+    <title>Rekapitulasi Universal - SIMTIK POLDA DIY</title>
     <style>
         body { font-family: Arial, sans-serif; font-size: 11px; color: #333; line-height: 1.4; padding: 20px; }
         .header { text-align: center; margin-bottom: 25px; border-bottom: 2px solid #333; padding-bottom: 15px; }

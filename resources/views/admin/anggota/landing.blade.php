@@ -43,6 +43,16 @@
         <p>Manajemen Jabatan untuk Semua Subbid</p>
         <div class="btn-select global">Kelola Jabatan</div>
     </div>
+
+    <!-- STRUKTUR -->
+    <div class="card landing-card" onclick="location.href='{{ route('admin.struktur.index') }}'">
+        <div class="icon-wrapper struktur">
+            <i class="bi bi-diagram-3"></i>
+        </div>
+        <h3>STRUKTUR ORGANISASI</h3>
+        <p>Manajemen Struktur Organisasi Bidang TIK</p>
+        <div class="btn-select struktur">Kelola Struktur</div>
+    </div>
 </div>
 
 <style>
@@ -72,6 +82,7 @@
     .icon-wrapper.tekkom { background: rgba(59, 130, 246, 0.1); color: #3b82f6; }
     .icon-wrapper.tekinfo { background: rgba(16, 185, 129, 0.1); color: #10b981; }
     .icon-wrapper.global { background: rgba(107, 114, 128, 0.1); color: #6b7280; }
+    .icon-wrapper.struktur { background: rgba(139, 92, 246, 0.1); color: #8b5cf6; }
     
     .landing-card h3 { margin-bottom: 10px; font-family: 'Poppins', sans-serif; font-weight: 700; }
     .landing-card p { color: var(--gray-500); font-size: 0.9rem; margin-bottom: 20px; }
@@ -88,5 +99,6 @@
     .btn-select.tekkom { background: #3b82f6; }
     .btn-select.tekinfo { background: #10b981; }
     .btn-select.global { background: #6b7280; }
+    .btn-select.struktur { background: #8b5cf6; }
 </style>
 @endsection
